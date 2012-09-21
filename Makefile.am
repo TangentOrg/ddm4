@@ -21,6 +21,15 @@ EXTRA_HEADERS =
 BUILT_SOURCES=
 EXTRA_DIST=
 
-TESTS += ${check_PROGRAMS}
+dist_pkgdata_DATA= AUTHORS COPYING README
+aclocaldir= $(datadir)/aclocal
+dist_aclocal_DATA=
+
+maintainer-clean-local:
+	@rm -rf $(srcdir)/build-aux
+
+TESTS+= ${check_PROGRAMS}
 
 include tests/include.am
+include m4/include.m4
+

@@ -15,6 +15,6 @@ m4/lt~obsolete.m4
 tests/.deps/
 tests/.dirstamp
 tests/main_c
-tests/main_c.o
 tests/main_cxx
-tests/main_cxx.o
+*.o
+*.gz

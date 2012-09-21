@@ -48,9 +48,9 @@ if test -n $MAKE_J; then
   MAKE_J="-j2"
 fi
 
-if test -f configure; then $MAKE $MAKE_J clean; $MAKE $MAKE_J distclean; fi;
+if test -f Makefile; then $MAKE $MAKE_J clean; $MAKE $MAKE_J distclean; fi;
 
-rm -r -f autom4te.cache/ config.h config.log config.status configure build-aux
+rm -r -f autom4te.cache config.h config.log config.status configure build-aux Makefile
 
 mkdir -p build-aux
 
