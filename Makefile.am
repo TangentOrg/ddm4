@@ -26,7 +26,9 @@ aclocaldir= $(datadir)/aclocal
 dist_aclocal_DATA=
 
 maintainer-clean-local:
-	@rm -rf $(srcdir)/build-aux
+	@rm -f Makefile.in aclocal.m4
+	@rm -f config.log config.status
+	@rm -f ddm4-*.*.tar.* 
 
 TESTS+= ${check_PROGRAMS}
 
