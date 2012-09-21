@@ -1,0 +1,17 @@
+# vim:ft=automake
+# Copyright (C) 2012 Data Differential
+# All rights reserved.
+#
+# Use and distribution licensed under the BSD license.  See
+# the COPYING file in the parent directory for full text.
+#
+# included from Top Level Makefile.am
+# All paths should be given relative to the root
+
+main_c_SOURCES= tests/main_c.c
+check_PROGRAMS+= tests/main_c
+noinst_PROGRAMS+= tests/main_c
+
+main_cxx_SOURCES= tests/main_cxx.cc
+check_PROGRAMS+= tests/main_cxx
+noinst_PROGRAMS+= tests/main_cxx
