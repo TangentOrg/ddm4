@@ -22,8 +22,8 @@ AC_CONFIG_MACRO_DIR([m4])
 
 AC_CONFIG_SRCDIR([tests/main_cxx.cc])
 
-LT_PREREQ([2.4])
-LT_INIT([disable-static])
+LT_PREREQ([2.2])
+LT_INIT
 LT_LANG([C++])
 
 # Checks for programs.
