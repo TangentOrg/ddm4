@@ -33,9 +33,9 @@
 
 if test -d .git
 then
-  AUTORECONF_FLAGS=" --install --verbose -Wall -Werror"
+  AUTORECONF_FLAGS=" --install --verbose --force -Wall -Werror"
 else
-  AUTORECONF_FLAGS=" --install --verbose -Wall"
+  AUTORECONF_FLAGS=" --install --verbose --force -Wall"
 fi
 
 AUTORECONF=autoreconf
