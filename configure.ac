@@ -13,7 +13,7 @@ AC_CONFIG_AUX_DIR([build-aux])
 AC_CANONICAL_TARGET
 
 AM_INIT_AUTOMAKE([-Wall -Werror -Wno-portability subdir-objects foreign tar-ustar])
-AC_PREREQ([2.69])
+AC_PREREQ([2.63])
 
 AC_CANONICAL_HOST
 AC_CANONICAL_BUILD
