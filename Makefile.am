@@ -33,5 +33,5 @@ maintainer-clean-local:
 TESTS+= ${check_PROGRAMS}
 
 include tests/include.am
-include m4/include.m4
+include m4/include.am
 
