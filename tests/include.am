@@ -8,10 +8,10 @@
 # included from Top Level Makefile.am
 # All paths should be given relative to the root
 
-main_c_SOURCES= tests/main_c.c
+tests_main_c_SOURCES= tests/main_c.c
 check_PROGRAMS+= tests/main_c
 noinst_PROGRAMS+= tests/main_c
 
-main_cxx_SOURCES= tests/main_cxx.cc
+tests_main_cxx_SOURCES= tests/main_cxx.cc
 check_PROGRAMS+= tests/main_cxx
 noinst_PROGRAMS+= tests/main_cxx

@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
-# DD m4
+# DDM4
 # Copyright (C) 2012 Data Differential, http://datadifferential.com/
 # All rights reserved.
 #
 # Use and distribution licensed under the BSD license.  See
 # the COPYING file in this directory for full text.
 
-AC_PREREQ([2.69])
 AC_INIT([ddm4], [0.1], [brian@tangent.org])
 
 AC_CONFIG_AUX_DIR([build-aux])
 
 AC_CANONICAL_TARGET
 
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([-Wall -Werror -Wno-portability subdir-objects foreign tar-ustar])
+AC_PREREQ([2.69])
 
 AC_CANONICAL_HOST
 AC_CANONICAL_BUILD
@@ -21,6 +21,10 @@ AC_CANONICAL_BUILD
 AC_CONFIG_MACRO_DIR([m4])
 
 AC_CONFIG_SRCDIR([tests/main_cxx.cc])
+
+LT_PREREQ([2.4])
+LT_INIT([disable-static])
+LT_LANG([C++])
 
 # Checks for programs.
 
@@ -32,10 +36,12 @@ AC_CONFIG_SRCDIR([tests/main_cxx.cc])
 
 # Checks for library functions.
 
+AX_CXX_COMPILER_VERSION
+AX_HARDEN_CC_COMPILER_FLAGS
+
 AC_CONFIG_FILES([
   Makefile
   ])
-AC_OUTPUT
 
 AC_OUTPUT
 

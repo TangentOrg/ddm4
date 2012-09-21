@@ -40,8 +40,6 @@ fi
 
 AUTORECONF=autoreconf
 
-run $AUTORECONF $AUTORECONF_FLAGS || die "Can't execute autoreconf"
-
 if test -n $MAKE; then 
   MAKE="make"
 fi
@@ -50,10 +48,14 @@ if test -n $MAKE_J; then
   MAKE_J="-j2"
 fi
 
-if test -f configure; then $MAKE $MAKE_J clean; $MAKE $MAKE_J merge-clean; $MAKE $MAKE_J distclean; fi;
+if test -f configure; then $MAKE $MAKE_J clean; $MAKE $MAKE_J distclean; fi;
 
-rm -r -f autom4te.cache/ config.h config.log config.status configure
-./config/autorun.sh
+rm -r -f autom4te.cache/ config.h config.log config.status configure build-aux
+
+mkdir -p build-aux
+
+$AUTORECONF $AUTORECONF_FLAGS
+
 if [ $(uname) = "Darwin" ];
 then
   ./configure CC=clang CXX=clang++
