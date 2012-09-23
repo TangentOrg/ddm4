@@ -101,6 +101,18 @@ else
   ./configure $DEBUG $ASSERT $PREFIX || die "configure failed to run"
 fi
 
+$MAKE $MAKE_J maintainer-clean
+
+run $AUTORECONF $AUTORECONF_FLAGS || die "Can't execute autoreconf"
+
+# If we are executing on OSX use CLANG, otherwise only use it if we find it in the ENV
+if [ $(uname) = "Darwin" ]
+then
+  CC=clang CXX=clang++ ./configure $DEBUG $ASSERT $PREFIX || die "configure failed to run"
+else
+  ./configure $DEBUG $ASSERT $PREFIX || die "configure failed to run"
+fi
+
 # Set ENV MAKE_TARGET in order to override default of "all"
 if [ -z "$MAKE_TARGET" ]
 then 
