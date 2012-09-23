@@ -50,16 +50,11 @@ AC_DEFUN([AX_ASSERT],[
       [AS_HELP_STRING([--enable-assert],
         [Add assert code/turns off optimizations (yes|no) @<:@default=no@:>@])],[
       ax_enable_assert=yes
-      dnl Debugging. No optimization.
-      AM_CFLAGS="${AM_CFLAGS} ${ASSERT_CFLAGS} -DASSERT"
-      AM_CXXFLAGS="${AM_CXXFLAGS} ${ASSERT_CXXFLAGS} -DASSERT"
-      AC_DEFINE(ASSERT, [ 1 ], [Define to 1 to enable assertging code.])
+      dnl enable assert()
+      AC_DEFINE(DASSERT,[1],[Define to 1 to enable assertging code.])
       ],[
       ax_enable_assert=no
-      dnl Optimized version. No assert
-      AM_CFLAGS="${AM_CFLAGS} ${OPTIMIZE_CFLAGS}"
-      AM_CXXFLAGS="${AM_CXXFLAGS} ${OPTIMIZE_CXXFLAGS}"
-      AC_DEFINE(ASSERT, [ 0 ], [Define to 1 to enable assertging code.])
+      AC_DEFINE(DASSERT,[0],[Define to 1 to enable assertging code.])
       ])
 
     AC_MSG_CHECKING([for assert])

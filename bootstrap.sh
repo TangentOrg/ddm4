@@ -31,43 +31,86 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-if test -d .git
+die() { echo "$@"; exit 1; }
+
+run() {
+  echo "$ARGV0: running \`$@' $ARGS"
+  $@ $ARGS
+} 
+
+if [ -d .git ]
 then
-  AUTORECONF_FLAGS=" --install --verbose --Wall -Werror"
+  AUTORECONF_FLAGS="--install --verbose -Wall -Werror"
+elif [ -d .bzr ]
+then
+  AUTORECONF_FLAGS="--install --verbose -Wall -Werror"
+elif [ -d .svn ]
+then
+  AUTORECONF_FLAGS="--install --verbose -Wall -Werror"
+elif [ -d .hg ]
+then
+  AUTORECONF_FLAGS="--install --verbose -Wall -Werror"
 else
-  AUTORECONF_FLAGS=" --install --verbose --Wall"
+  AUTORECONF_FLAGS="--install --verbose -Wall"
 fi
 
 AUTORECONF=autoreconf
 
-if test -n $DEBUG; then 
+# Set ENV DEBUG in order to enable debugging
+if [ -n "$DEBUG" ]
+then 
   DEBUG="--enable-debug"
 fi
 
-if test -n $ASSERT; then 
+# Set ENV ASSERT in order to enable assert
+if [ -n "$ASSERT" ]
+then 
   DEBUG="--enable-assert"
 fi
 
-if test -n $MAKE; then 
+# Set ENV MAKE in order to override "make"
+if [ -z "$MAKE" ]
+then 
   MAKE="make"
 fi
 
-if test -n $MAKE_J; then 
+# Set ENV MAKE_J in order to override "-j2"
+if [ -z "$MAKE_J" ]
+then
   MAKE_J="-j2"
 fi
 
-if test -f Makefile; then $MAKE $MAKE_J maintainer-clean; fi;
+# Set ENV PREFIX in order to set --prefix for ./configure
+if [ -n "$PREFIX" ]
+then 
+  PREFIX="--prefix=$PREFIX"
+fi
 
-$AUTORECONF $AUTORECONF_FLAGS
-
-if [ $(uname) = "Darwin" ];
+if [ -f Makefile ]
 then
-  ./configure CC=clang CXX=clang++ $DEBUG $ASSERT
+  $MAKE $MAKE_J maintainer-clean
+fi
+
+run $AUTORECONF $AUTORECONF_FLAGS || die "Can't execute autoreconf"
+
+# If we are executing on OSX use CLANG, otherwise only use it if we find it in the ENV
+if [ $(uname) = "Darwin" ]
+then
+  run ./configure CC=clang CXX=clang++ $DEBUG $ASSERT $PREFIX || die "configure failed to run"
+elif [ -n "$CLANG" ]
+then
+  run ./configure CC=clang CXX=clang++ $DEBUG $ASSERT $PREFIX || die "configure failed to run"
 else
-  ./configure $DEBUG $ASSERT
+  run ./configure $DEBUG $ASSERT $PREFIX || die "configure failed to run"
 fi
 
-if test -z $JENKINS_URL; then 
-$MAKE $MAKE_J
+# Set ENV MAKE_TARGET in order to override default of "all"
+if [ -z "$MAKE_TARGET" ]
+then 
+  MAKE_TARGET="all"
 fi
 
+if [ -z "$JENKINS_URL" ]
+then 
+  run $MAKE $MAKE_J $MAKE_TARGET || die "Can't execute make"
+fi

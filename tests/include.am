@@ -15,3 +15,7 @@ noinst_PROGRAMS+= tests/main_c
 tests_main_cxx_SOURCES= tests/main_cxx.cc
 check_PROGRAMS+= tests/main_cxx
 noinst_PROGRAMS+= tests/main_cxx
+
+tests_main_assert_SOURCES= tests/main_assert.cc
+check_PROGRAMS+= tests/main_assert
+noinst_PROGRAMS+= tests/main_assert

@@ -38,6 +38,7 @@ LT_LANG([C++])
 
 # Checks for library functions.
 
+AX_ASSERT
 AX_CXX_COMPILER_VERSION
 AX_HARDEN_COMPILER_FLAGS
 
