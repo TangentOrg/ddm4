@@ -53,7 +53,7 @@ AC_DEFUN([AX_VCS_CHECKOUT],[
       AS_IF([test -d ".svn"],[ac_cv_vcs_checkout=yes])
       AS_IF([test -d ".hg"], [ac_cv_vcs_checkout=yes])
       AS_IF([test -d ".git"],[ac_cv_vcs_checkout=yes])
+      ],[
+      ac_cv_vcs_checkout=no
       ])
-
-    AS_IF([test "$ac_cv_vcs_checkout" = yes], [])
     ])

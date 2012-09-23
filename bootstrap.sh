@@ -33,12 +33,20 @@
 
 if test -d .git
 then
-  AUTORECONF_FLAGS=" --install --verbose --force -Wall -Werror"
+  AUTORECONF_FLAGS=" --install --verbose --Wall -Werror"
 else
-  AUTORECONF_FLAGS=" --install --verbose --force -Wall"
+  AUTORECONF_FLAGS=" --install --verbose --Wall"
 fi
 
 AUTORECONF=autoreconf
+
+if test -n $DEBUG; then 
+  DEBUG="--enable-debug"
+fi
+
+if test -n $ASSERT; then 
+  DEBUG="--enable-assert"
+fi
 
 if test -n $MAKE; then 
   MAKE="make"
@@ -54,9 +62,9 @@ $AUTORECONF $AUTORECONF_FLAGS
 
 if [ $(uname) = "Darwin" ];
 then
-  ./configure CC=clang CXX=clang++
+  ./configure CC=clang CXX=clang++ $DEBUG $ASSERT
 else
-  ./configure
+  ./configure $DEBUG $ASSERT
 fi
 
 if test -z $JENKINS_URL; then 

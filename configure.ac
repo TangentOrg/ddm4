@@ -20,7 +20,9 @@ AC_CANONICAL_BUILD
 
 AC_CONFIG_MACRO_DIR([m4])
 
-AC_CONFIG_SRCDIR([tests/main_cxx.cc])
+AC_CONFIG_HEADERS([config.h:config.in])dnl Keep filename to 8.3 for MS-DOS.
+
+AC_CONFIG_SRCDIR([bin/cflags.c])
 
 LT_PREREQ([2.2])
 LT_INIT
@@ -37,7 +39,14 @@ LT_LANG([C++])
 # Checks for library functions.
 
 AX_CXX_COMPILER_VERSION
-AX_HARDEN_CC_COMPILER_FLAGS
+AX_HARDEN_COMPILER_FLAGS
+
+AC_DEFINE_UNQUOTED([CC], ["$CC"], [Compiler information for CC compiler])
+AC_DEFINE_UNQUOTED([CXX], ["$CC"], [Compiler information for CXX compiler])
+AC_DEFINE_UNQUOTED([CC_VERSION], ["$CC_VERSION"], [Version information for CC compiler])
+AC_DEFINE_UNQUOTED([CXX_VERSION], ["$CXX_VERSION"], [Version information for CXX compiler])
+AC_DEFINE_UNQUOTED([CFLAGS], ["$CFLAGS"], [CFLAGS used for compiling binary])
+AC_DEFINE_UNQUOTED([CXXFLAGS], ["$CXXFLAGS"], [CXXFLAGS used for compiling binary])
 
 AC_CONFIG_FILES([
   Makefile
