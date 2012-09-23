@@ -65,7 +65,7 @@ fi
 # Set ENV ASSERT in order to enable assert
 if [ -n "$ASSERT" ]
 then 
-  DEBUG="--enable-assert"
+  ASSERT="--enable-assert"
 fi
 
 # Set ENV MAKE in order to override "make"

@@ -39,7 +39,7 @@
 
 int main(void)
 {
-  assert(0);
+  assert(true);
   return 0;
 }
 
