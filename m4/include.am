@@ -17,6 +17,7 @@ EXTRA_DIST+= m4/ax_pthread.m4
 
 dist_aclocal_DATA+= m4/ax_compiler_version.m4
 dist_aclocal_DATA+= m4/ax_debug.m4
+dist_aclocal_DATA+= m4/ax_assert.m4
 dist_aclocal_DATA+= m4/ax_harden_compiler_flags.m4
 dist_aclocal_DATA+= m4/ax_pthread_timedjoin_np.m4
 dist_aclocal_DATA+= m4/ax_uuid.m4

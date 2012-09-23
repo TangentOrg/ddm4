@@ -4,11 +4,11 @@
 #
 # SYNOPSIS
 #
-#   AX_DEBUG
+#   AX_ASSERT
 #
 # DESCRIPTION
 #
-#   --enable-debug
+#   --enable-assert
 #
 # LICENSE
 #
@@ -45,23 +45,24 @@
 
 #serial 1
 
-AC_DEFUN([AX_DEBUG],[
-    AC_ARG_ENABLE([debug],
-      [AS_HELP_STRING([--enable-debug],
-        [Add debug code/turns off optimizations (yes|no) @<:@default=no@:>@])],[
-      ax_enable_debug=yes
+AC_DEFUN([AX_ASSERT],[
+    AC_ARG_ENABLE([assert],
+      [AS_HELP_STRING([--enable-assert],
+        [Add assert code/turns off optimizations (yes|no) @<:@default=no@:>@])],[
+      ax_enable_assert=yes
       dnl Debugging. No optimization.
-      AM_CFLAGS="${AM_CFLAGS} ${DEBUG_CFLAGS} -DDEBUG"
-      AM_CXXFLAGS="${AM_CXXFLAGS} ${DEBUG_CXXFLAGS} -DDEBUG"
-      AC_DEFINE(DEBUG, [ 1 ], [Define to 1 to enable debugging code.])
+      AM_CFLAGS="${AM_CFLAGS} ${ASSERT_CFLAGS} -DASSERT"
+      AM_CXXFLAGS="${AM_CXXFLAGS} ${ASSERT_CXXFLAGS} -DASSERT"
+      AC_DEFINE(ASSERT, [ 1 ], [Define to 1 to enable assertging code.])
       ],[
-      ax_enable_debug=no
-      dnl Optimized version. No debug
+      ax_enable_assert=no
+      dnl Optimized version. No assert
       AM_CFLAGS="${AM_CFLAGS} ${OPTIMIZE_CFLAGS}"
       AM_CXXFLAGS="${AM_CXXFLAGS} ${OPTIMIZE_CXXFLAGS}"
-      AC_DEFINE(DEBUG, [ 0 ], [Define to 1 to enable debugging code.])
+      AC_DEFINE(ASSERT, [ 0 ], [Define to 1 to enable assertging code.])
       ])
 
-    AC_MSG_CHECKING([for debug])
-    AC_MSG_RESULT([$ax_enable_debug])
+    AC_MSG_CHECKING([for assert])
+    AC_MSG_RESULT([$ax_enable_assert])
     ])
+

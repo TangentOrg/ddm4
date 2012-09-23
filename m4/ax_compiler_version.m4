@@ -44,15 +44,21 @@
 #  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 #  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#serial 2
+#serial 3
 
 AC_DEFUN([AX_C_COMPILER_VERSION],[
     AC_REQUIRE([AX_COMPILER_VENDOR])
     AC_MSG_CHECKING("C Compiler version--$GCC")
+    AC_CHECK_DECL([__GNUC_PATCHLEVEL__], [GNUCC="yes"], [GNUCC="no"])
+    AC_CHECK_DECL([__SUNPRO_C], [SUNCC="yes"], [SUNCC="no"])
+    AC_CHECK_DECL([__ICC], [INTELCC="yes"], [INTELCC="no"])
+    AC_CHECK_DECL([__clang__], [CLANG="yes"], [CLANG="no"])
     ax_cc_version=unknown
-    AS_IF([test "$GCC" = "yes"],[ax_cc_version=`$CC --version | sed 1q` ])
+    AS_IF([test "$GNUCC" = "yes"],[ax_cc_version=`$CC --version | sed 1q` ])
     AS_IF([test "$SUNCC" = "yes"],[ax_cc_version=`$CC -V 2>&1 | sed 1q` ])
     AS_IF([test "$CLANG" = "yes"],[ax_cc_version=`$CC --version 2>&1 | sed 1q` ])
+    AS_IF([test "$CLANG" = "yes"],[ax_cc_version=`$CC --version 2>&1 | sed 1q` ])
+    AS_IF([test "$INTELCC" = "yes"],[ax_cc_version=`$CC --version 2>&1 | sed 1q` ])
     AC_MSG_RESULT(["$ax_cc_version"])
     AC_SUBST([CC_VERSION],["$ax_cc_version"])
     ])
@@ -61,10 +67,10 @@ AC_DEFUN([AX_CXX_COMPILER_VERSION], [
     AC_REQUIRE([AX_C_COMPILER_VERSION])
     AC_MSG_CHECKING("C++ Compiler version")
     ax_cxx_version=unknown
-    AS_IF([test "$GCC" = "yes"],[ax_cxx_version=`$CXX --version | sed 1q`])
+    AS_IF([test "$GNUCC" = "yes"],[ax_cxx_version=`$CXX --version | sed 1q`])
     AS_IF([test "$SUNCC" = "yes"],[ax_cxx_version=`$CXX -V 2>&1 | sed 1q`])
     AS_IF([test "$CLANG" = "yes"],[ax_cxx_version=`$CXX --version 2>&1 | sed 1q`])
+    AS_IF([test "$INTELCC" = "yes"],[ax_cc_version=`$CCX --version 2>&1 | sed 1q` ])
     AC_MSG_RESULT(["$ax_cxx_version"])
     AC_SUBST([CXX_VERSION], ["$ax_cxx_version"])
   ])
-

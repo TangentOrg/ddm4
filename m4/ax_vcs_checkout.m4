@@ -45,8 +45,8 @@
 #  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 #  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#serial 1
- 
+#serial 2
+
 AC_DEFUN([AX_VCS_CHECKOUT],[
     AC_CACHE_CHECK([for vcs checkout], [ac_cv_vcs_checkout], [
       AS_IF([test -d ".bzr"],[ac_cv_vcs_checkout=yes])
