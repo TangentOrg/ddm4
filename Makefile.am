@@ -1,6 +1,6 @@
 # vim:ft=automake
 
-ACLOCAL_AMFLAGS = -I m4 --install -Wall -Werror --force
+ACLOCAL_AMFLAGS = -I m4 -Wall
 
 # includes append to these:
 SUFFIXES =
@@ -26,12 +26,6 @@ EXTRA_DIST+= README.md
 dist_pkgdata_DATA= AUTHORS COPYING README
 aclocaldir= $(datadir)/aclocal
 dist_aclocal_DATA=
-nodist_aclocal_DATA=
-
-maintainer-clean-local:
-	@rm -f Makefile.in aclocal.m4
-	@rm -f config.log config.status
-	@rm -f ddm4-*.*.tar.*
 
 TESTS+= ${check_PROGRAMS}
 

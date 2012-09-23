@@ -40,18 +40,18 @@ run() {
 
 if [ -d .git ]
 then
-  AUTORECONF_FLAGS="--install --verbose -Wall -Werror"
+  AUTORECONF_FLAGS="--install --force --verbose -Wall -Werror"
 elif [ -d .bzr ]
 then
-  AUTORECONF_FLAGS="--install --verbose -Wall -Werror"
+  AUTORECONF_FLAGS="--install --force --verbose -Wall -Werror"
 elif [ -d .svn ]
 then
-  AUTORECONF_FLAGS="--install --verbose -Wall -Werror"
+  AUTORECONF_FLAGS="--install --force --verbose -Wall -Werror"
 elif [ -d .hg ]
 then
-  AUTORECONF_FLAGS="--install --verbose -Wall -Werror"
+  AUTORECONF_FLAGS="--install --force --verbose -Wall -Werror"
 else
-  AUTORECONF_FLAGS="--install --verbose -Wall"
+  AUTORECONF_FLAGS="--install --force --verbose -Wall"
 fi
 
 AUTORECONF=autoreconf
@@ -88,20 +88,8 @@ fi
 
 if [ -f Makefile ]
 then
-  $MAKE $MAKE_J maintainer-clean
+  $MAKE $MAKE_J distclean
 fi
-
-run $AUTORECONF $AUTORECONF_FLAGS || die "Can't execute autoreconf"
-
-# If we are executing on OSX use CLANG, otherwise only use it if we find it in the ENV
-if [ $(uname) = "Darwin" ]
-then
-  CC=clang CXX=clang++ ./configure $DEBUG $ASSERT $PREFIX || die "configure failed to run"
-else
-  ./configure $DEBUG $ASSERT $PREFIX || die "configure failed to run"
-fi
-
-$MAKE $MAKE_J maintainer-clean
 
 run $AUTORECONF $AUTORECONF_FLAGS || die "Can't execute autoreconf"
 
