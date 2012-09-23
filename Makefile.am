@@ -1,6 +1,6 @@
 # vim:ft=automake
 
-ACLOCAL_AMFLAGS = -I m4 --install -Wall -Werror
+ACLOCAL_AMFLAGS = -I m4 --install -Wall -Werror --force
 
 # includes append to these:
 SUFFIXES =
