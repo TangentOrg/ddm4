@@ -33,9 +33,6 @@ maintainer-clean-local:
 	@rm -f config.log config.status
 	@rm -f ddm4-*.*.tar.*
 
-dist-hook:
-	echo $(VERSION) > $(distdir)/.version
-
 TESTS+= ${check_PROGRAMS}
 
 include tests/include.am
