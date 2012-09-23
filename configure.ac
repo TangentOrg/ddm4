@@ -29,6 +29,7 @@ LT_INIT
 LT_LANG([C++])
 
 # Checks for programs.
+AX_PROG_SPHINX_BUILD
 
 # Checks for libraries.
 
