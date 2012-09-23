@@ -54,6 +54,16 @@ else
   AUTORECONF_FLAGS="--install --force --verbose -Wall"
 fi
 
+LIBTOOLIZE_FLAGS="--force --verbose"
+
+if [ $(uname) = "Darwin" ]
+then
+  LIBTOOLIZE=glibtoolize
+elif [ -z "$LIBTOOLIZE" ]
+then 
+  LIBTOOLIZE=libtoolize
+fi
+
 AUTORECONF=autoreconf
 
 # Set ENV DEBUG in order to enable debugging
@@ -91,7 +101,8 @@ then
   $MAKE $MAKE_J distclean
 fi
 
-run $AUTORECONF $AUTORECONF_FLAGS || die "Can't execute autoreconf"
+run $LIBTOOLIZE $LIBTOOLIZE_FLAGS || die "Can't execute $LIBTOOLIZE"
+run $AUTORECONF $AUTORECONF_FLAGS || die "Can't execute $AUTORECONF"
 
 # If we are executing on OSX use CLANG, otherwise only use it if we find it in the ENV
 if [ $(uname) = "Darwin" ]
