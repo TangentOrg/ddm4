@@ -119,7 +119,4 @@ then
   MAKE_TARGET="all"
 fi
 
-if [ -z "$JENKINS_URL" ]
-then 
-  run $MAKE $MAKE_J $MAKE_TARGET || die "Can't execute make"
-fi
+run $MAKE $MAKE_J $MAKE_TARGET || die "Can't execute make"
