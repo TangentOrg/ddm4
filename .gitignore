@@ -23,5 +23,6 @@ m4/lt~obsolete.m4
 stamp-h1
 tests/.deps/
 tests/.dirstamp
+tests/main_assert
 tests/main_c
 tests/main_cxx

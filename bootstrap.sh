@@ -34,7 +34,7 @@
 die() { echo "$@"; exit 1; }
 
 run() {
-  echo "$ARGV0: running \`$@' $ARGS"
+  echo "\`$@' $ARGS"
   $@ $ARGS
 } 
 
@@ -96,10 +96,10 @@ run $AUTORECONF $AUTORECONF_FLAGS || die "Can't execute autoreconf"
 # If we are executing on OSX use CLANG, otherwise only use it if we find it in the ENV
 if [ $(uname) = "Darwin" ]
 then
-  run ./configure CC=clang CXX=clang++ $DEBUG $ASSERT $PREFIX || die "configure failed to run"
+  run CC=clang CXX=clang++ ./configure $DEBUG $ASSERT $PREFIX || die "configure failed to run"
 elif [ -n "$CLANG" ]
 then
-  run ./configure CC=clang CXX=clang++ $DEBUG $ASSERT $PREFIX || die "configure failed to run"
+  run CC=clang CXX=clang++ ./configure CC=clang CXX=clang++ $DEBUG $ASSERT $PREFIX || die "configure failed to run"
 else
   run ./configure $DEBUG $ASSERT $PREFIX || die "configure failed to run"
 fi
