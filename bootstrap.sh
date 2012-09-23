@@ -96,12 +96,9 @@ run $AUTORECONF $AUTORECONF_FLAGS || die "Can't execute autoreconf"
 # If we are executing on OSX use CLANG, otherwise only use it if we find it in the ENV
 if [ $(uname) = "Darwin" ]
 then
-  run CC=clang CXX=clang++ ./configure $DEBUG $ASSERT $PREFIX || die "configure failed to run"
-elif [ -n "$CLANG" ]
-then
-  run CC=clang CXX=clang++ ./configure CC=clang CXX=clang++ $DEBUG $ASSERT $PREFIX || die "configure failed to run"
+  CC=clang CXX=clang++ ./configure $DEBUG $ASSERT $PREFIX || die "configure failed to run"
 else
-  run ./configure $DEBUG $ASSERT $PREFIX || die "configure failed to run"
+  ./configure $DEBUG $ASSERT $PREFIX || die "configure failed to run"
 fi
 
 # Set ENV MAKE_TARGET in order to override default of "all"
