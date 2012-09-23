@@ -35,8 +35,15 @@
  */
 
 #include "config.h"
+#include <assert.h>
 
 int main(void)
 {
-  return 0;
+  assert(HEX_VERSION);
+  if (HEX_VERSION)
+  {
+    return 0;
+  }
+
+  return 1;
 }
