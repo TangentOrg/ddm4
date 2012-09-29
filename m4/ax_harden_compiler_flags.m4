@@ -87,6 +87,7 @@
       AS_IF([test "$ac_cv_vcs_checkout" = yes], [
         AX_APPEND_COMPILE_FLAGS([-Werror])
         AX_APPEND_COMPILE_FLAGS([-Wpragmas])
+        AX_APPEND_COMPILE_FLAGS([-fstack-check])
         ac_cv_warnings_as_errors=yes
         ],[
         AX_APPEND_COMPILE_FLAGS([-Wno-pragmas])
@@ -151,6 +152,7 @@
       AS_IF([test "$ac_cv_vcs_checkout" = yes], [
         AX_APPEND_COMPILE_FLAGS([-Werror])
         AX_APPEND_COMPILE_FLAGS([-Wpragmas])
+        AX_APPEND_COMPILE_FLAGS([-fstack-check])
         ],[
         AX_APPEND_COMPILE_FLAGS([-Wno-pragmas])
         ])
