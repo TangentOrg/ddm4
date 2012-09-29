@@ -86,7 +86,6 @@
       ac_cv_warnings_as_errors=no
       AS_IF([test "$ac_cv_vcs_checkout" = yes], [
         AX_APPEND_COMPILE_FLAGS([-Werror])
-        AX_APPEND_COMPILE_FLAGS([-Wpragmas])
         AX_APPEND_COMPILE_FLAGS([-fstack-check])
         ac_cv_warnings_as_errors=yes
         ],[
@@ -95,6 +94,8 @@
 
       AX_APPEND_COMPILE_FLAGS([-Wall])
       AX_APPEND_COMPILE_FLAGS([-Wextra])
+      AX_APPEND_COMPILE_FLAGS([-Wunknown-pragmas])
+      AX_APPEND_COMPILE_FLAGS([-Wthis-test-should-fail])
       AX_APPEND_COMPILE_FLAGS([-std=c99])
       dnl Anything below this comment please keep sorted.
       AX_APPEND_COMPILE_FLAGS([--paramssp-buffer-size=1])
@@ -151,7 +152,6 @@
 
       AS_IF([test "$ac_cv_vcs_checkout" = yes], [
         AX_APPEND_COMPILE_FLAGS([-Werror])
-        AX_APPEND_COMPILE_FLAGS([-Wpragmas])
         AX_APPEND_COMPILE_FLAGS([-fstack-check])
         ],[
         AX_APPEND_COMPILE_FLAGS([-Wno-pragmas])
@@ -159,6 +159,8 @@
 
       AX_APPEND_COMPILE_FLAGS([-Wall])
       AX_APPEND_COMPILE_FLAGS([-Wextra])
+      AX_APPEND_COMPILE_FLAGS([-Wunknown-pragmas])
+      AX_APPEND_COMPILE_FLAGS([-Wthis-test-should-fail])
       dnl Anything below this comment please keep sorted.
       AX_APPEND_COMPILE_FLAGS([--paramssp-buffer-size=1])
       AX_APPEND_COMPILE_FLAGS([-Waddress])
