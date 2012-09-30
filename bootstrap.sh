@@ -111,7 +111,7 @@ bootstrap() {
 
   if [ -f Makefile ]
   then
-    $MAKE $MAKE_J distclean
+    $MAKE $MAKE_J maintainer-clean
   fi
 
   run $LIBTOOLIZE $LIBTOOLIZE_FLAGS || die "Can't execute $LIBTOOLIZE"
