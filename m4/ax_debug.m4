@@ -4,7 +4,7 @@
 #
 # SYNOPSIS
 #
-#   AX_DEBUG
+#   AX_DEBUG()
 #
 # DESCRIPTION
 #

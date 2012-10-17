@@ -35,18 +35,20 @@
  */
 
 #include "config.h"
-#include "version.h"
-
 #include <stdlib.h>
-#include <assert.h>
+#include <stddef.h>
+
+#if defined(HAVE_LIBEVENT) && HAVE_LIBEVENT
+#include <event.h>
+#endif
 
 int main(void)
 {
-  assert(DDm4_VERSION_HEX);
-  if (DDm4_VERSION_HEX)
-  {
-    return EXIT_SUCCESS;
-  }
-
+#if defined(HAVE_LIBEVENT) && HAVE_LIBEVENT
+  struct event_base *tmp_event= event_init();
+  event_base_free(tmp_event);
+  return EXIT_SUCCESS;
+#else
   return EXIT_FAILURE;
+#endif
 }

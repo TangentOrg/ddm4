@@ -4,6 +4,7 @@
 Makefile
 Makefile.in
 aclocal.m4
+aminclude.am
 autom4te.cache/
 bin/
 build-aux/
@@ -20,9 +21,19 @@ m4/ltsugar.m4
 m4/ltversion.m4
 m4/lt~obsolete.m4
 m4/lt~obsolete.m4 
+rpm/spec
 stamp-h1
+test-suite.log
 tests/.deps/
 tests/.dirstamp
+tests/event
 tests/main_assert
+tests/main_assert.log
+tests/main_assert.trs
 tests/main_c
+tests/main_c.log
+tests/main_c.trs
 tests/main_cxx
+tests/main_cxx.log
+tests/main_cxx.trs
+version.h

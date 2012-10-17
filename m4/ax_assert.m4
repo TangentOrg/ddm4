@@ -4,7 +4,7 @@
 #
 # SYNOPSIS
 #
-#   AX_ASSERT
+#   AX_ASSERT()
 #
 # DESCRIPTION
 #
@@ -51,10 +51,10 @@ AC_DEFUN([AX_ASSERT],[
         [Add assert code/turns off optimizations (yes|no) @<:@default=no@:>@])],[
       ax_enable_assert=yes
       dnl enable assert()
-      AC_DEFINE(DASSERT,[1],[Define to 1 to enable assertging code.])
+      AC_DEFINE(DASSERT,[1],[Define to 1 to enable assert'ing code.])
       ],[
       ax_enable_assert=no
-      AC_DEFINE(DASSERT,[0],[Define to 1 to enable assertging code.])
+      AC_DEFINE(DASSERT,[0],[Define to 1 to enable assert'ing code.])
       ])
 
     AC_MSG_CHECKING([for assert])

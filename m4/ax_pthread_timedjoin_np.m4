@@ -4,7 +4,7 @@
 #
 # SYNOPSIS
 #
-#   AX_PTHREAD_TIMEDJOIN_NP
+#   AX_PTHREAD_TIMEDJOIN_NP()
 #
 # DESCRIPTION
 #
@@ -24,7 +24,7 @@
   AC_DEFUN([AX_PTHREAD_TIMEDJOIN_NP], [
       AC_REQUIRE([AX_PTHREAD])
       AC_CACHE_CHECK([check for pthread_timedjoin_np], [ax_cv_pthread_timedjoin_np], [
-        save_LDFLAGS="$LDFLAGS"
+        AX_SAVE_FLAGS
         LDFLAGS="$PTHREAD_LIBS"
         AC_LANG_PUSH([C])
         AC_LINK_IFELSE([
@@ -43,8 +43,7 @@
           [])
 
         AC_LANG_POP
-        LDFLAGS="$save_LDFLAGS"
-
+        AX_RESTORE_FLAGS
       ])
 
       AS_IF([test "$ax_cv_pthread_timedjoin_np" = yes],[

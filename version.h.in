@@ -1,0 +1,4 @@
+#pragma once
+
+#define DDm4_VERSION_STRING "@DDm4_VERSION_STRING@"
+#define DDm4_VERSION_HEX @DDm4_VERSION_HEX@

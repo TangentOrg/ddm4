@@ -28,6 +28,8 @@ LT_PREREQ([2.2])
 LT_INIT
 LT_LANG([C++])
 
+AX_PLATFORM
+
 # Checks for programs.
 AX_PROG_SPHINX_BUILD
 
@@ -39,11 +41,13 @@ AX_PROG_SPHINX_BUILD
 
 # Checks for library functions.
 
+AX_LIBEVENT
 AX_ENDIAN
-AX_HEX_VERSION
+AX_HEX_VERSION([DDm4], [0.1.0])
 AX_ASSERT
 AX_CXX_COMPILER_VERSION
 AX_HARDEN_COMPILER_FLAGS
+AX_CC_OTHER_FLAGS
 
 AC_DEFINE_UNQUOTED([CC], ["$CC"], [Compiler information for CC compiler])
 AC_DEFINE_UNQUOTED([CXX], ["$CC"], [Compiler information for CXX compiler])
@@ -52,8 +56,12 @@ AC_DEFINE_UNQUOTED([CXX_VERSION], ["$CXX_VERSION"], [Version information for CXX
 AC_DEFINE_UNQUOTED([CFLAGS], ["$CFLAGS"], [CFLAGS used for compiling binary])
 AC_DEFINE_UNQUOTED([CXXFLAGS], ["$CXXFLAGS"], [CXXFLAGS used for compiling binary])
 
+AX_AM_JOBSERVER([yes])
+
 AC_CONFIG_FILES([
   Makefile
+  rpm/spec
+  version.h
   ])
 
 AC_OUTPUT
@@ -72,5 +80,8 @@ echo "   * CPP Flags:                 $CPPFLAGS"
 echo "   * Assertions enabled:        $ax_enable_assert"
 echo "   * Debug enabled:             $ax_enable_debug"
 echo "   * Warnings as failure:       $ac_cv_warnings_as_errors"
+echo "   * libevent:                  $ax_cv_libevent"
+echo "   * make -j:                   $enable_jobserver"
+echo "   * VCS checkout:              $ac_cv_vcs_checkout"
 echo ""
 echo "---"

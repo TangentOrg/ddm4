@@ -4,8 +4,8 @@
 #
 # SYNOPSIS
 #
-#   AX_UUID
-#   AX_UUID_GENERATE_TIME_SAFE
+#   AX_UUID()
+#   AX_UUID_GENERATE_TIME_SAFE()
 #
 # DESCRIPTION
 #
@@ -39,7 +39,7 @@ AC_DEFUN([AX_UUID], [
 
       AS_IF([test "$ax_cv_libuuid_is_required" = maybe], [
         AC_CACHE_CHECK([check to see if -luuid is needed], [ax_cv_libuuid_works], [
-          save_LIBS="$LIBS"
+          AX_SAVE_FLAGS
           LIBS="-luuid $LIBS"
           AC_LANG_PUSH([C])
           AC_RUN_IFELSE([
@@ -51,7 +51,7 @@ AC_DEFUN([AX_UUID], [
             [ax_cv_libuuid_works=no],
             [AC_MSG_WARN([test program execution failed])])
           AC_LANG_POP
-          LIBS="$save_LIBS"
+          AX_RESTORE_FLAGS
           ])
         AS_IF([test "$ax_cv_libuuid_works" = yes], [
           AC_SUBST([LIBUUID_LDFLAGS],[-luuid])])
@@ -71,7 +71,7 @@ AC_DEFUN([AX_UUID], [
   AC_DEFUN([AX_UUID_GENERATE_TIME_SAFE], [
       AC_REQUIRE([AX_UUID])
       AC_CACHE_CHECK([for uuid_generate_time_safe], [ax_cv_uuid_generate_time_safe], [
-        save_LIBS="$LIBS"
+        AX_SAVE_FLAGS
         LIBS="$LIBUUID_LDFLAGS $LIBS"
         AC_LANG_PUSH([C])
         AC_RUN_IFELSE([
@@ -83,7 +83,7 @@ AC_DEFUN([AX_UUID], [
           [ax_cv_uuid_generate_time_safe=no],
           [AC_MSG_WARN([test program execution failed])])
         AC_LANG_POP
-        LIBS="$save_LIBS"
+        AX_RESTORE_FLAGS
         ])
 
       AS_IF([test "$ax_cv_uuid_generate_time_safe" = yes],[
