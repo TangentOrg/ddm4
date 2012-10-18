@@ -619,12 +619,20 @@ run_configure_if_required ()
   if [ ! -f 'Makefile' ]; then
     run_configure
   fi
+
+  if [ ! -f 'Makefile' ]; then
+    die "$LINENO: assert(Makefile)"
+  fi
 }
 
 run_autoreconf_if_required () 
 {
   if [ ! -x 'configure' ]; then
     run_autoreconf
+  fi
+
+  if [ ! -x 'configure' ]; then
+    die "$LINENO: assert(configure)"
   fi
 }
 
@@ -635,6 +643,8 @@ run_autoreconf ()
   fi
 
   run $AUTORECONF || die "$LINENO: Cannot execute $AUTORECONF"
+
+  eval 'bash -n configure' || die "$LINENO: autoreconf generated a malformed configure"
 }
 
 run ()
