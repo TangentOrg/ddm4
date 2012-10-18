@@ -872,15 +872,6 @@ bootstrap ()
     push_PREFIX_ARG $PREFIX
   fi
 
-  # If we are running under Jenkins we predetermine what tests we will run against
-  if [[ -n "$JENKINS_HOME" ]]; then 
-    if [[ -n "$JENKINS_TARGET" ]]; then 
-      MAKE_TARGET="$JENKINS_TARGET"
-    else
-      MAKE_TARGET='jenkins'
-    fi
-  fi
-
   if [[ "$MAKE_TARGET" == 'gdb' ]]; then
     run_configure_if_required
     make_gdb || die "$LINENO: gdb was not found"
@@ -956,6 +947,16 @@ main ()
   local HOST_OS=
 
   rebuild_host_os no_output
+
+  # If we are running under Jenkins we predetermine what tests we will run against
+  # This MAKE_TARGET can be overridden by getopt based MAKE_TARGET changes.
+  if [[ -n "$JENKINS_HOME" ]]; then 
+    if [[ -n "$JENKINS_TARGET" ]]; then 
+      MAKE_TARGET="$JENKINS_TARGET"
+    else
+      MAKE_TARGET='jenkins'
+    fi
+  fi
 
   parse_command_line_options $@
 
