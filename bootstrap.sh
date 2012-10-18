@@ -864,7 +864,11 @@ bootstrap ()
 
   # If we are running under Jenkins we predetermine what tests we will run against
   if [[ -n "$JENKINS_HOME" ]]; then 
-    MAKE_TARGET='jenkins'
+    if [[ -n "$JENKINS_TARGET" ]]; then 
+      MAKE_TARGET="$JENKINS_TARGET"
+    else
+      MAKE_TARGET='jenkins'
+    fi
   fi
 
   if [[ "$MAKE_TARGET" == 'gdb' ]]; then
