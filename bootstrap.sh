@@ -416,6 +416,29 @@ make_darwin_malloc ()
   MallocScribble=$old_MallocScribble
 }
 
+make_for_snapshot ()
+{
+  # Make sure it is clean
+  make_maintainer_clean
+
+  if [ -d 'man' ]; then 
+    run_configure
+    make_target 'man'
+    make_target 'distclean'
+  else
+    run_autoreconf
+  fi
+
+  # We should have a configure, but no Makefile at the end of this exercise
+  if [ ! -x 'configure' ]; then
+    die "$LINENO: assert(configure)"
+  fi
+
+  if [ -f 'Makefile' ]; then
+    die "$LINENO: assert(Makefile)"
+  fi
+}
+
 make_for_continuus_integration ()
 {
   # If this is really Jenkins everything will be clean, but if not...
@@ -425,10 +448,6 @@ make_for_continuus_integration ()
 
   if [ -f 'Makefile' ]; then
     die "$LINENO: Programmer error, the file Makefile existed where build state should have been clean"
-  fi
-
-  if [ -f 'configure' ]; then
-    die "$LINENO: Programmer error, the file configure existed where build state should have been clean"
   fi
 
   case $HOST_OS in
@@ -887,10 +906,14 @@ bootstrap ()
   elif [[ "$MAKE_TARGET" == 'configure' ]]; then
     run_configure
     return
+  elif [[ "$MAKE_TARGET" == 'snapshot' ]]; then
+    make_for_snapshot
+    return
   elif [[ "$MAKE_TARGET" == 'valgrind' ]]; then
     run_configure_if_required
     make_valgrind || die "$LINENO: valrind was not found"
   elif [[ "$MAKE_TARGET" == 'jenkins' ]]; then 
+    run_autoreconf_if_required
     make_for_continuus_integration
   elif [[ -z "$MAKE_TARGET" ]]; then 
     run_configure_if_required
