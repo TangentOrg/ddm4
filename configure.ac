@@ -42,7 +42,7 @@ AX_PROG_SPHINX_BUILD
 
 # Checks for library functions.
 
-AX_LIBEVENT
+AX_LIBEVENT2
 AX_ENDIAN
 AX_HEX_VERSION([DDm4], [0.1.0])
 AX_CXX_COMPILER_VERSION
@@ -81,6 +81,7 @@ echo "   * Assertions enabled:        $ax_enable_assert"
 echo "   * Debug enabled:             $ax_enable_debug"
 echo "   * Warnings as failure:       $ac_cv_warnings_as_errors"
 echo "   * libevent:                  $ax_cv_libevent"
+echo "   * libevent2:                 $ax_cv_libevent2"
 echo "   * make -j:                   $enable_jobserver"
 echo "   * VCS checkout:              $ac_cv_vcs_checkout"
 echo ""
