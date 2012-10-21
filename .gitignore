@@ -37,3 +37,4 @@ tests/main_cxx
 tests/main_cxx.log
 tests/main_cxx.trs
 version.h
+tests/uuid

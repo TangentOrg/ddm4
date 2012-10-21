@@ -39,17 +39,18 @@
 #include <stdlib.h>
 #include <stddef.h>
 
-#if defined(HAVE_LIBEVENT) && HAVE_LIBEVENT
-#include <event.h>
+#if defined(HAVE_UUID_UUID_H) && HAVE_UUID_UUID_H
+#include <uuid/uuid.h>
 #endif
 
 int main(void)
 {
-#if defined(HAVE_LIBEVENT) && HAVE_LIBEVENT
-  struct event_base *tmp_event= event_init();
-  event_base_free(tmp_event);
+#if defined(HAVE_UUID_UUID_H) && HAVE_UUID_UUID_H
+  uuid_t out;
+  uuid_generate(out);
   return EXIT_SUCCESS;
 #else
-  return EXIT_FAILURE;
+  return 77; // EXIT_SKIP 77
 #endif
 }
+

@@ -27,8 +27,6 @@ AC_CONFIG_SRCDIR([bin/cflags.c])
 LT_PREREQ([2.2])
 LT_INIT
 LT_LANG([C++])
-gl_VISIBILITY
-AS_IF([ test -n "$CFLAG_VISIBILITY" ], [ CPPFLAGS="$CPPFLAGS $CFLAG_VISIBILITY" ])
 
 AX_PLATFORM
 AX_ASSERT
@@ -44,6 +42,7 @@ AX_PROG_SPHINX_BUILD
 
 # Checks for library functions.
 
+AX_UUID
 AX_LIBEVENT2
 AX_ENDIAN
 AX_HEX_VERSION([DDm4], [0.1.0])
@@ -84,6 +83,7 @@ echo "   * Debug enabled:             $ax_enable_debug"
 echo "   * Warnings as failure:       $ac_cv_warnings_as_errors"
 echo "   * libevent:                  $ax_cv_libevent"
 echo "   * libevent2:                 $ax_cv_libevent2"
+echo "   * uuid/uuid.h:               $ax_uuid"
 echo "   * make -j:                   $enable_jobserver"
 echo "   * VCS checkout:              $ac_cv_vcs_checkout"
 echo ""
