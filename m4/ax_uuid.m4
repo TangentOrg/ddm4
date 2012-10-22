@@ -64,11 +64,12 @@ AC_DEFUN([AX_UUID],
 
   AS_IF([test "$ax_libuuid" = yes], [
       AC_DEFINE([HAVE_UUID_UUID_H], [1], [Have uuid/uuid.h])
-      AS_IF([test "$ax_cv_libuuid_is_required" = yes], [ AC_SUBST([LIBUUID_LDFLAGS],[-luuid]) ])
+      AS_IF([test "$ax_cv_libuuid_is_required" = yes], [ LIBUUID_LDFLAGS='-luuid' ])
       ],[
       AC_DEFINE([HAVE_UUID_UUID_H], [0], [Have uuid/uuid.h])
       ])
 
+  AC_SUBST([LIBUUID_LDFLAGS])
   AM_CONDITIONAL([HAVE_LIBUUID], [test "$ax_libuuid" = yes])
   ])
 
