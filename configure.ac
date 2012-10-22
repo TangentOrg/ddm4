@@ -6,13 +6,13 @@
 # Use and distribution licensed under the BSD license.  See
 # the COPYING file in this directory for full text.
 
-AC_INIT([ddm4], [0.1], [brian@tangent.org])
+AC_INIT([ddm4], [0.1.0], [brian@tangent.org], [ddm4], [https://github.com/TangentOrg/ddm4])
 
 AC_CONFIG_AUX_DIR([build-aux])
 
 AC_CANONICAL_TARGET
 
-AM_INIT_AUTOMAKE([-Wall -Werror -Wno-portability subdir-objects foreign tar-ustar])
+AM_INIT_AUTOMAKE([1.11 color-tests -Wno-portability subdir-objects foreign tar-ustar])
 AC_PREREQ([2.63])
 
 AC_CANONICAL_HOST
@@ -45,7 +45,7 @@ AX_PROG_SPHINX_BUILD
 AX_UUID
 AX_LIBEVENT2
 AX_ENDIAN
-AX_HEX_VERSION([DDm4], [0.1.0])
+AX_HEX_VERSION([DDm4], [$VERSION])
 AX_CXX_COMPILER_VERSION
 AX_HARDEN_COMPILER_FLAGS
 
