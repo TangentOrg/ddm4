@@ -405,8 +405,10 @@ function make_valgrind ()
 
   push_TESTS_ENVIRONMENT
 
+  # If we don't have a configure, then most likely we will be missing libtool
+  assert_file 'configure'
   if [[ -f 'libtool' ]]; then
-    TESTS_ENVIRONMENT="$LIBTOOL_COMMAND $VALGRIND_COMMAND"
+    TESTS_ENVIRONMENT="./libtool --mode=execute $VALGRIND_COMMAND"
   else
     TESTS_ENVIRONMENT="$VALGRIND_COMMAND"
   fi
@@ -601,8 +603,10 @@ function make_gdb ()
       setup_gdb_command
     fi
 
-    if [ -f 'libtool' ]; then
-      TESTS_ENVIRONMENT="$LIBTOOL_COMMAND $GDB_COMMAND"
+    # If we don't have a configure, then most likely we will be missing libtool
+    assert_file 'configure'
+    if [[ -f 'libtool' ]]; then
+      TESTS_ENVIRONMENT="./libtool --mode=execute $GDB_COMMAND"
     else
       TESTS_ENVIRONMENT="$GDB_COMMAND"
     fi
@@ -1052,11 +1056,6 @@ function bootstrap ()
     if $PRINT_SETUP_OPTION; then
       exit
     fi
-  fi
-
-  # Setup LIBTOOL_COMMAND if we need it
-  if [ -f 'libtool' ]; then
-    LIBTOOL_COMMAND='./libtool --mode=execute'
   fi
 
   # Use OLD_TESTS_ENVIRONMENT for tracking the state of the variable
