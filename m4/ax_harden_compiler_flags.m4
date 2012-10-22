@@ -169,7 +169,7 @@
         ])
 
       AX_APPEND_COMPILE_FLAGS([-g],,[$ax_append_compile_cxxflags_extra])
-      AS_IF([test "$ax_enable_debug" = "yes" ], [
+      AS_IF([test "$ax_enable_debug" = "yes"], [
         AX_APPEND_COMPILE_FLAGS([-O0],,[$ax_append_compile_cxxflags_extra])
         AX_APPEND_COMPILE_FLAGS([-ggdb],,[$ax_append_compile_cxxflags_extra])
         ],[
@@ -177,7 +177,7 @@
         AX_APPEND_COMPILE_FLAGS([-D_FORTIFY_SOURCE=2],,[$ax_append_compile_cxxflags_extra])
         ])
 
-      AS_IF([test "$ac_cv_vcs_checkout" = "yes" ], [
+      AS_IF([test "$ac_cv_vcs_checkout" = "yes"], [
         AX_APPEND_COMPILE_FLAGS([-Werror],,[$ax_append_compile_cxxflags_extra])
         AX_APPEND_COMPILE_FLAGS([-fstack-check],,[$ax_append_compile_cxxflags_extra])
         ],[
@@ -226,7 +226,7 @@
       AC_REQUIRE([AX_HARDEN_CXX_COMPILER_FLAGS])
       AC_REQUIRE([AX_CC_OTHER_FLAGS])
       gl_VISIBILITY
-      AS_IF([ test -n "$CFLAG_VISIBILITY" ], [ CPPFLAGS="$CPPFLAGS $CFLAG_VISIBILITY" ])
+      AS_IF([test -n "$CFLAG_VISIBILITY"], [ CPPFLAGS="$CPPFLAGS $CFLAG_VISIBILITY" ])
       ])
 
   AC_DEFUN([AX_CC_OTHER_FLAGS], [
