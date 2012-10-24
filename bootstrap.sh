@@ -854,8 +854,12 @@ autoreconf_setup ()
       fi
     fi
     
-    if $DEBUG; then
+    if [ -n "$VCS_CHECKOUT" ]; then
       MAKE="$MAKE --warn-undefined-variables"
+    fi
+
+    if $DEBUG; then
+      MAKE="$MAKE -d"
     fi
   fi
 
@@ -1045,7 +1049,7 @@ check_make_target()
       ;;
     'snapshot')
       ;;
-    'mingw32')
+    'mingw')
       ;;
     'universe')
       ;;
@@ -1142,7 +1146,7 @@ function bootstrap ()
         make
         run_configure
         ;;
-      'mingw32')
+      'mingw')
         make_for_mingw32
         ;;
       'snapshot')

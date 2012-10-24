@@ -3,7 +3,7 @@
 #
 # SYNOPSIS
 #
-#   AX_LIBEVENT(), AX_LIBEVENT2()
+#   AX_LIBEVENT(), AX_LIBEVENT2(), AX_LIBEVENT2_EVHTTP()
 #
 # DESCRIPTION
 #
@@ -64,7 +64,6 @@
 #include <sys/time.h>
 #include <stdlib.h>
 #include <event2/event.h>
-#include <event2/http.h>
             ],[
             struct event_base *tmp_event= event_init();
             event_base_free(tmp_event);
@@ -86,3 +85,36 @@
       AM_CONDITIONAL(HAVE_LIBEVENT2, test "x$ax_cv_libevent2" = "xyes")
       ])
 
+  AC_DEFUN([AX_LIBEVENT2_EVHTTP],[
+      AC_REQUIRE([AX_LIBEVENT2])
+      AC_CACHE_CHECK([test for a working libevent2 evhttp interface], [ax_cv_libevent2_evhttp], [
+        AX_SAVE_FLAGS
+        LIBS="-levent $LIBS"
+        AC_LANG_PUSH([C])
+        AC_RUN_IFELSE([
+          AC_LANG_PROGRAM([
+#include <sys/types.h>
+#include <sys/time.h>
+#include <stdlib.h>
+#include <event2/event.h>
+#include <event2/http.h>
+            ],[
+            struct event_base *libbase= event_base_new();  
+            struct evhttp *libsrvr= evhttp_new(libbase);
+            ])],
+          [ax_cv_libevent2_evhttp=yes],
+          [ax_cv_libevent2_evhttp=no],
+          [AC_MSG_WARN([test program execution failed])])
+        AC_LANG_POP
+        AX_RESTORE_FLAGS
+        ])
+
+      AS_IF([test "x$ax_cv_libevent2_evhttp" = "xyes"],[
+        LIBEVENT2_LDFLAGS="-levent"
+        AC_SUBST(LIBEVENT2_LDFLAGS)
+        AC_DEFINE([HAVE_LIBEVENT2],[1],[Define if event_init is present in event2/event.h.])],[
+        AC_DEFINE([HAVE_LIBEVENT2],[0],[Define if event_init is present in event2/event.h.])
+        ])
+
+      AM_CONDITIONAL(HAVE_LIBEVENT2_EVHTTP, test "x$ax_cv_libevent2_evhttp" = "xyes")
+      ])
