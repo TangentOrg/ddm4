@@ -65,7 +65,7 @@
 #include <stdlib.h>
 #include <event2/event.h>
 #include <event2/http.h>
-            ], [
+            ],[
             struct event_base *tmp_event= event_init();
             event_base_free(tmp_event);
             ])],

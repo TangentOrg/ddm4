@@ -121,6 +121,8 @@
       AX_APPEND_COMPILE_FLAGS([-std=c99],,[$ax_append_compile_cflags_extra])
       dnl Anything below this comment please keep sorted.
       AX_APPEND_COMPILE_FLAGS([--param=ssp-buffer-size=1],,[$ax_append_compile_cflags_extra])
+      dnl -Wmissing-format-attribute
+      AX_APPEND_COMPILE_FLAGS([-Wno-attributes],,[$ax_append_compile_cflags_extra])
       AX_APPEND_COMPILE_FLAGS([-Waddress],,[$ax_append_compile_cflags_extra])
       AX_APPEND_COMPILE_FLAGS([-Warray-bounds],,[$ax_append_compile_cflags_extra])
       AX_APPEND_COMPILE_FLAGS([-Wbad-function-cast],,[$ax_append_compile_cflags_extra])
@@ -133,7 +135,11 @@
       AX_APPEND_COMPILE_FLAGS([-Wlogical-op],,[$ax_append_compile_cflags_extra])
       AX_APPEND_COMPILE_FLAGS([-Wmaybe-uninitialized],,[$ax_append_compile_cflags_extra])
       AX_APPEND_COMPILE_FLAGS([-Wmissing-field-initializers],,[$ax_append_compile_cflags_extra])
-      AX_APPEND_COMPILE_FLAGS([-Wmissing-noreturn],,[$ax_append_compile_cflags_extra])
+      AS_IF([test "$MINGW" = "yes"],[
+          AX_APPEND_COMPILE_FLAGS([-Wno-missing-noreturn],,[$ax_append_compile_cflags_extra])
+          ],[
+          AX_APPEND_COMPILE_FLAGS([-Wmissing-noreturn],,[$ax_append_compile_cflags_extra])
+          ])
       AX_APPEND_COMPILE_FLAGS([-Wmissing-prototypes],,[$ax_append_compile_cflags_extra])
       AX_APPEND_COMPILE_FLAGS([-Wnested-externs],,[$ax_append_compile_cflags_extra])
       AX_APPEND_COMPILE_FLAGS([-Wnormalized=id],,[$ax_append_compile_cflags_extra])
@@ -141,7 +147,14 @@
       AX_APPEND_COMPILE_FLAGS([-Woverride-init],,[$ax_append_compile_cflags_extra])
       AX_APPEND_COMPILE_FLAGS([-Wpointer-arith],,[$ax_append_compile_cflags_extra])
       AX_APPEND_COMPILE_FLAGS([-Wpointer-sign],,[$ax_append_compile_cflags_extra])
-      AX_APPEND_COMPILE_FLAGS([-Wredundant-decls],,[$ax_append_compile_cflags_extra])
+      AS_IF([test "$MINGW" = "yes"],[
+          AX_APPEND_COMPILE_FLAGS([-Wno-suggest-attribute=const],,[$ax_append_compile_cflags_extra])
+          AX_APPEND_COMPILE_FLAGS([-Wno-suggest-attribute=noreturn],,[$ax_append_compile_cflags_extra])
+          AX_APPEND_COMPILE_FLAGS([-Wno-suggest-attribute=pure],,[$ax_append_compile_cflags_extra])
+          AX_APPEND_COMPILE_FLAGS([-Wno-redundant-decls],,[$ax_append_compile_cflags_extra])
+          ],[
+          AX_APPEND_COMPILE_FLAGS([-Wredundant-decls],,[$ax_append_compile_cflags_extra])
+          ])
       AX_APPEND_COMPILE_FLAGS([-Wshadow],,[$ax_append_compile_cflags_extra])
       AX_APPEND_COMPILE_FLAGS([-Wshorten-64-to-32],,[$ax_append_compile_cflags_extra])
       AX_APPEND_COMPILE_FLAGS([-Wsign-compare],,[$ax_append_compile_cflags_extra])
@@ -190,6 +203,8 @@
       AX_APPEND_COMPILE_FLAGS([-Wthis-test-should-fail],,[$ax_append_compile_cxxflags_extra])
       dnl Anything below this comment please keep sorted.
       AX_APPEND_COMPILE_FLAGS([--param=ssp-buffer-size=1],,[$ax_append_compile_cxxflags_extra])
+      dnl -Wmissing-format-attribute
+      AX_APPEND_COMPILE_FLAGS([-Wno-attributes],,[$ax_append_compile_cxxflags_extra])
       AX_APPEND_COMPILE_FLAGS([-Waddress],,[$ax_append_compile_cxxflags_extra])
       AX_APPEND_COMPILE_FLAGS([-Warray-bounds],,[$ax_append_compile_cxxflags_extra])
       AX_APPEND_COMPILE_FLAGS([-Wchar-subscripts],,[$ax_append_compile_cxxflags_extra])
@@ -199,13 +214,24 @@
       AX_APPEND_COMPILE_FLAGS([-Wformat=2],,[$ax_append_compile_cxxflags_extra])
       AX_APPEND_COMPILE_FLAGS([-Wmaybe-uninitialized],,[$ax_append_compile_cxxflags_extra])
       AX_APPEND_COMPILE_FLAGS([-Wmissing-field-initializers],,[$ax_append_compile_cxxflags_extra])
-      AX_APPEND_COMPILE_FLAGS([-Wmissing-noreturn],,[$ax_append_compile_cxxflags_extra])
+      AS_IF([test "$MINGW" = "yes"],[
+          AX_APPEND_COMPILE_FLAGS([-Wno-missing-noreturn],,[$ax_append_compile_cxxflags_extra])
+          ],[
+          AX_APPEND_COMPILE_FLAGS([-Wmissing-noreturn],,[$ax_append_compile_cxxflags_extra])
+          ])
       AX_APPEND_COMPILE_FLAGS([-Wlogical-op],,[$ax_append_compile_cxxflags_extra])
       AX_APPEND_COMPILE_FLAGS([-Wnon-virtual-dtor],,[$ax_append_compile_cxxflags_extra])
       AX_APPEND_COMPILE_FLAGS([-Wnormalized=id],,[$ax_append_compile_cxxflags_extra])
       AX_APPEND_COMPILE_FLAGS([-Woverloaded-virtual],,[$ax_append_compile_cxxflags_extra])
       AX_APPEND_COMPILE_FLAGS([-Wpointer-arith],,[$ax_append_compile_cxxflags_extra])
-      AX_APPEND_COMPILE_FLAGS([-Wredundant-decls],,[$ax_append_compile_cxxflags_extra])
+      AS_IF([test "$MINGW" = "yes"],[
+          AX_APPEND_COMPILE_FLAGS([-Wno-suggest-attribute=const],,[$ax_append_compile_cxxflags_extra])
+          AX_APPEND_COMPILE_FLAGS([-Wno-suggest-attribute=noreturn],,[$ax_append_compile_cxxflags_extra])
+          AX_APPEND_COMPILE_FLAGS([-Wno-error=suggest-attribute=noreturn],,[$ax_append_compile_cxxflags_extra])
+          AX_APPEND_COMPILE_FLAGS([-Wno-redundant-decls],,[$ax_append_compile_cxxflags_extra])
+          ],[
+          AX_APPEND_COMPILE_FLAGS([-Wredundant-decls],,[$ax_append_compile_cxxflags_extra])
+          ])
       AX_APPEND_COMPILE_FLAGS([-Wshadow],,[$ax_append_compile_cxxflags_extra])
       AX_APPEND_COMPILE_FLAGS([-Wshorten-64-to-32],,[$ax_append_compile_cxxflags_extra])
       AX_APPEND_COMPILE_FLAGS([-Wsign-compare],,[$ax_append_compile_cxxflags_extra])
