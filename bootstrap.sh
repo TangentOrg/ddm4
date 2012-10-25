@@ -55,12 +55,6 @@ function die ()
   exit 1; 
 }
 
-function return_on_error ()
-{ 
-  echo "$BASH_SOURCE:$BASH_LINENO: fail:  $@" >&2
-  return 1; 
-}
-
 function nassert ()
 {
   local param_name=\$"$1"
@@ -501,17 +495,19 @@ function make_for_snapshot ()
 function make_for_mingw32 ()
 {
   # Make sure it is clean
-  make_maintainer_clean
+  if [ -f Makefile -o -f configure ]; then
+    make_maintainer_clean
+  fi
   assert_no_file 'Makefile'
 
   if command_exists mingw32-configure; then
     run_autoreconf
 
-    mingw32-configure || return_on_error 'mingw32-configure failed'
+    mingw32-configure || die 'mingw32-configure failed'
     assert_file 'Makefile'
 
     if command_exists mingw32-make; then
-      mingw32-make || return_on_error 'mingw32-make failed'
+      mingw32-make || die 'mingw32-make failed'
     fi
   fi
 }
@@ -854,8 +850,10 @@ autoreconf_setup ()
       fi
     fi
     
-    if [ -n "$VCS_CHECKOUT" ]; then
-      MAKE="$MAKE --warn-undefined-variables"
+    if [ "$VCS_CHECKOUT" ]; then
+      if $DEBUG; then
+        MAKE="$MAKE --warn-undefined-variables"
+      fi
     fi
 
     if $DEBUG; then
