@@ -19,25 +19,22 @@
 #   and this notice are preserved. This file is offered as-is, without any
 #   warranty.
 
-#serial 4
+#serial 5
 
   AC_DEFUN([AX_PTHREAD_TIMEDJOIN_NP], [
       AC_REQUIRE([AX_PTHREAD])
       AC_CACHE_CHECK([check for pthread_timedjoin_np], [ax_cv_pthread_timedjoin_np], [
         AX_SAVE_FLAGS
-        LDFLAGS="$PTHREAD_LIBS"
+        CFLAGS="$PTHREAD_CFLAGS"
+        LIBS="$PTHREAD_LIBS"
         AC_LANG_PUSH([C])
         AC_LINK_IFELSE([
           AC_LANG_PROGRAM([
-#ifndef _GNU_SOURCE 
-#define _GNU_SOURCE 
-#endif
-
-#include <stdlib.h> 
 #include <pthread.h>
+#include <stdlib.h>
             ], [
             pthread_t thread;
-            pthread_timedjoin_np(thread, NULL);
+            pthread_timedjoin_np(thread, NULL, NULL);
             ])],
           [ax_cv_pthread_timedjoin_np=yes],
           [])

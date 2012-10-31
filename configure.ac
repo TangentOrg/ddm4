@@ -17,8 +17,11 @@ AC_PREREQ([2.63])
 
 AC_CANONICAL_HOST
 AC_CANONICAL_BUILD
+AC_ARG_PROGRAM
+AC_USE_SYSTEM_EXTENSIONS
 
 AC_CONFIG_MACRO_DIR([m4])
+
 
 AC_CONFIG_HEADERS([config.h:config.in])dnl Keep filename to 8.3 for MS-DOS.
 
@@ -41,6 +44,8 @@ AX_PROG_SPHINX_BUILD
 # Checks for typedefs, structures, and compiler characteristics.
 
 # Checks for library functions.
+
+AX_PTHREAD_TIMEDJOIN_NP
 
 AX_UUID
 AX_LIBEVENT2
@@ -84,6 +89,6 @@ echo "   * libevent:                  $ax_cv_libevent"
 echo "   * libevent2:                 $ax_cv_libevent2"
 echo "   * uuid/uuid.h:               $ax_libuuid"
 echo "   * make -j:                   $enable_jobserver"
-echo "   * VCS checkout:              $ac_cv_vcs_checkout"
+echo "   * VCS checkout:              $ac_cv_vcs_system"
 echo ""
 echo "---"
