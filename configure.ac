@@ -53,20 +53,19 @@ AX_ENDIAN
 AX_HEX_VERSION([DDm4], [$VERSION])
 AX_HARDEN_COMPILER_FLAGS
 
-AC_DEFINE_UNQUOTED([CC], ["$CC"], [Compiler information for CC compiler])
-AC_DEFINE_UNQUOTED([CXX], ["$CC"], [Compiler information for CXX compiler])
-AC_DEFINE_UNQUOTED([CC_VERSION], ["$CC_VERSION"], [Version information for CC compiler])
-AC_DEFINE_UNQUOTED([CXX_VERSION], ["$CXX_VERSION"], [Version information for CXX compiler])
-AC_DEFINE_UNQUOTED([CFLAGS], ["$CFLAGS"], [CFLAGS used for compiling binary])
-AC_DEFINE_UNQUOTED([CXXFLAGS], ["$CXXFLAGS"], [CXXFLAGS used for compiling binary])
+AC_DEFINE_UNQUOTED([CC],["$CC"],[Compiler information for CC compiler])
+AC_DEFINE_UNQUOTED([CXX],["$CC"],[Compiler information for CXX compiler])
+AC_DEFINE_UNQUOTED([CC_VERSION],["$CC_VERSION"],[Version information for CC compiler])
+AC_DEFINE_UNQUOTED([CXX_VERSION],["$CXX_VERSION"],[Version information for CXX compiler])
+AC_DEFINE_UNQUOTED([CFLAGS],["$CFLAGS"],[CFLAGS used for compiling binary])
+AC_DEFINE_UNQUOTED([CXXFLAGS],["$CXXFLAGS"],[CXXFLAGS used for compiling binary])
 
 AX_AM_JOBSERVER([yes])
 
-AC_CONFIG_FILES([
-  Makefile
-  rpm/spec
-  version.h
-  ])
+AC_CONFIG_FILES([Makefile
+                 rpm/spec
+                 version.h
+                 ])
 
 AC_OUTPUT
 
