@@ -169,6 +169,7 @@ AX_APPEND_COMPILE_FLAGS([-Wpointer-sign],,[$ax_append_compile_cflags_extra])
   AX_APPEND_COMPILE_FLAGS([-Wwrite-strings],,[$ax_append_compile_cflags_extra])
   AX_APPEND_COMPILE_FLAGS([-floop-parallelize-all],,[$ax_append_compile_cflags_extra])
 AX_APPEND_COMPILE_FLAGS([-fwrapv],,[$ax_append_compile_cflags_extra])
+AX_APPEND_COMPILE_FLAGS([-fmudflapt],,[$ax_append_compile_cflags_extra])
   AC_LANG_POP
   ])
 
@@ -249,6 +250,7 @@ AX_APPEND_COMPILE_FLAGS([-Wpointer-arith],,[$ax_append_compile_cxxflags_extra])
   AX_APPEND_COMPILE_FLAGS([-Wformat-security],,[$ax_append_compile_cxxflags_extra])
   AX_APPEND_COMPILE_FLAGS([-floop-parallelize-all],,[$ax_append_compile_cxxflags_extra])
 AX_APPEND_COMPILE_FLAGS([-fwrapv],,[$ax_append_compile_cxxflags_extra])
+AX_APPEND_COMPILE_FLAGS([-fmudflapt],,[$ax_append_compile_cxxflags_extra])
   AC_LANG_POP
   ])
 
