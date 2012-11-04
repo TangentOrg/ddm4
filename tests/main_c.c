@@ -37,14 +37,26 @@
 #include "config.h"
 #include "version.h"
 
-#include <stdlib.h>
 #include <assert.h>
+#include <stdlib.h>
+#include <string.h>
 
 int main(void)
 {
   assert(DDm4_VERSION_HEX);
   if (DDm4_VERSION_HEX)
   {
+    assert(strstr(CFLAGS, "-std=c99"));
+
+    if (VCS_CHECKOUT)
+    {
+      assert(strstr(VCS_SYSTEM, "git"));
+    }
+    else
+    {
+      assert(strstr(VCS_SYSTEM, "none"));
+    }
+
     return EXIT_SUCCESS;
   }
 
