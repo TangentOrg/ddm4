@@ -53,8 +53,10 @@ AX_ENDIAN
 AX_HEX_VERSION([DDm4], [$VERSION])
 AX_HARDEN_COMPILER_FLAGS
 
+AC_DEFINE_UNQUOTED([C_COMPILER_VENDOR],["$ax_cv_c_compiler_vendor"],[Compiler vendor])
+AC_DEFINE_UNQUOTED([CXX_COMPILER_VENDOR],["$ax_cv_cxx_compiler_vendor"],[Compiler vendor])
 AC_DEFINE_UNQUOTED([CC],["$CC"],[Compiler information for CC compiler])
-AC_DEFINE_UNQUOTED([CXX],["$CC"],[Compiler information for CXX compiler])
+AC_DEFINE_UNQUOTED([CXX],["$CXX"],[Compiler information for CXX compiler])
 AC_DEFINE_UNQUOTED([CC_VERSION],["$CC_VERSION"],[Version information for CC compiler])
 AC_DEFINE_UNQUOTED([CXX_VERSION],["$CXX_VERSION"],[Version information for CXX compiler])
 AC_DEFINE_UNQUOTED([CFLAGS],["$CFLAGS"],[CFLAGS used for compiling binary])
@@ -75,9 +77,12 @@ echo ""
 echo "   * Installation prefix:       $prefix"
 echo "   * System type:               $host_vendor-$host_os"
 echo "   * Host CPU:                  $host_cpu"
-echo "   * C Compiler:                $CC_VERSION"
+echo "   * Compiler Vendor:           $ax_cv_c_compiler_vendor"
+echo "   * C Compiler:                $CC"
+echo "   * C Compiler Version:        $ax_c_compiler_version"
 echo "   * C Flags:                   $CFLAGS"
-echo "   * C++ Compiler:              $CXX_VERSION"
+echo "   * C++ Compiler:              $CXX"
+echo "   * C++ Version:               $ax_cxx_compiler_version"
 echo "   * C++ Flags:                 $CXXFLAGS"
 echo "   * CPP Flags:                 $CPPFLAGS"
 echo "   * LIB Flags:                 $LIB"

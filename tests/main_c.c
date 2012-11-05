@@ -57,6 +57,9 @@ int main(void)
       assert(strstr(VCS_SYSTEM, "none"));
     }
 
+    assert(strcmp(CC_VERSION, "unknown"));
+    assert(strcmp(CXX_VERSION, "unknown"));
+
     return EXIT_SUCCESS;
   }
 
