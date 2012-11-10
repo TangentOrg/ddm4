@@ -20,6 +20,12 @@ tests_main_assert_SOURCES= tests/main_assert.cc
 check_PROGRAMS+= tests/main_assert
 noinst_PROGRAMS+= tests/main_assert
 
+tests_pthread_check_SOURCES= tests/pthread_check.cc
+tests_pthread_check_CXXFLAGS= @PTHREAD_CFLAGS@
+tests_pthread_check_LDADD= @PTHREAD_LIBS@
+check_PROGRAMS+= tests/pthread_check
+noinst_PROGRAMS+= tests/pthread_check
+
 tests_event_SOURCES= tests/event.cc
 tests_event_LDFLAGS= @LIBEVENT_LDFLAGS@
 if HAVE_LIBEVENT
