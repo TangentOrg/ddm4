@@ -753,6 +753,11 @@ function run_autoreconf ()
     die "Programmer error, tried to call run_autoreconf () but AUTORECONF was not set"
   fi
 
+  if test $use_libtool = 1; then
+    assert $BOOTSTRAP_LIBTOOLIZE
+    run $BOOTSTRAP_LIBTOOLIZE '--copy' '--install' '--force' || die "Cannot execute $BOOTSTRAP_LIBTOOLIZE"
+  fi
+
   run $AUTORECONF || die "Cannot execute $AUTORECONF"
 
   eval 'bash -n configure' || die "autoreconf generated a malformed configure"
@@ -842,7 +847,16 @@ determine_vcs ()
   fi
 }
 
-autoreconf_setup ()
+function require_libtoolise ()
+{
+  use_libtool=0
+  grep '^[         ]*A[CM]_PROG_LIBTOOL' configure.ac >/dev/null \
+    && use_libtool=1
+  grep '^[         ]*LT_INIT' configure.ac >/dev/null \
+    && use_libtool=1
+}
+
+function autoreconf_setup ()
 {
   # Set ENV MAKE in order to override "make"
   if [[ -z "$MAKE" ]]; then 
@@ -885,15 +899,36 @@ autoreconf_setup ()
     fi
   fi
 
-  if [[ -z "$LIBTOOLIZE" ]]; then
-    # If we are using OSX, we first check to see glibtoolize is available
-    if [[ "$VENDOR_DISTRIBUTION" == "darwin" ]]; then
-      LIBTOOLIZE=`type -p glibtoolize`
+  if test $use_libtool = 1; then
+    if [[ -n "$LIBTOOLIZE" ]]; then
+      BOOTSTRAP_LIBTOOLIZE=`type -p $LIBTOOLIZE`
 
-      if [[ -z "$LIBTOOLIZE" ]]; then
-        echo "Couldn't find glibtoolize, it is required on OSX"
+      if [[ -z "$BOOTSTRAP_LIBTOOLIZE" ]]; then
+        echo "Couldn't find user supplied libtoolize, it is required"
+      fi
+    else
+      # If we are using OSX, we first check to see glibtoolize is available
+      if [[ "$VENDOR_DISTRIBUTION" == "darwin" ]]; then
+        BOOTSTRAP_LIBTOOLIZE=`type -p glibtoolize`
+
+        if [[ -z "$BOOTSTRAP_LIBTOOLIZE" ]]; then
+          echo "Couldn't find glibtoolize, it is required on OSX"
+        fi
+      else
+        BOOTSTRAP_LIBTOOLIZE=`type -p libtoolize`
+
+        if [[ -z "$BOOTSTRAP_LIBTOOLIZE" ]]; then
+          echo "Couldn't find libtoolize, it is required"
+        fi
       fi
     fi
+    if $VERBOSE; then
+      LIBTOOLIZE_OPTIONS="--verbose $BOOTSTRAP_LIBTOOLIZE_OPTIONS"
+    fi
+    if $DEBUG; then
+      LIBTOOLIZE_OPTIONS="--debug $BOOTSTRAP_LIBTOOLIZE_OPTIONS"
+    fi
+    LIBTOOLIZE=true
   fi
 
   # Test the ENV AUTOMAKE if it exists
@@ -915,6 +950,12 @@ autoreconf_setup ()
   if [[ -n "$AUTOM4TE" ]]; then
     run $AUTOM4TE '--help'    &> /dev/null    || die "Failed to run AUTOM4TE:$AUTOM4TE"
   fi
+
+  # Test the ENV AUTOHEADER if it exists, if not we add one and add --install
+  if [[ -z "$ACLOCAL" ]]; then
+    ACLOCAL="aclocal --install"
+  fi
+  run $ACLOCAL '--help'  &> /dev/null    || die "Failed to run ACLOCAL:$ACLOCAL"
 
   if [[ -z "$AUTORECONF" ]]; then
     AUTORECONF=`type -p autoreconf`
@@ -1094,6 +1135,7 @@ function bootstrap ()
   determine_vcs
 
   # Set up whatever we need to do to use autoreconf later
+  require_libtoolise
   autoreconf_setup
 
   if [ -z "$MAKE_TARGET" ]; then
@@ -1256,6 +1298,18 @@ enable_debug ()
   fi
 }
 
+function usage ()
+{
+  cat << EOF
+  Usage: $program_name [OPTION]..
+
+  Bootstrap this package from the checked-out sources, and optionally walk through CI run.
+
+  Options:
+
+EOF
+}
+
 disable_debug ()
 {
   set +x
@@ -1264,6 +1318,8 @@ disable_debug ()
 
 # Script begins here
 
+program_name=$0
+
 env_debug_enabled=false
 if [[ -n "$JENKINS_HOME" ]]; then 
   declare -r jenkins_build_environment=true
@@ -1271,6 +1327,7 @@ else
   declare -r jenkins_build_environment=false
 fi
 
+export ACLOCAL
 export AUTOCONF
 export AUTOHEADER
 export AUTOM4TE
@@ -1278,6 +1335,8 @@ export AUTOMAKE
 export AUTORECONF
 export DEBUG
 export GNU_BUILD_FLAGS
+export LIBTOOLIZE
+export LIBTOOLIZE_OPTIONS
 export MAKE
 export TESTS_ENVIRONMENT
 export VERBOSE
