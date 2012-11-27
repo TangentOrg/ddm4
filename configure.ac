@@ -38,6 +38,7 @@ AX_ASSERT
 AX_PROG_SPHINX_BUILD
 
 # Checks for libraries.
+AX_CXX_GCC_ABI_DEMANGLE
 
 # Checks for header files.
 
