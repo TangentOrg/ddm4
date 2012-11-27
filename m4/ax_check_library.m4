@@ -32,6 +32,7 @@
 #
 # LICENSE
 #
+#   Copyright (c) 2012 Brian Aker <brian@tangent.org>
 #   Copyright (c) 2010 Diego Elio Petteno` <flameeyes@gmail.com>
 #
 #   This program is free software: you can redistribute it and/or modify it
