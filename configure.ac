@@ -41,6 +41,12 @@ AX_PROG_SPHINX_BUILD
 AX_CXX_GCC_ABI_DEMANGLE
 
 # Checks for header files.
+AC_DEFUN([CHECK_FOR_CXXABI],
+         [AC_LANG_PUSH([C++])
+         AC_CHECK_HEADERS([cxxabi.h])
+         AC_LANG_POP
+         ])
+CHECK_FOR_CXXABI
 
 # Checks for typedefs, structures, and compiler characteristics.
 

@@ -36,8 +36,28 @@
 
 #include "config.h"
 
+#include <cassert>
+#include <cstdlib>
+
 int main(void)
 {
+#if defined(HAVE_CXXABI_H) && HAVE_CXXABI_H
+  // We just need to make sure it was defined
+  assert(HAVE_GCC_ABI_DEMANGLE);
+  if (HAVE_GCC_ABI_DEMANGLE == 0)
+  {
+    return EXIT_FAILURE;
+  }
+#endif
+
+#if defined(HAVE_GCC_ABI_DEMANGLE) && HAVE_GCC_ABI_DEMANGLE
+  assert(HAVE_CXXABI_H);
+  if (HAVE_CXXABI_H == 0)
+  {
+    return EXIT_FAILURE;
+  }
+#endif
+
   return 0;
 }
 
