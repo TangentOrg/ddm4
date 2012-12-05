@@ -667,7 +667,7 @@ function make_gdb ()
 # $2 to die, or not to die, based on contents
 function make_target ()
 {
-  if [[ -z "$1" ]]; then
+  if [ -z "$1" ]; then
     die "Programmer error, no target provided for make"
   fi
 
@@ -680,11 +680,11 @@ function make_target ()
     echo "TESTS_ENVIRONMENT=$TESTS_ENVIRONMENT"
   fi
 
-  if [[ -z "$MAKE" ]]; then
+  if [ -z "$MAKE" ]; then
     die "MAKE was not set"
   fi
 
-  if [[ -n "$2" ]]; then
+  if [ -n "$2" ]; then
     run $MAKE $1 || return 1
   else
     run $MAKE $1 || die "Cannot execute $MAKE $1"
