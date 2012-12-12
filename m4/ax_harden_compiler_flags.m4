@@ -142,6 +142,7 @@ AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
           _APPEND_COMPILE_FLAGS_ERROR([-floop-parallelize-all])
           _APPEND_COMPILE_FLAGS_ERROR([-fwrapv])
           _APPEND_COMPILE_FLAGS_ERROR([-fmudflapt])
+          _APPEND_COMPILE_FLAGS_ERROR([-pipe])
 
           AS_IF([test "x$ax_enable_debug" = xno],
             [AS_IF([test "x$ac_cv_vcs_checkout" = xyes],
@@ -222,6 +223,7 @@ AC_DEFUN([_HARDEN_CXX_COMPILER_FLAGS],
             _APPEND_COMPILE_FLAGS_ERROR([-floop-parallelize-all])
             _APPEND_COMPILE_FLAGS_ERROR([-fwrapv])
             _APPEND_COMPILE_FLAGS_ERROR([-fmudflapt])
+            _APPEND_COMPILE_FLAGS_ERROR([-pipe])
 
             AS_IF([test "x$ax_enable_debug" = xno],
             [AS_IF([test "x$ac_cv_vcs_checkout" = xyes],
@@ -238,16 +240,8 @@ AC_DEFUN([_HARDEN_CXX_COMPILER_FLAGS],
             AC_LANG_POP([C++])
   ])
 
-  AC_DEFUN([_CC_OTHER_FLAGS],
-            [AC_REQUIRE([_APPEND_COMPILE_FLAGS_ERROR])
-
-            AC_LANG_PUSH([C])
-            _APPEND_COMPILE_FLAGS_ERROR([-pipe])
-            AC_LANG_POP([C])
-            ])
-
 # All of the heavy lifting happens in _HARDEN_LINKER_FLAGS,
-# _HARDEN_CC_COMPILER_FLAGS, _HARDEN_CXX_COMPILER_FLAGS, _CC_OTHER_FLAGS
+# _HARDEN_CC_COMPILER_FLAGS, _HARDEN_CXX_COMPILER_FLAGS
   AC_DEFUN([AX_HARDEN_COMPILER_FLAGS],
            [AC_PREREQ([2.63])dnl
            AC_REQUIRE([_WARNINGS_AS_ERRORS])
@@ -262,5 +256,4 @@ AC_DEFUN([_HARDEN_CXX_COMPILER_FLAGS],
            AC_REQUIRE([_HARDEN_LINKER_FLAGS])
            AC_REQUIRE([_HARDEN_CC_COMPILER_FLAGS])
            AC_REQUIRE([_HARDEN_CXX_COMPILER_FLAGS])
-           AC_REQUIRE([_CC_OTHER_FLAGS])
            ])

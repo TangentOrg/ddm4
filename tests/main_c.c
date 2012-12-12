@@ -60,6 +60,10 @@ int main(void)
     assert(strcmp(CC_VERSION, "unknown"));
     assert(strcmp(CXX_VERSION, "unknown"));
 
+#if defined(VCS_CHECKOUT) && VCS_CHECKOUT
+    assert(strstr(CFLAGS, "-Werror"));
+#endif
+
     return EXIT_SUCCESS;
   }
 

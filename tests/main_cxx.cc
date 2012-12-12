@@ -38,6 +38,7 @@
 
 #include <cassert>
 #include <cstdlib>
+#include <cstring>
 
 int main(void)
 {
@@ -56,6 +57,10 @@ int main(void)
   {
     return EXIT_FAILURE;
   }
+#endif
+
+#if defined(VCS_CHECKOUT) && VCS_CHECKOUT
+  assert(strstr(CXXFLAGS, "-Werror"));
 #endif
 
   return 0;
