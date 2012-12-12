@@ -48,6 +48,8 @@ AC_DEFUN([CHECK_FOR_CXXABI],
          ])
 CHECK_FOR_CXXABI
 
+AX_DLOPEN
+
 # Checks for typedefs, structures, and compiler characteristics.
 
 # Checks for library functions.

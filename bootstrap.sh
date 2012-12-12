@@ -1284,6 +1284,48 @@ main ()
   exit 0
 }
 
+function set_branch ()
+{
+  if [ -z "$BRANCH" ]; then 
+    if [ -z "$CI_PROJECT_TEAM" ]; then 
+      die "Variable CI_PROJECT_TEAM has not been set"
+    fi
+    if [ -z "$PROJECT" ]; then 
+      die "Variable PROJECT has not been set"
+    fi
+    if [ -z "$BUILD_TAG" ]; then 
+      die "Variable BUILD_TAG has not been set"
+    fi
+
+    BRANCH="lp:~$CI_PROJECT_TEAM/$PROJECT/$BUILD_TAG"
+    export BRANCH
+  fi
+
+  if [ -z "$BRANCH" ]; then 
+    die "Missing values required to build BRANCH variable."
+  fi
+}
+
+function merge ()
+{
+  if [ -z "$VCS_CHECKOUT" ]; then
+    die "Merges require VCS_CHECKOUT."
+  fi
+
+  set_branch
+
+  if [[ "$VCS_CHECKOUT" == 'bzr' ]]; then
+    if test -n "$BRANCH_TO_MERGE"; then
+      bzr merge $BRANCH_TO_MERGE
+      bzr commit --message="Merge $BRANCH_TO_MERGE Build: $BUILD_TAG" --unchanged
+    fi
+
+    bzr push "$BRANCH"
+  elif [[ -n "$VCS_CHECKOUT" ]]; then
+    die "Merge attempt occured, current VCS setup does not support this"
+  fi
+}
+
 enable_debug ()
 {
   if ! $DEBUG; then

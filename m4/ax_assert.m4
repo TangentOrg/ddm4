@@ -43,7 +43,7 @@
 #  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 #  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#serial 5
+#serial 6
 
 AC_DEFUN([AX_ASSERT],
     [AC_PREREQ([2.63])dnl
@@ -56,9 +56,9 @@ AC_DEFUN([AX_ASSERT],
       [ax_enable_assert=no])
 
     AS_IF([ test "$ax_enable_assert" = "yes" -o "$ax_enable_debug" = "yes" -o "$ac_cv_vcs_checkout" = "yes" ],
-      [ax_enable_assert="yes"
-      AC_DEFINE(NDEBUG,[1],[Define to 1 to enable assert'ing code.])
-      ])
+      [ax_enable_assert="yes"],
+      [ax_enable_assert="no"
+      AC_DEFINE(NDEBUG,[1],[Define to 1 to disable assert'ing code.])])
 
     AC_MSG_CHECKING([for assert])
     AC_MSG_RESULT([$ax_enable_assert])
