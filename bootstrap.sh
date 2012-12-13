@@ -358,8 +358,10 @@ function safe_pushd ()
 {
   pushd $1 &> /dev/null ;
 
-  if $VERBOSE -a test -n "$BUILD_DIR"; then
-    echo "BUILD_DIR=$BUILD_DIR"
+  if [ -n "$BUILD_DIR" ]; then
+    if $VERBOSE; then
+      echo "BUILD_DIR=$BUILD_DIR"
+    fi
   fi
 }
 
@@ -676,8 +678,10 @@ function make_target ()
     run_configure
   fi
 
-  if [ -n "$TESTS_ENVIRONMENT" -a $VERBOSE ]; then
-    echo "TESTS_ENVIRONMENT=$TESTS_ENVIRONMENT"
+  if [ -n "$TESTS_ENVIRONMENT" ]; then
+    if $VERBOSE; then
+      echo "TESTS_ENVIRONMENT=$TESTS_ENVIRONMENT"
+    fi
   fi
 
   if [ -z "$MAKE" ]; then
@@ -1272,8 +1276,10 @@ main ()
   # If we are running under Jenkins we predetermine what tests we will run against
   # This MAKE_TARGET can be overridden by parse_command_line_options based MAKE_TARGET changes.
   # We don't want Jenkins overriding other variables, so we NULL them.
-  if [ -z "$MAKE_TARGET" -a $jenkins_build_environment ]; then
-    MAKE_TARGET='jenkins'
+  if [ -z "$MAKE_TARGET" ]; then
+    if $jenkins_build_environment; then
+      MAKE_TARGET='jenkins'
+    fi
   fi
 
   bootstrap
