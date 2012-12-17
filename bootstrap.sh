@@ -573,6 +573,8 @@ function make_for_continuus_integration ()
       assert_exec_file 'configure'
       assert_file 'Makefile'
 
+      make_target 'all'
+
       # make rpm includes "make distcheck"
       if [[ -f rpm.am ]]; then
         make_rpm
@@ -592,6 +594,8 @@ function make_for_continuus_integration ()
 
       assert_exec_file 'configure'
       assert_file 'Makefile'
+
+      make_target 'all'
 
       make_distcheck
 
