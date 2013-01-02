@@ -21,6 +21,7 @@ EXTRA_HEADERS =
 BUILT_SOURCES=
 EXTRA_DIST=
 CONFIGURE_DEPENDENCIES=
+dist_man_MANS=
 
 #includes additional rules from aminclude.am
 @INC_AMINCLUDE@
@@ -38,6 +39,8 @@ include tests/include.am
 include m4/include.am
 include bin/include.am
 include rpm/include.am
+include docs/include.am
+include man/include.am
 include yatl/include.am
 
 # Cleanup individual files in order to preserve uninstall/etc order

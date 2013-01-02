@@ -631,6 +631,14 @@ function self_test ()
   eval "./bootstrap.sh maintainer-clean" || die "failed 'maintainer-clean'"
 }
 
+function make_install_html ()
+{
+  run_configure_if_required
+  assert_file 'configure'
+
+  make_target 'install-html'
+}
+
 function make_gdb ()
 {
   run_configure_if_required
@@ -1189,6 +1197,9 @@ function bootstrap ()
         ;;
       'gdb')
         make_gdb
+        ;;
+      'install-html')
+        make_install_html
         ;;
       'clean_op')
         make_clean_option
