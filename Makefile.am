@@ -38,6 +38,7 @@ include tests/include.am
 include m4/include.am
 include bin/include.am
 include rpm/include.am
+include yatl/include.am
 
 # Cleanup individual files in order to preserve uninstall/etc order
 maintainer-clean-local:

@@ -40,6 +40,8 @@
 
 #include <cassert>
 
+#include <yatl/lite.h>
+
 static void* thread_runner(void*)
 {
   pthread_exit(0);
@@ -48,11 +50,9 @@ static void* thread_runner(void*)
 int main(void)
 {
   pthread_t thread;
-  int ret= pthread_create(&thread, NULL, thread_runner, NULL);
-  assert(ret == 0);
+  ASSERT_EQ(0, pthread_create(&thread, NULL, thread_runner, NULL));
 
-  ret= pthread_join(thread, 0);
-  assert(ret == 0);
+  ASSERT_EQ(0, pthread_join(thread, 0));
 
   return 0;
 }

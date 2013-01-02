@@ -39,6 +39,8 @@
 #include <stdlib.h>
 #include <stddef.h>
 
+#include <yatl/lite.h>
+
 #if defined(HAVE_LIBEVENT) && HAVE_LIBEVENT
 #include <event.h>
 #endif
@@ -46,10 +48,15 @@
 int main(void)
 {
 #if defined(HAVE_LIBEVENT) && HAVE_LIBEVENT
-  struct event_base *tmp_event= event_init();
-  event_base_free(tmp_event);
-  return EXIT_SUCCESS;
-#else
-  return EXIT_FAILURE;
+  SKIP_IF(HAVE_LIBEVENT == 0);
+  if (HAVE_LIBEVENT)
+  {
+    struct event_base *tmp_event= event_init();
+    ASSERT_TRUE(tmp_event);
+    event_base_free(tmp_event);
+    return EXIT_SUCCESS;
+  }
 #endif
+
+  return EXIT_SKIP;
 }

@@ -59,8 +59,19 @@ int main(void)
   }
 #endif
 
-#if defined(VCS_CHECKOUT) && VCS_CHECKOUT
-  assert(strstr(CXXFLAGS, "-Werror"));
+#if defined(VCS_CHECKOUT)
+  if (VCS_CHECKOUT)
+  {
+    assert(strstr(CXXFLAGS, "-Werror"));
+  }
+#endif
+
+#ifdef DEBUG
+  if (DEBUG)
+  {
+    assert(strstr(CXXFLAGS, "-O0"));
+    assert(strstr(CXXFLAGS, "-O2") == NULL);
+  }
 #endif
 
   return 0;
