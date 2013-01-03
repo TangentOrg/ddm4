@@ -84,7 +84,8 @@ AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
          [AC_LANG_PUSH([C])dnl
 
          AS_IF([test "x$ax_enable_debug" = xyes],
-           [_APPEND_COMPILE_FLAGS_ERROR([-ggdb])
+           [CFLAGS=''
+           _APPEND_COMPILE_FLAGS_ERROR([-ggdb])
            _APPEND_COMPILE_FLAGS_ERROR([-g])
            _APPEND_COMPILE_FLAGS_ERROR([-O0])],
            [_APPEND_COMPILE_FLAGS_ERROR([-g])
