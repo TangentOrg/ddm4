@@ -6,7 +6,10 @@
 # Use and distribution licensed under the BSD license.  See
 # the COPYING file in this directory for full text.
 
-AC_INIT([ddm4], [0.1.0], [brian@tangent.org], [ddm4], [https://github.com/TangentOrg/ddm4])
+AC_COPYRIGHT([Data Differential, http://datadifferential.com/])
+AC_REVISION([m4_esyscmd_s([git describe --always])])
+
+AC_INIT([ddm4],[0.1.0],[brian@tangent.org],[ddm4],[https://github.com/TangentOrg/ddm4])
 
 AC_MSG_NOTICE([first])
 
@@ -63,8 +66,6 @@ AC_DEFUN([CHECK_FOR_CXXABI],
          ])
 CHECK_FOR_CXXABI
 
-AX_DLOPEN
-
 # Checks for typedefs, structures, and compiler characteristics.
 
 # Checks for library functions.
@@ -74,7 +75,7 @@ AX_PTHREAD_TIMEDJOIN_NP
 AX_UUID
 AX_LIBEVENT2
 AX_ENDIAN
-AX_HEX_VERSION([DDm4], [$VERSION])
+AX_HEX_VERSION([DDm4],[$VERSION])
 AX_HARDEN_COMPILER_FLAGS
 
 AC_DEFINE_UNQUOTED([C_COMPILER_VENDOR],["$ax_cv_c_compiler_vendor"],[Compiler vendor])
