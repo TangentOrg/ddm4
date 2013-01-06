@@ -51,7 +51,11 @@
 # include <string.h>
 #endif
 
-#include <alloca.h>
+#ifdef _WIN32
+# include <malloc.h>
+#else
+# include <alloca.h>
+#endif
 
 #ifndef __PRETTY_FUNCTION__
 # define __PRETTY_FUNCTION__ __func__

@@ -19,7 +19,8 @@
 #   and this notice are preserved. This file is offered as-is, without any
 #   warranty.
 
-#serial 2
+#serial 3
+#
   AC_DEFUN([AX_PLATFORM],
       [AC_REQUIRE([AC_CANONICAL_HOST])
       AC_REQUIRE([AC_CANONICAL_TARGET])
@@ -36,8 +37,6 @@
         [*mingw32*],
         [TARGET_WINDOWS="true"
         AC_DEFINE([TARGET_OS_WINDOWS], [1], [Whether we are building for Windows])
-        AC_DEFINE([WINVER], [WindowsXP], [Version of Windows])
-        AC_DEFINE([_WIN32_WINNT], [0x0501], [Magical number to make things work])
         AC_DEFINE([EAI_SYSTEM], [11], [Another magical number])
         AH_BOTTOM([
 #ifndef HAVE_SYS_SOCKET_H

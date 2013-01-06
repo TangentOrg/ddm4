@@ -59,9 +59,12 @@ AX_PROG_SPHINX_BUILD
 AX_CXX_GCC_ABI_DEMANGLE
 
 # Checks for header files.
+#  We use the header to cross test our m4 rules that also test
 AC_DEFUN([CHECK_FOR_CXXABI],
-         [AC_LANG_PUSH([C++])
-         AC_CHECK_HEADERS([cxxabi.h])
+         [AC_REQUIRE([AX_PLATFORM])
+         AC_LANG_PUSH([C++])
+         AS_IF([test "x${TARGET_WINDOWS}" != "xtrue"],
+               [AC_CHECK_HEADERS([cxxabi.h])])
          AC_LANG_POP
          ])
 CHECK_FOR_CXXABI
