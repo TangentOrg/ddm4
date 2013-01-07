@@ -68,6 +68,8 @@ mkdir -p $RPM_BUILD_ROOT/
 %{_datadir}/aclocal/ax_pthread_timedjoin_np.m4
 %{_datadir}/aclocal/ax_uuid.m4
 %{_datadir}/aclocal/ax_vcs_checkout.m4
+%{_mandir}/man1/cflags.1.gz
+%{_mandir}/man1/cxxflags.1.gz
 
 %changelog
 * Wed Oct 11 2012 Brian Aker <brian@tangent.org> - 0.1-1

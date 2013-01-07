@@ -7,28 +7,19 @@
 # the COPYING file in this directory for full text.
 
 AC_COPYRIGHT([Data Differential, http://datadifferential.com/])
-AC_REVISION([m4_esyscmd_s([git describe --always])])
+#AC_REVISION([m4_esyscmd_s([git describe --always])])
 
 AC_INIT([ddm4],[0.1.0],[brian@tangent.org],[ddm4],[https://github.com/TangentOrg/ddm4])
 
-AC_MSG_NOTICE([first])
-
 AC_CONFIG_AUX_DIR([build-aux])
-
-AC_MSG_NOTICE([second])
 
 AC_CANONICAL_TARGET
 
-AC_MSG_NOTICE([third])
-
 AM_INIT_AUTOMAKE([1.11 color-tests -Wno-portability subdir-objects foreign tar-ustar])
-AC_MSG_NOTICE([fourth])
 AC_PREREQ([2.63])
 
-AC_MSG_NOTICE([fifth])
 AC_PREREQ([2.63])
 AC_ARG_PROGRAM
-AC_MSG_NOTICE([sixth])
 AC_DEFUN([PROTECT_AC_USE_SYSTEM_EXTENSIONS],
          [AX_SAVE_FLAGS
           AC_LANG_PUSH([C++])
@@ -37,7 +28,6 @@ AC_DEFUN([PROTECT_AC_USE_SYSTEM_EXTENSIONS],
           AX_RESTORE_FLAGS
           ])
 PROTECT_AC_USE_SYSTEM_EXTENSIONS
-AC_MSG_NOTICE([seventh])
 
 AC_CONFIG_MACRO_DIR([m4])
 
