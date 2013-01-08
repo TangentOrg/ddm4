@@ -45,14 +45,28 @@
 
 command_not_found_handle ()
 {
-  echo "Command not found: '$@'"
-  exit 127
+  echo "$1: command not found"
+
+  echo ""
+  echo "Stack trace:"
+  local frame=0
+  while caller $frame; do
+    ((frame++));
+  done
+  echo ""
+
+  return 127
 }
 
 function die ()
 { 
   echo "$BASH_SOURCE:$BASH_LINENO: $@" >&2
   exit 1; 
+}
+
+function warn ()
+{ 
+  echo "$BASH_SOURCE:$BASH_LINENO: $@" >&1
 }
 
 function nassert ()
@@ -116,15 +130,12 @@ assert_exec_file ()
 
 command_exists ()
 {
-  # ret=0
-  # $1 --version >/dev/null 2>&1
-  #if [ 126 -le $? ]; then
-  #echo "$me: Error: '$app' not found" >&2
-  #ret=1
-  #fi
-  #return $ret
-
-  type "$1" &> /dev/null ;
+  ret=0
+  $1 --version >/dev/null 2>&1
+  if [ 126 -le $? ]; then
+    ret=1
+  fi
+  return $ret
 }
 
 rebuild_host_os ()
@@ -514,14 +525,63 @@ function make_for_snapshot ()
   snapshot_check
 }
 
-function make_for_mingw32 ()
+function check_mingw64 ()
 {
-  if ! command_exists mingw32-configure; then
-    die 'mingw32-configure was not found, do you have mingw installed?'
+  if ! command_exists mingw64-configure; then
+    warn 'mingw64-configure was not found, do you have mingw installed?'
+    return 1
   fi
 
-  if ! command_exists mingw32-make; then
-    die 'mingw32-make was not found, do you have mingw installed?'
+  if ! command_exists mingw64-make; then
+    warn 'mingw64-make was not found, do you have mingw installed?'
+    return 1
+  fi
+
+  return 0
+}
+
+function check_mingw32 ()
+{
+  if ! command_exists 'mingw32-configure'; then
+    warn 'mingw32-configure was not found, do you have mingw installed?'
+    return 1
+  fi
+
+  if ! command_exists 'mingw32-make'; then
+    warn 'mingw32-make was not found, do you have mingw installed?'
+    return 1
+  fi
+
+  return 0
+}
+
+function make_for_mingw64 ()
+{
+  if ! check_mingw64; then
+    die 'mingw64 tools were not found'
+  fi
+
+  # Make sure it is clean
+  if [ -f Makefile -o -f configure ]; then
+    make_maintainer_clean
+  fi
+
+  run_autoreconf
+
+  mingw64-configure '--enable-static' || die 'mingw64-configure failed'
+  assert_file 'Makefile'
+
+  mingw64-make || die 'mingw64-make failed'
+  if command_exists wineconsole; then
+    TESTS_ENVIRONMENT='wineconsole --backend=curses'
+    mingw64-make 'check' || die 'mingw64-make check failed'
+  fi
+}
+
+function make_for_mingw32 ()
+{
+  if ! check_mingw32; then
+    die 'mingw32 tools were not found'
   fi
 
   # Make sure it is clean
@@ -563,7 +623,15 @@ function make_universe ()
   make_valgrind
   make_gdb
   make_rpm
-  make_for_mingw32
+
+  if check_mingw32; then
+    make_for_mingw32
+  fi
+
+  if check_mingw64; then
+    make_for_mingw64
+  fi
+
   make_distcheck
   make_install_system
 }
@@ -1246,6 +1314,7 @@ function bootstrap ()
         ;;
       'mingw')
         make_for_mingw32
+        make_for_mingw64
         ;;
       'snapshot')
         make_for_snapshot
