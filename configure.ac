@@ -42,6 +42,15 @@ LT_LANG([C++])
 AX_PLATFORM
 AX_ASSERT
 
+AC_DEFUN([CHECK_FOR_MINGW],
+         [AC_REQUIRE([AX_PLATFORM])
+         AS_IF([test "x${TARGET_WINDOWS}" == "xtrue"],
+               [AX_APPEND_LINK_FLAGS([-static-libstdc++],[LDFLAGS])
+               AX_APPEND_LINK_FLAGS([-lmingw32],[LIBS])
+               ])
+         ])
+CHECK_FOR_MINGW
+
 # Checks for programs.
 AX_PROG_SPHINX_BUILD
 
@@ -104,7 +113,8 @@ echo "   * C++ Compiler:              $CXX"
 echo "   * C++ Version:               $ax_cxx_compiler_version"
 echo "   * C++ Flags:                 $CXXFLAGS"
 echo "   * CPP Flags:                 $CPPFLAGS"
-echo "   * LIB Flags:                 $LIB"
+echo "   * LIBS Flags:                $LIBS"
+echo "   * LDFLAGS Flags:             $LDFLAGS"
 echo "   * Assertions enabled:        $ax_enable_assert"
 echo "   * Debug enabled:             $ax_enable_debug"
 echo "   * Warnings as failure:       $ac_cv_warnings_as_errors"
