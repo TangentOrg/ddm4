@@ -24,7 +24,7 @@ man:
 if HAVE_RECENT_SPHINX
 	@PYTHONPATH=$(SPHINX_BUILDDIR)/docs  $(SPHINXBUILD) -b man $(ALLSPHINXOPTS) ${top_builddir}/man
 else
-	@echo "You need to install a recent version of sphinxbuild to create the man pages.
+	@echo "You need to install a recent version of sphinx-build to create the man pages.
 endif
 
 if HAVE_SPHINX

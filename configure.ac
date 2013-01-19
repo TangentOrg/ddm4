@@ -46,12 +46,15 @@ AC_DEFUN([CHECK_FOR_MINGW],
          [AC_REQUIRE([AX_PLATFORM])
          AS_IF([test "x${TARGET_WINDOWS}" == "xtrue"],
                [AX_APPEND_LINK_FLAGS([-static-libstdc++],[LDFLAGS])
-               AX_APPEND_LINK_FLAGS([-lmingw32],[LIBS])
+               AX_APPEND_LINK_FLAGS([-lmingw64],[LIBS])
+               AX_APPEND_LINK_FLAGS([-lssp],[LIBS])
                ])
          ])
 CHECK_FOR_MINGW
 
 # Checks for programs.
+AC_CHECK_PROGS([VALGRIND],['valgrind'])
+AC_CHECK_PROGS([WINE],['wine'])
 AX_PROG_SPHINX_BUILD
 
 # Checks for libraries.

@@ -1,6 +1,6 @@
 #!/bin/bash
 # 
-# Copyright (C) 2012 Brian Aker
+# Copyright (C) 2012-2013 Brian Aker
 # All rights reserved.
 # 
 # Redistribution and use in source and binary forms, with or without
@@ -642,8 +642,6 @@ function make_skeleton_mingw ()
         if command_exists 'wine'; then
           TESTS_ENVIRONMENT='wine'
         fi
-      elif command_exists 'wineconsole'; then
-        TESTS_ENVIRONMENT='wineconsole --backend=curses'
       fi
 
       if [[ -n "$TESTS_ENVIRONMENT" ]]; then
@@ -678,7 +676,7 @@ function make_for_mingw ()
 
   CONFIGURE='mingw64-configure'
   MAKE='mingw64-make'
-  CONFIGURE_ARGS='--enable-static'
+  CONFIGURE_ARGS='--enable-static --disable-shared'
 
   make_skeleton_mingw
   ret=$?
@@ -883,9 +881,9 @@ function make_target ()
 
   if [ $ret -ne 0 ]; then
     if [ -n "$2" ]; then
-      warn "Cannot execute $MAKE $1: $ret"
+      warn "Failed to execute $MAKE $1: $ret"
     else
-      die "Cannot execute $MAKE $1: $ret"
+      die "Failed to execute $MAKE $1: $ret"
     fi
   fi
 
