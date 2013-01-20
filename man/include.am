@@ -12,7 +12,7 @@ BUILT_SOURCES+= $(dist_man_MANS)
 
 endif
 
-endif
-
 dist_man_MANS+= man/cxxflags.1
 dist_man_MANS+= man/cflags.1
+
+endif
