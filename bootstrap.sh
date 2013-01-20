@@ -637,6 +637,17 @@ function check_clang ()
   return 0
 }
 
+function check_clang_analyzer ()
+{
+  command_exists 'scan-build'
+  ret=$?
+  if [ "$ret" -ne 0 ]; then
+    return 1
+  fi
+
+  return 0
+}
+
 function make_skeleton ()
 {
   run_configure
@@ -672,9 +683,8 @@ function make_skeleton ()
 
 function make_for_mingw ()
 {
-  check_mingw
   if ! check_mingw; then
-    die 'mingw64 tools were not found'
+    return 1
   fi
 
   # Make sure it is clean
@@ -700,9 +710,8 @@ function make_for_mingw ()
 
 function make_for_clang ()
 {
-  check_clang
   if ! check_clang; then
-    die 'clang was not found'
+    return 1
   fi
 
   # Make sure it is clean
@@ -721,6 +730,41 @@ function make_for_clang ()
   ret=$?
 
   make_target 'check'
+
+  restore_BUILD
+
+  return $ret
+}
+
+function make_for_clang_analyzer ()
+{
+  if ! check_clang; then
+    return 1
+  fi
+
+  if ! check_clang_analyzer; then
+    die 'clang-analyzer was not found'
+  fi
+
+  # Make sure it is clean
+  if [ -f Makefile -o -f configure ]; then
+    make_maintainer_clean
+  fi
+
+  run_autoreconf
+
+  save_BUILD
+
+  CC=clang CXX=clang++
+  export CC CXX
+  CONFIGURE_ARGS='--enable-debug'
+
+  make_skeleton
+  ret=$?
+
+  make_target 'clean' 'warn'
+
+  scan-build -o clang-html make -j4 -k
 
   restore_BUILD
 
@@ -749,6 +793,8 @@ function make_universe ()
   make_valgrind
   make_gdb
   make_rpm
+  make_for_clang
+  make_for_clang_analyzer
 
   if [ check_mingw -eq 0 ]; then
     make_for_mingw
@@ -1374,6 +1420,8 @@ function check_make_target()
       ;;
     'clang')
       ;;
+    'clang-analyzer')
+      ;;
     'test-*')
       ;;
     'valgrind-*')
@@ -1459,17 +1507,27 @@ function bootstrap ()
         make_default
         ;;
       'clang')
-        check_clang
         if ! check_clang; then
           die "clang was not found"
         fi
 
         if ! make_for_clang; then
-          die "Failed to build mingw: $?"
+          die "Failed to build clang: $?"
+        fi
+        ;;
+      'clang-analyzer')
+        if ! check_clang_analyzer; then
+          die "clang-analyzer was not found"
+        fi
+        if ! check_clang; then
+          die "clang was not found"
+        fi
+
+        if ! make_for_clang_analyzer; then
+          die "Failed to build clang-analyzer: $?"
         fi
         ;;
       'mingw')
-        check_mingw
         if ! check_mingw; then
           die "mingw was not found"
         fi
