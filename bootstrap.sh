@@ -414,7 +414,8 @@ function restore_BUILD ()
   OLD_CONFIGURE_ARG=
   OLD_MAKE=
   OLD_TESTS_ENVIRONMENT=
-  echo "reset happened"
+
+  export -n CC CXX
 }
 
 function push_PREFIX_ARG ()
@@ -625,7 +626,18 @@ function check_mingw ()
   return 0
 }
 
-function make_skeleton_mingw ()
+function check_clang ()
+{
+  command_exists 'clang'
+  ret=$?
+  if [ "$ret" -ne 0 ]; then
+    return 1
+  fi
+
+  return 0
+}
+
+function make_skeleton ()
 {
   run_configure
   ret=$?
@@ -678,8 +690,37 @@ function make_for_mingw ()
   MAKE='mingw64-make'
   CONFIGURE_ARGS='--enable-static --disable-shared'
 
-  make_skeleton_mingw
+  make_skeleton
   ret=$?
+
+  restore_BUILD
+
+  return $ret
+}
+
+function make_for_clang ()
+{
+  check_clang
+  if ! check_clang; then
+    die 'clang was not found'
+  fi
+
+  # Make sure it is clean
+  if [ -f Makefile -o -f configure ]; then
+    make_maintainer_clean
+  fi
+
+  run_autoreconf
+
+  save_BUILD
+
+  CC=clang CXX=clang++
+  export CC CXX
+
+  make_skeleton
+  ret=$?
+
+  make_target 'check'
 
   restore_BUILD
 
@@ -1331,6 +1372,8 @@ function check_make_target()
       ;;
     'make_default')
       ;;
+    'clang')
+      ;;
     'test-*')
       ;;
     'valgrind-*')
@@ -1415,14 +1458,21 @@ function bootstrap ()
       'make_default')
         make_default
         ;;
+      'clang')
+        check_clang
+        if ! check_clang; then
+          die "clang was not found"
+        fi
+
+        if ! make_for_clang; then
+          die "Failed to build mingw: $?"
+        fi
+        ;;
       'mingw')
         check_mingw
         if ! check_mingw; then
           die "mingw was not found"
         fi
-
-        make_for_mingw
-        check_ret=$?
 
         if ! make_for_mingw; then
           die "Failed to build mingw: $?"
