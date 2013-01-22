@@ -61,6 +61,8 @@ AX_PROG_SPHINX_BUILD
 AX_CXX_GCC_ABI_DEMANGLE
 
 # Checks for header files.
+AC_CHECK_HEADERS_ONCE([features.h])
+
 #  We use the header to cross test our m4 rules that also test
 AC_DEFUN([CHECK_FOR_CXXABI],
          [AC_REQUIRE([AX_PLATFORM])
@@ -74,6 +76,7 @@ CHECK_FOR_CXXABI
 # Checks for typedefs, structures, and compiler characteristics.
 
 # Checks for library functions.
+AX_PRINTF_STRERROR
 
 AX_PTHREAD_TIMEDJOIN_NP
 
