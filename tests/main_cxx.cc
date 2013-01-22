@@ -37,6 +37,8 @@
 #include "config.h"
 
 #include <cassert>
+#include <cerrno>
+#include <cstdio>
 #include <cstdlib>
 #include <cstring>
 
@@ -71,6 +73,16 @@ int main(void)
   {
     assert(strstr(CXXFLAGS, "-O0"));
     assert(strstr(CXXFLAGS, "-O2") == NULL);
+  }
+#endif
+
+#ifdef HAVE_PRINTF_STRERROR
+  {
+    char buffer[1024];
+    errno= 0;
+    int buffer_length= snprintf(buffer, sizeof(buffer), "%ms");
+    assert(buffer_length >= 3);
+    assert(strncmp(buffer, "Suc", 3) == 0);
   }
 #endif
 

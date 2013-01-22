@@ -51,9 +51,12 @@ AC_DEFUN([AX_PRINTF_STRERROR],
          [ax_cv_have_printf_strerror],
          [AC_LANG_PUSH([C++])
          AC_RUN_IFELSE([AC_LANG_PROGRAM([[#include <cstdio>
+                        #include <cstddef>
+                        #include <cstdlib>
+                        #include <cstring>
                         #include <cerrno>
                         ]],
-                        [[printf("%m", EINVAL)]])],
+                        [[char buffer[1024]; errno=0; snprintf(buffer, sizeof(buffer), "%m"); if (strcmp("Success", buffer) !=0 ) return EXIT_FAILURE;]])],
                         [ax_cv_have_printf_strerror=yes],
                         [ax_cv_have_printf_strerror=no],
                         [ax_cv_have_printf_strerror=no])
