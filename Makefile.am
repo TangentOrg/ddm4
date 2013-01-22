@@ -11,7 +11,6 @@ DISTCLEANFILES =
 bin_PROGRAMS =
 noinst_HEADERS =
 lib_LTLIBRARIES =
-man_MANS =
 noinst_LTLIBRARIES =
 noinst_PROGRAMS =
 include_HEADERS =
