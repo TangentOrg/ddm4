@@ -94,7 +94,7 @@ static inline size_t yatl_strlen(const char *s)
     return strlen(s);
   }
 
-  return (size_t)(0);
+  return 0UL;
 }
 
 static inline int yatl_strcmp(const char *s1, const char *s2, size_t *s1_length, size_t *s2_length)
