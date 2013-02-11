@@ -135,7 +135,6 @@ AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
           _APPEND_COMPILE_FLAGS_ERROR([-Wmissing-prototypes])
           _APPEND_COMPILE_FLAGS_ERROR([-Wnested-externs])
           _APPEND_COMPILE_FLAGS_ERROR([-Wnormalized=id])
-          _APPEND_COMPILE_FLAGS_ERROR([-Wold-style-definition])
           _APPEND_COMPILE_FLAGS_ERROR([-Woverride-init])
           _APPEND_COMPILE_FLAGS_ERROR([-Wpointer-arith])
           _APPEND_COMPILE_FLAGS_ERROR([-Wpointer-sign])
