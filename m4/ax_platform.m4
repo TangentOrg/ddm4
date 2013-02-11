@@ -50,7 +50,6 @@
         [*solaris*],[AC_DEFINE([TARGET_OS_SOLARIS],[1],[Whether we are building for Solaris])],
         [*darwin*],
         [TARGET_OSX="true"
-        AC_DEFINE([TARGET_OS_OSX],[1],[Whether we build for OSX])],
         [*linux*],
         [TARGET_LINUX="true"
         AC_DEFINE([TARGET_OS_LINUX],[1],[Whether we build for Linux])])
