@@ -1169,6 +1169,7 @@ function autoreconf_setup ()
 
       if [[ -z "$BOOTSTRAP_LIBTOOLIZE" ]]; then
         echo "Couldn't find user supplied libtoolize, it is required"
+        return 1
       fi
     else
       # If we are using OSX, we first check to see glibtoolize is available
@@ -1177,12 +1178,14 @@ function autoreconf_setup ()
 
         if [[ -z "$BOOTSTRAP_LIBTOOLIZE" ]]; then
           echo "Couldn't find glibtoolize, it is required on OSX"
+          return 1
         fi
       else
         BOOTSTRAP_LIBTOOLIZE=`type -p libtoolize`
 
         if [[ -z "$BOOTSTRAP_LIBTOOLIZE" ]]; then
           echo "Couldn't find libtoolize, it is required"
+          return 1
         fi
       fi
     fi
@@ -1406,7 +1409,9 @@ function bootstrap ()
 
   # Set up whatever we need to do to use autoreconf later
   require_libtoolise
-  autoreconf_setup
+  if ! autoreconf_setup; then
+    return 1
+  fi
 
   if [ -z "$MAKE_TARGET" ]; then
     MAKE_TARGET="make_default"
