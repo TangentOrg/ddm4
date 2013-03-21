@@ -46,11 +46,28 @@
 int main(void)
 {
 #if defined(HAVE_UUID_UUID_H) && HAVE_UUID_UUID_H
-  uuid_t out;
-  uuid_generate(out);
-  return EXIT_SUCCESS;
+  {
+    uuid_t out;
+    uuid_generate(out);
+  }
 #else
   return 77; // EXIT_SKIP 77
 #endif
+
+#if defined(HAVE_UUID_GENERATE_TIME) && HAVE_UUID_GENERATE_TIME
+  {
+    uuid_t out;
+    uuid_generate_time(out);
+  }
+#endif
+
+#if defined(HAVE_UUID_GENERATE_TIME_SAFE) && HAVE_UUID_GENERATE_TIME_SAFE
+  {
+    uuid_t out;
+    uuid_generate_time_safe(out);
+  }
+#endif
+
+  return EXIT_SUCCESS;
 }
 
