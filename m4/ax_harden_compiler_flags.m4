@@ -92,7 +92,8 @@ AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
            _APPEND_COMPILE_FLAGS_ERROR([-H])
            _APPEND_COMPILE_FLAGS_ERROR([-ggdb])
            _APPEND_COMPILE_FLAGS_ERROR([-g])
-           _APPEND_COMPILE_FLAGS_ERROR([-O0])],
+           _APPEND_COMPILE_FLAGS_ERROR([-O0]),
+           _APPEND_COMPILE_FLAGS_ERROR([-fno-omit-frame-pointer])],
            [_APPEND_COMPILE_FLAGS_ERROR([-g])
            _APPEND_COMPILE_FLAGS_ERROR([-O2])])
 
@@ -157,7 +158,9 @@ AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
           _APPEND_COMPILE_FLAGS_ERROR([-funsafe-loop-optimizations])
           _APPEND_COMPILE_FLAGS_ERROR([-fsanitize=address])
           _APPEND_COMPILE_FLAGS_ERROR([-fsanitize=integer])
-          _APPEND_COMPILE_FLAGS_ERROR([-fsanitize=thread])
+          AS_IF([test "x$enable_shared" = "xyes"],[
+              _APPEND_COMPILE_FLAGS_ERROR([-fsanitize=thread])
+              ])
           _APPEND_COMPILE_FLAGS_ERROR([-fsanitize=memory])
           _APPEND_COMPILE_FLAGS_ERROR([-fsanitize=alignment])
           _APPEND_COMPILE_FLAGS_ERROR([-fsanitize=bool])
@@ -214,7 +217,8 @@ AC_DEFUN([_HARDEN_CXX_COMPILER_FLAGS],
            _APPEND_COMPILE_FLAGS_ERROR([-H])
            _APPEND_COMPILE_FLAGS_ERROR([-ggdb])
            _APPEND_COMPILE_FLAGS_ERROR([-g])
-           _APPEND_COMPILE_FLAGS_ERROR([-O0])],
+           _APPEND_COMPILE_FLAGS_ERROR([-O0]),
+           _APPEND_COMPILE_FLAGS_ERROR([-fno-omit-frame-pointer])],
            [_APPEND_COMPILE_FLAGS_ERROR([-g])
            _APPEND_COMPILE_FLAGS_ERROR([-O2])])
 
@@ -271,7 +275,9 @@ AC_DEFUN([_HARDEN_CXX_COMPILER_FLAGS],
           _APPEND_COMPILE_FLAGS_ERROR([-Weffc++])
           _APPEND_COMPILE_FLAGS_ERROR([-fsanitize=address])
           _APPEND_COMPILE_FLAGS_ERROR([-fsanitize=integer])
-          _APPEND_COMPILE_FLAGS_ERROR([-fsanitize=thread])
+          AS_IF([test "x$enable_shared" = "xyes"],[
+              _APPEND_COMPILE_FLAGS_ERROR([-fsanitize=thread])
+              ])
           _APPEND_COMPILE_FLAGS_ERROR([-fsanitize=memory])
           _APPEND_COMPILE_FLAGS_ERROR([-fsanitize=alignment])
           _APPEND_COMPILE_FLAGS_ERROR([-fsanitize=bool])

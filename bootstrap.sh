@@ -1068,6 +1068,14 @@ function parse_command_line_options ()
         ;;
       h) # help
         echo "bootstrap.sh [options] optional_target ..."
+        echo "  -a # Just run autoreconf";
+        echo "  -p # Print ENV";
+        echo "  -c # Just run configure";
+        echo "  -m # Just run maintainer-clean";
+        echo "  -t # Make target";
+        echo "  -d # Enable debug";
+        echo "  -h # Show help";
+        echo "  -v # Be more verbose in output";
         exit
         ;;
       v) # verbose
@@ -1250,6 +1258,9 @@ function print_setup ()
   echo 'BOOTSTRAP ENV' 
   echo "AUTORECONF=$AUTORECONF"
   echo "HOST_OS=$HOST_OS"
+  echo "VENDOR=$VENDOR"
+  echo "VENDOR_DISTRIBUTION=$VENDOR_DISTRIBUTION"
+  echo "VENDOR_RELEASE=$VENDOR_RELEASE"
 
   echo "getopt()"
   if $AUTORECONF_OPTION; then
