@@ -53,7 +53,7 @@
 # ?  _APPEND_COMPILE_FLAGS_ERROR([-Wlong-long]) -- Don't turn on for
 # compatibility issues memcached_stat_st
 
-#serial 8
+#serial 9
 
 AC_DEFUN([_WARNINGS_AS_ERRORS],
     [AC_CACHE_CHECK([if all warnings into errors],[ac_cv_warnings_as_errors],
