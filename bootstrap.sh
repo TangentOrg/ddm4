@@ -1085,6 +1085,7 @@ function run_autoreconf_if_required ()
   fi
 
   assert_exec_file 'configure'
+  bash -n configure
 }
 
 function run_autoreconf () 
