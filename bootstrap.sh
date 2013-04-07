@@ -151,7 +151,8 @@ function rebuild_host_os ()
   fi
 }
 
-#  Valid values are: darwin,fedora,rhel,ubuntu
+# Validate the distribution name, or toss an erro
+#  values: darwin,fedora,rhel,ubuntu,debian,opensuse
 function set_VENDOR_DISTRIBUTION ()
 {
   local dist=`echo "$1" | tr '[A-Z]' '[a-z]'`
@@ -171,6 +172,9 @@ function set_VENDOR_DISTRIBUTION ()
     ubuntu)
       VENDOR_DISTRIBUTION='ubuntu'
       ;;
+    suse)
+      VENDOR_DISTRIBUTION='opensuse'
+      ;;
     opensuse)
       VENDOR_DISTRIBUTION='opensuse'
       ;;
@@ -180,19 +184,23 @@ function set_VENDOR_DISTRIBUTION ()
   esac
 }
 
+# Validate a Vendor's release name/number 
 function set_VENDOR_RELEASE ()
 {
   local release=`echo "$1" | tr '[A-Z]' '[a-z]'`
   case "$VENDOR_DISTRIBUTION" in
     darwin)
       case "$VENDOR_DISTRIBUTION" in
-        10.7*)
-          VENDOR_RELEASE='mountain_lion'
+        10.6*)
+          VENDOR_RELEASE='snow_leopard'
           ;;
-        10.8*)
-          VENDOR_RELEASE='mountain_lion'
+        10.7*)
+          VENDOR_RELEASE='mountain'
           ;;
         mountain)
+          VENDOR_RELEASE='mountain'
+          ;;
+        10.8*)
           VENDOR_RELEASE='mountain_lion'
           ;;
         *)
@@ -202,8 +210,8 @@ function set_VENDOR_RELEASE ()
       ;;
     fedora)
       VENDOR_RELEASE="$release"
-      if [[ "x$VENDOR_RELEASE" == 'sphericalcow' ]]; then
-        VENDOR_RELEASE="quantal"
+      if [[ "x$VENDOR_RELEASE" == '18' ]]; then
+        VENDOR_RELEASE='sphericalcow'
       fi
       ;;
     rhel)
@@ -230,7 +238,7 @@ function set_VENDOR_RELEASE ()
 }
 
 
-#  Valid values are: apple, redhat, centos, canonical
+#  Valid values are: apple, redhat, centos, canonical, oracle, suse
 function set_VENDOR ()
 {
   local vendor=`echo "$1" | tr '[A-Z]' '[a-z]'`
@@ -244,6 +252,12 @@ function set_VENDOR ()
       ;;
     fedora)
       VENDOR='redhat'
+      ;;
+    redhat-release-server-*)
+      VENDOR='redhat'
+      ;;
+    enterprise-release-*)
+      VENDOR='oracle'
       ;;
     centos)
       VENDOR='centos'
@@ -272,12 +286,13 @@ function set_VENDOR ()
   set_VENDOR_RELEASE $3
 
   # Set which vendor/versions we trust for autoreconf
-  case $VENDOR in
+  case $VENDOR_DISTRIBUTION in
     fedora)
-      if [[ "x$VENDOR_RELEASE" == 'x17' ]]; then
-        AUTORECONF_REBUILD_HOST=true
-      fi
       if [[ "x$VENDOR_RELEASE" == 'x18' ]]; then
+        AUTORECONF_REBUILD_HOST=true
+      elif [[ "x$VENDOR_RELEASE" == 'xsphericalcow' ]]; then
+        AUTORECONF_REBUILD_HOST=true
+      elif [[ "x$VENDOR_RELEASE" == 'x19' ]]; then
         AUTORECONF_REBUILD_HOST=true
       fi
       ;;
@@ -300,7 +315,7 @@ function determine_target_platform ()
 
   if [[ -x '/usr/bin/sw_vers' ]]; then 
     local _VERSION=`/usr/bin/sw_vers -productVersion`
-    set_VENDOR 'apple' 'darwin' 'mountain'
+    set_VENDOR 'apple' 'darwin' $_VERSION
   elif [[ $(uname) == 'Darwin' ]]; then
     set_VENDOR 'apple' 'darwin' 'mountain'
   elif [[ -f '/etc/fedora-release' ]]; then 
@@ -315,7 +330,8 @@ function determine_target_platform ()
     set_VENDOR 'suse' $suse_distribution $suse_version
   elif [[ -f '/etc/redhat-release' ]]; then
     local rhel_version=`cat /etc/redhat-release | awk ' { print $7 } '`
-    set_VENDOR 'redhat' 'rhel' $rhel_version
+    local _vendor=`rpm -qf /etc/redhat-release`
+    set_VENDOR $_vendor 'rhel' $rhel_version
   elif [[ -f '/etc/os-release' ]]; then 
     source '/etc/os-release'
     set_VENDOR $ID $ID $VERSION_ID
