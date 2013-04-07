@@ -165,6 +165,9 @@ function set_VENDOR_DISTRIBUTION ()
     rhel)
       VENDOR_DISTRIBUTION='rhel'
       ;;
+    debian)
+      VENDOR_DISTRIBUTION='debian'
+      ;;
     ubuntu)
       VENDOR_DISTRIBUTION='ubuntu'
       ;;
@@ -182,16 +185,37 @@ function set_VENDOR_RELEASE ()
   local release=`echo "$1" | tr '[A-Z]' '[a-z]'`
   case "$VENDOR_DISTRIBUTION" in
     darwin)
-      VENDOR_RELEASE='mountain'
+      case "$VENDOR_DISTRIBUTION" in
+        10.7*)
+          VENDOR_RELEASE='mountain_lion'
+          ;;
+        10.8*)
+          VENDOR_RELEASE='mountain_lion'
+          ;;
+        mountain)
+          VENDOR_RELEASE='mountain_lion'
+          ;;
+        *)
+          VENDOR_RELEASE='unknown'
+          ;;
+      esac
       ;;
     fedora)
       VENDOR_RELEASE="$release"
+      if [[ "x$VENDOR_RELEASE" == 'sphericalcow' ]]; then
+        VENDOR_RELEASE="quantal"
+      fi
       ;;
     rhel)
       VENDOR_RELEASE="$release"
       ;;
     ubuntu)
       VENDOR_RELEASE="$release"
+      if [[ "x$VENDOR_RELEASE" == 'x12.04' ]]; then
+        VENDOR_RELEASE="precise"
+      elif [[ "x$VENDOR_RELEASE" == 'x12.10' ]]; then
+        VENDOR_RELEASE="quantal"
+      fi
       ;;
     opensuse)
       VENDOR_RELEASE="$release"
@@ -218,11 +242,23 @@ function set_VENDOR ()
     redhat)
       VENDOR='redhat'
       ;;
+    fedora)
+      VENDOR='redhat'
+      ;;
     centos)
       VENDOR='centos'
       ;;
     canonical)
       VENDOR='canonical'
+      ;;
+    ubuntu)
+      VENDOR='canonical'
+      ;;
+    debian)
+      VENDOR='debian'
+      ;;
+    opensuse)
+      VENDOR='suse'
       ;;
     suse)
       VENDOR='suse'
@@ -234,6 +270,26 @@ function set_VENDOR ()
 
   set_VENDOR_DISTRIBUTION $2
   set_VENDOR_RELEASE $3
+
+  # Set which vendor/versions we trust for autoreconf
+  case $VENDOR in
+    fedora)
+      if [[ "x$VENDOR_RELEASE" == 'x17' ]]; then
+        AUTORECONF_REBUILD_HOST=true
+      fi
+      if [[ "x$VENDOR_RELEASE" == 'x18' ]]; then
+        AUTORECONF_REBUILD_HOST=true
+      fi
+      ;;
+    canonical)
+      if [[ "x$VENDOR_RELEASE" == 'xprecise' ]]; then
+        AUTORECONF_REBUILD_HOST=true
+      elif [[ "x$VENDOR_RELEASE" == 'xquantal' ]]; then
+        AUTORECONF_REBUILD_HOST=true
+      fi
+      ;;
+  esac
+
 }
 
 function determine_target_platform ()
@@ -242,14 +298,14 @@ function determine_target_platform ()
   UNAME_KERNEL=`(uname -s) 2>/dev/null`  || UNAME_SYSTEM=unknown
   UNAME_KERNEL_RELEASE=`(uname -r) 2>/dev/null` || UNAME_KERNEL_RELEASE=unknown
 
-  if [[ $(uname) == 'Darwin' ]]; then
+  if [[ -x '/usr/bin/sw_vers' ]]; then 
+    local _VERSION=`/usr/bin/sw_vers -productVersion`
+    set_VENDOR 'apple' 'darwin' 'mountain'
+  elif [[ $(uname) == 'Darwin' ]]; then
     set_VENDOR 'apple' 'darwin' 'mountain'
   elif [[ -f '/etc/fedora-release' ]]; then 
     local fedora_version=`cat /etc/fedora-release | awk ' { print $3 } '`
     set_VENDOR 'redhat' 'fedora' $fedora_version
-    if [[ "x$VENDOR_RELEASE" == 'x17' ]]; then
-      AUTORECONF_REBUILD_HOST=true
-    fi
   elif [[ -f '/etc/centos-release' ]]; then
     local centos_version=`cat /etc/centos-release | awk ' { print $7 } '`
     set_VENDOR 'centos' 'rhel' $centos_version
@@ -260,13 +316,16 @@ function determine_target_platform ()
   elif [[ -f '/etc/redhat-release' ]]; then
     local rhel_version=`cat /etc/redhat-release | awk ' { print $7 } '`
     set_VENDOR 'redhat' 'rhel' $rhel_version
+  elif [[ -f '/etc/os-release' ]]; then 
+    source '/etc/os-release'
+    set_VENDOR $ID $ID $VERSION_ID
+  elif [[ -x '/usr/bin/lsb_release' ]]; then 
+    local _ID=`/usr/bin/lsb_release -s -i`
+    local _VERSION=`/usr/bin/lsb_release -s -r`
+    set_VENDOR $_ID $_ID $_VERSION_ID
   elif [[ -f '/etc/lsb-release' ]]; then 
-    local debian_DISTRIB_ID=`cat /etc/lsb-release | grep DISTRIB_ID | awk -F= ' { print $2 } '`
-    local debian_version=`cat /etc/lsb-release | grep DISTRIB_CODENAME | awk -F= ' { print $2 } '`
-    set_VENDOR 'canonical' $debian_DISTRIB_ID $debian_version
-    if [[ "x$VENDOR_RELEASE" == 'xprecise' ]]; then
-      AUTORECONF_REBUILD_HOST=true
-    fi
+    source '/etc/lsb-release'
+    set_VENDOR 'canonical' $DISTRIB_ID $DISTRIB_CODENAME
   fi
 
   rebuild_host_os
