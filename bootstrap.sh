@@ -1055,6 +1055,13 @@ function run_configure_if_required ()
   assert_file 'Makefile' 'configure did not produce a Makefile'
 }
 
+function run_make_maintainer_clean_if_possible () 
+{
+  if [ -f 'Makefile' ]; then
+    make_maintainer_clean
+  fi
+}
+
 function run_autoreconf_if_required () 
 {
   if [ ! -x 'configure' ]; then
@@ -1525,6 +1532,8 @@ function bootstrap ()
       fi
     fi
 
+    local snapshot_run=false
+
     case $target in
       'self')
         self_test
@@ -1582,6 +1591,7 @@ function bootstrap ()
         ;;
       'snapshot')
         make_for_snapshot
+        snapshot_run=true
         ;;
       'rpm')
         make_rpm
@@ -1600,6 +1610,13 @@ function bootstrap ()
         make_target "$target"
         ;;
     esac
+
+    if $jenkins_build_environment; then
+      if ! $snapshot_run; then
+        run_make_maintainer_clean_if_possible
+      fi
+    fi
+
   done
 }
 
@@ -1668,7 +1685,16 @@ function main ()
   # We don't want Jenkins overriding other variables, so we NULL them.
   if [ -z "$MAKE_TARGET" ]; then
     if $jenkins_build_environment; then
-      MAKE_TARGET='jenkins'
+      if [[ -n "$label" ]]; then
+        check_make_target $label
+        if [ $? -eq 0 ]; then
+          MAKE_TARGET="$label"
+        fi
+      fi
+
+      if [ -z "$MAKE_TARGET" ]; then
+        MAKE_TARGET='jenkins'
+      fi
     fi
   fi
 
@@ -1761,13 +1787,6 @@ program_name=$0
 env_debug_enabled=false
 if [[ -n "$JENKINS_HOME" ]]; then 
   declare -r jenkins_build_environment=true
-  if [[ -n "$label" ]]; then
-    check_make_target $label
-    ret=$?
-    if [ $ret -eq 0 ]; then
-      MAKE_TARGET="$label"
-    fi
-  fi
 else
   declare -r jenkins_build_environment=false
 fi
