@@ -203,7 +203,7 @@ AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
                   [_APPEND_COMPILE_FLAGS_ERROR([-D_FORTIFY_SOURCE=2])
                   #_APPEND_COMPILE_FLAGS_ERROR([-Wstack-protector])
                   #_APPEND_COMPILE_FLAGS_ERROR([-fstack-protector])
-                  #_APPEND_COMPILE_FLAGS_ERROR([--param=ssp-buffer-size=1])
+                  #_APPEND_COMPILE_FLAGS_ERROR([--param=ssp-buffer-size=4])
                   _APPEND_COMPILE_FLAGS_ERROR([-fstack-protector-all])
                   ])])])])
 
@@ -327,7 +327,7 @@ AC_DEFUN([_HARDEN_CXX_COMPILER_FLAGS],
                 [_APPEND_COMPILE_FLAGS_ERROR([-D_FORTIFY_SOURCE=2])
                 #_APPEND_COMPILE_FLAGS_ERROR([-Wstack-protector])
                 #_APPEND_COMPILE_FLAGS_ERROR([-fstack-protector])
-                #_APPEND_COMPILE_FLAGS_ERROR([--param=ssp-buffer-size=1])
+                #_APPEND_COMPILE_FLAGS_ERROR([--param=ssp-buffer-size=4])
                 _APPEND_COMPILE_FLAGS_ERROR([-fstack-protector-all])
                 ])])])])
 
