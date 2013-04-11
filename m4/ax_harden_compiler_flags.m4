@@ -15,7 +15,7 @@
 #
 # LICENSE
 #
-#  Copyright (C) 2012 Brian Aker
+#  Copyright (C) 2012-2013 Brian Aker
 #  All rights reserved.
 #
 #  Redistribution and use in source and binary forms, with or without
@@ -281,7 +281,7 @@ AC_DEFUN([_HARDEN_CXX_COMPILER_FLAGS],
           _APPEND_COMPILE_FLAGS_ERROR([-Wc++11-compat])
           _APPEND_COMPILE_FLAGS_ERROR([-Weffc++])
           AS_IF([test "x$ac_cv_vcs_checkout" = xyes],[
-            _APPEND_COMPILE_FLAGS_ERROR([-fno-omit-frame-pointer]),
+            _APPEND_COMPILE_FLAGS_ERROR([-fno-omit-frame-pointer])
             _APPEND_COMPILE_FLAGS_ERROR([-fsanitize=address])
             _APPEND_COMPILE_FLAGS_ERROR([-fsanitize=integer])
             AS_IF([test "x$enable_shared" = "xyes"],[

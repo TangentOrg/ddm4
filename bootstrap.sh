@@ -1457,18 +1457,21 @@ function check_make_target()
       ;;
     'clang-analyzer')
       ;;
-    'test-*')
+    test-*)
       ;;
-    'valgrind-*')
+    valgrind-*)
       ;;
-    'gdb-*')
+    gdb-*)
       ;;
     'dist')
       ;;
     *)
-      die "Unknown MAKE_TARGET option: $1"
+      echo "Matched default"
+      return 1
       ;;
   esac
+
+  return 0
 }
 
 function bootstrap ()
@@ -1516,6 +1519,10 @@ function bootstrap ()
     # If we are running inside of Jenkins, we want to only run some of the possible tests
     if $jenkins_build_environment; then
       check_make_target $target
+      ret=$?
+      if [ $ret -ne 0 ]; then
+        die "Unknown MAKE_TARGET option: $target"
+      fi
     fi
 
     case $target in
@@ -1754,6 +1761,13 @@ program_name=$0
 env_debug_enabled=false
 if [[ -n "$JENKINS_HOME" ]]; then 
   declare -r jenkins_build_environment=true
+  if [[ -n "$label" ]]; then
+    check_make_target $label
+    ret=$?
+    if [ $ret -eq 0 ]; then
+      MAKE_TARGET="$label"
+    fi
+  fi
 else
   declare -r jenkins_build_environment=false
 fi
