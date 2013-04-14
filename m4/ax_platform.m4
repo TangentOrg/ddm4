@@ -12,7 +12,7 @@
 #
 # LICENSE
 #
-#   Copyright (c) 2012 Brian Aker <brian@tangent.org>
+#   Copyright (c) 2012-2013 Brian Aker <brian@tangent.org>
 #
 #   Copying and distribution of this file, with or without modification, are
 #   permitted in any medium without royalty provided the copyright notice
@@ -57,4 +57,5 @@
   AM_CONDITIONAL([BUILD_WIN32],[test "x${TARGET_WINDOWS}" = "xtrue"])
   AM_CONDITIONAL([TARGET_OSX],[test "x${TARGET_OSX}" = "xtrue"])
   AM_CONDITIONAL([TARGET_LINUX],[test "x${TARGET_LINUX}" = "xtrue"])
+  AM_CONDITIONAL([TARGET_FREEBSD],[test "x${TARGET_OS_FREEBSD}" = "xtrue"])
   ])

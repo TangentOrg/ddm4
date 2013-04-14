@@ -79,7 +79,6 @@ AC_DEFUN([_HARDEN_LINKER_FLAGS],
          [
          AS_IF([test "$CC" != "clang"],
            [_APPEND_LINK_FLAGS_ERROR([-z relro -z now])
-#_APPEND_LINK_FLAGS_ERROR([-pie])
            AS_IF([test "x$ac_cv_warnings_as_errors" = xyes],
              [AX_APPEND_LINK_FLAGS([-Werror])])])
          ])
@@ -194,6 +193,7 @@ AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
           _APPEND_COMPILE_FLAGS_ERROR([-fwrapv])
           _APPEND_COMPILE_FLAGS_ERROR([-fmudflapt])
           _APPEND_COMPILE_FLAGS_ERROR([-pipe])
+          _APPEND_COMPILE_FLAGS_ERROR([-fPIE -pie])
           _APPEND_COMPILE_FLAGS_ERROR([-Wsizeof-pointer-memaccess])
 
           AS_IF([test "x$ax_enable_debug" = xno],
@@ -202,8 +202,7 @@ AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
                 [AS_IF([test "x$ac_c_gcc_recent" = xyes],
                   [_APPEND_COMPILE_FLAGS_ERROR([-D_FORTIFY_SOURCE=2])
                   #_APPEND_COMPILE_FLAGS_ERROR([-Wstack-protector])
-                  #_APPEND_COMPILE_FLAGS_ERROR([-fstack-protector])
-                  #_APPEND_COMPILE_FLAGS_ERROR([--param=ssp-buffer-size=4])
+                  #_APPEND_COMPILE_FLAGS_ERROR([-fstack-protector --param=ssp-buffer-size=4])
                   _APPEND_COMPILE_FLAGS_ERROR([-fstack-protector-all])
                   ])])])])
 
@@ -318,6 +317,7 @@ AC_DEFUN([_HARDEN_CXX_COMPILER_FLAGS],
           _APPEND_COMPILE_FLAGS_ERROR([-fwrapv])
           _APPEND_COMPILE_FLAGS_ERROR([-fmudflapt])
           _APPEND_COMPILE_FLAGS_ERROR([-pipe])
+          _APPEND_COMPILE_FLAGS_ERROR([-fPIE -pie])
           _APPEND_COMPILE_FLAGS_ERROR([-Wsizeof-pointer-memaccess])
 
           AS_IF([test "x$ax_enable_debug" = xno],
@@ -326,8 +326,7 @@ AC_DEFUN([_HARDEN_CXX_COMPILER_FLAGS],
               [AS_IF([test "x$ac_c_gcc_recent" = xyes],
                 [_APPEND_COMPILE_FLAGS_ERROR([-D_FORTIFY_SOURCE=2])
                 #_APPEND_COMPILE_FLAGS_ERROR([-Wstack-protector])
-                #_APPEND_COMPILE_FLAGS_ERROR([-fstack-protector])
-                #_APPEND_COMPILE_FLAGS_ERROR([--param=ssp-buffer-size=4])
+                #_APPEND_COMPILE_FLAGS_ERROR([-fstack-protector --param=ssp-buffer-size=4])
                 _APPEND_COMPILE_FLAGS_ERROR([-fstack-protector-all])
                 ])])])])
 
