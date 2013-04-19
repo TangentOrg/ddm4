@@ -217,6 +217,9 @@ function set_VENDOR_RELEASE ()
     rhel)
       VENDOR_RELEASE="$release"
       ;;
+    debian)
+      VENDOR_RELEASE="$release"
+      ;;
     ubuntu)
       VENDOR_RELEASE="$release"
       if [[ "x$VENDOR_RELEASE" == 'x12.04' ]]; then
