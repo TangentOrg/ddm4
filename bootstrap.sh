@@ -188,9 +188,15 @@ function set_VENDOR_DISTRIBUTION ()
 function set_VENDOR_RELEASE ()
 {
   local release=`echo "$1" | tr '[A-Z]' '[a-z]'`
-  case "$VENDOR_DISTRIBUTION" in
+
+  if $DEBUG; then 
+    echo "VENDOR_DISTRIBUTION:$VENDOR_DISTRIBUTION"
+    echo "VENDOR_RELEASE:$release"
+  fi
+
+  case $VENDOR_DISTRIBUTION in
     darwin)
-      case "$VENDOR_DISTRIBUTION" in
+      case $release in
         10.6*)
           VENDOR_RELEASE='snow_leopard'
           ;;
@@ -200,10 +206,12 @@ function set_VENDOR_RELEASE ()
         mountain)
           VENDOR_RELEASE='mountain'
           ;;
-        10.8*)
+        10.8.*)
+          echo "mountain_lion"
           VENDOR_RELEASE='mountain_lion'
           ;;
         *)
+          echo $VENDOR_RELEASE
           VENDOR_RELEASE='unknown'
           ;;
       esac
