@@ -383,11 +383,17 @@ function run_configure ()
   local BUILD_CONFIGURE_ARG= 
 
   # If ENV DEBUG is set we enable both debug and asssert, otherwise we see if this is a VCS checkout and if so enable assert
-  # Set ENV ASSERT in order to enable assert
-  if $DEBUG; then 
-    BUILD_CONFIGURE_ARG+=' --enable-debug --enable-assert'
-  elif [[ -n "$VCS_CHECKOUT" ]]; then
-    BUILD_CONFIGURE_ARG+=' --enable-assert'
+  # Set ENV ASSERT in order to enable assert.
+  # If we are doing a valgrind run, we always compile with assert disabled
+  if $valgrind_run; then
+    BUILD_CONFIGURE_ARG+= " CXXFLAGS=-DNDEBUG "
+    BUILD_CONFIGURE_ARG+= " CFLAGS=-DNDEBUG "
+  else
+    if $DEBUG; then 
+      BUILD_CONFIGURE_ARG+=' --enable-debug --enable-assert'
+    elif [[ -n "$VCS_CHECKOUT" ]]; then
+      BUILD_CONFIGURE_ARG+=' --enable-assert'
+    fi
   fi
 
   if [[ -n "$CONFIGURE_ARG" ]]; then 
@@ -439,7 +445,7 @@ function setup_gdb_command () {
 function setup_valgrind_command () {
   VALGRIND_PROGRAM=`type -p valgrind`
   if [[ -n "$VALGRIND_PROGRAM" ]]; then
-    VALGRIND_COMMAND="$VALGRIND_PROGRAM --error-exitcode=1 --leak-check=yes --show-reachable=yes --track-fds=yes --malloc-fill=A5 --free-fill=DE"
+    VALGRIND_COMMAND="$VALGRIND_PROGRAM --error-exitcode=1 --leak-check=yes --show-reachable=yes --malloc-fill=A5 --free-fill=DE --xml=yes --xml-file=\"valgrind-%p.xml\""
   fi
 }
 
@@ -539,11 +545,6 @@ function safe_popd ()
 
 function make_valgrind ()
 {
-  if [[ "$VENDOR_DISTRIBUTION" == 'darwin' ]]; then
-    make_darwin_malloc
-    return
-  fi
-
   # If the env VALGRIND_COMMAND is set then we assume it is valid
   local valgrind_was_set=false
   if [[ -z "$VALGRIND_COMMAND" ]]; then
@@ -563,8 +564,10 @@ function make_valgrind ()
 
   save_BUILD
 
+  valgrind_run=true
+
   # If we are required to run configure, do so now
-  run_configure_if_required
+  run_configure
 
   # If we don't have a configure, then most likely we will be missing libtool
   assert_file 'configure'
@@ -574,9 +577,21 @@ function make_valgrind ()
     TESTS_ENVIRONMENT="$VALGRIND_COMMAND"
   fi
 
-  make_target 'check' || return 1
+  make_target 'check'
+  ret=$?
+
+  # If we aren't going to error, we will clean up our environment
+  if [ "$ret" -eq 0 ]; then
+     make 'distclean'
+  fi
+
+  valgrind_run=false
 
   restore_BUILD
+
+  if [ "$ret" -ne 0 ]; then
+    return 1
+  fi
 }
 
 function make_install_system ()
@@ -1561,6 +1576,7 @@ function bootstrap ()
     fi
 
     local snapshot_run=false
+    local valgrind_run=false
 
     case $target in
       'self')
@@ -1624,7 +1640,11 @@ function bootstrap ()
       'rpm')
         make_rpm
         ;;
+      'darwin_malloc')
+        make_darwin_malloc
+        ;;
       'valgrind')
+        make_maintainer_clean 
         make_valgrind
         ;;
       'universe')

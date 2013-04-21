@@ -65,6 +65,10 @@ int main(void)
   if (VCS_CHECKOUT)
   {
     assert(strstr(CXXFLAGS, "-Werror"));
+    if (strstr(CXXFLAGS, "-Werror") == NULL)
+    {
+      return EXIT_FAILURE;
+    }
   }
 #endif
 
@@ -72,20 +76,44 @@ int main(void)
   if (DEBUG)
   {
     assert(strstr(CXXFLAGS, "-O0"));
+    if (strstr(CXXFLAGS, "-O0") == NULL)
+    {
+      return EXIT_FAILURE;
+    }
+
     assert(strstr(CXXFLAGS, "-O2") == NULL);
+    if (strstr(CXXFLAGS, "-O2"))
+    {
+      return EXIT_FAILURE;
+    }
   }
 #endif
 
 #ifdef HAVE_PRINTF_STRERROR
   {
-    char buffer[1024];
+    char buffer[1024]= { 0 };
     errno= 0;
     int buffer_length= snprintf(buffer, sizeof(buffer), "%ms");
+    assert(errno == 0);
+    if (errno != 0)
+    {
+      return EXIT_FAILURE;
+    }
+
     assert(buffer_length >= 3);
+    if (buffer_length < 3);
+    {
+      return EXIT_FAILURE;
+    }
+
     assert(strncmp(buffer, "Suc", 3) == 0);
+    if (strncmp(buffer, "Suc", 3) != 0)
+    {
+      return EXIT_FAILURE;
+    }
   }
 #endif
 
-  return 0;
+  return EXIT_SUCCESS;
 }
 
