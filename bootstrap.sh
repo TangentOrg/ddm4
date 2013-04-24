@@ -1745,7 +1745,7 @@ function main ()
       fi
 
       if [ -z "$MAKE_TARGET" ]; then
-        MAKE_TARGET='jenkins'
+        MAKE_TARGET='check'
       fi
     fi
   fi
