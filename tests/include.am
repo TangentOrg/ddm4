@@ -29,14 +29,10 @@ noinst_PROGRAMS+= tests/pthread_check
 
 tests_event_SOURCES= tests/event.cc
 tests_event_LDADD= @LIBEVENT_LIB@
-if HAVE_LIBEVENT
 check_PROGRAMS+= tests/event
-endif
 noinst_PROGRAMS+= tests/event
 
 tests_uuid_SOURCES= tests/uuid.cc
 tests_uuid_LDADD= @LIBUUID_LIB@
-if HAVE_LIBEVENT
 check_PROGRAMS+= tests/uuid
-endif
 noinst_PROGRAMS+= tests/uuid

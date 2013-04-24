@@ -1125,7 +1125,7 @@ function run_autoreconf ()
     run $BOOTSTRAP_LIBTOOLIZE '--copy' '--install' '--force' || die "Cannot execute $BOOTSTRAP_LIBTOOLIZE"
   fi
 
-  run $AUTORECONF || die "Cannot execute $AUTORECONF"
+  run $AUTORECONF $AUTORECONF_ARGS || die "Cannot execute $AUTORECONF"
 
   eval 'bash -n configure' || die "autoreconf generated a malformed configure"
 }
@@ -1306,12 +1306,16 @@ function autoreconf_setup ()
         fi
       fi
     fi
+
     if $VERBOSE; then
       LIBTOOLIZE_OPTIONS="--verbose $BOOTSTRAP_LIBTOOLIZE_OPTIONS"
     fi
+
     if $DEBUG; then
       LIBTOOLIZE_OPTIONS="--debug $BOOTSTRAP_LIBTOOLIZE_OPTIONS"
     fi
+
+    # Here we set LIBTOOLIZE to true since we are going to invoke it via BOOTSTRAP_LIBTOOLIZE
     LIBTOOLIZE=true
   fi
 
@@ -1349,7 +1353,7 @@ function autoreconf_setup ()
     fi
 
     if [[ -n "$GNU_BUILD_FLAGS" ]]; then
-      AUTORECONF="$AUTORECONF $GNU_BUILD_FLAGS"
+      AUTORECONF_ARGS="$GNU_BUILD_FLAGS"
     fi
   fi
 

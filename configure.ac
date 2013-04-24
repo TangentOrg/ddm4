@@ -15,7 +15,7 @@ AC_CONFIG_AUX_DIR([build-aux])
 
 AC_CANONICAL_TARGET
 
-AM_INIT_AUTOMAKE([1.11 color-tests -Wno-portability subdir-objects foreign tar-ustar])
+AM_INIT_AUTOMAKE([1.11 no-define color-tests -Wno-portability subdir-objects foreign tar-ustar])
 AC_PREREQ([2.63])
 
 AC_PREREQ([2.63])
@@ -39,12 +39,14 @@ LT_PREREQ([2.2])
 LT_INIT
 LT_LANG([C++])
 
+# AC_PROG_CXX
+# AC_PROG_CC
+
 AX_PLATFORM
 AX_ASSERT
 
 AC_DEFUN([CHECK_FOR_MINGW],
-         [AC_REQUIRE([AX_PLATFORM])
-         AS_IF([test "x${TARGET_WINDOWS}" == "xtrue"],
+         [AS_IF([test "x${TARGET_WINDOWS}" == "xtrue"],
                [AX_APPEND_LINK_FLAGS([-static-libstdc++],[LDFLAGS])
                AX_APPEND_LINK_FLAGS([-lmingw64],[LIBS])
                AX_APPEND_LINK_FLAGS([-lssp],[LIBS])
@@ -65,8 +67,7 @@ AC_CHECK_HEADERS_ONCE([features.h])
 
 #  We use the header to cross test our m4 rules that also test
 AC_DEFUN([CHECK_FOR_CXXABI],
-         [AC_REQUIRE([AX_PLATFORM])
-         AC_LANG_PUSH([C++])
+         [AC_LANG_PUSH([C++])
          AS_IF([test "x${TARGET_WINDOWS}" != "xtrue"],
                [AC_CHECK_HEADERS([cxxabi.h])])
          AC_LANG_POP

@@ -101,7 +101,7 @@ int main(void)
     }
 
     assert(buffer_length >= 3);
-    if (buffer_length < 3);
+    if (buffer_length < 3)
     {
       return EXIT_FAILURE;
     }
