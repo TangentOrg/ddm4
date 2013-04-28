@@ -46,4 +46,8 @@ tests/main_cxx.trs
 tests/pthread_check
 tests/uuid
 version.h
+*\.exe
 valgrind*.xml
+html
+bin/.libs/
+tests/.libs/
