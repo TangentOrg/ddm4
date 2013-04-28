@@ -827,7 +827,7 @@ function make_for_clang_analyzer ()
 function check_for_jenkins ()
 {
   if ! $jenkins_build_environment; then
-    echo "Not inside of jenkins"
+    echo "Not inside of jenkins, simulating environment"
 
     if [ -f 'configure' ]; then
       make_maintainer_clean
@@ -867,7 +867,13 @@ function make_for_continuus_integration ()
   # Platforms which require bootstrap should have some setup done before we hit this stage.
   # If we are building locally, skip this step, unless we are just testing locally. 
   if $BOOTSTRAP_SNAPSHOT; then
-    make_for_snapshot
+    if $BOOTSTRAP_SNAPSHOT; then
+      assert_file 'configure'
+    fi
+
+    if [ -n "$BOOTSTRAP_SNAPSHOT_CHECK" ]; then
+      assert_file "$BOOTSTRAP_SNAPSHOT_CHECK" 'snapshot check failed'
+    fi
   else
     # If we didn't require a snapshot, then we should not have a configure
     assert_no_file 'configure'
