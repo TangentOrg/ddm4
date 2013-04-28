@@ -59,10 +59,10 @@ CHECK_FOR_MINGW
 # Checks for programs.
 AC_CHECK_PROGS([VALGRIND],['valgrind'])
 AC_CHECK_PROGS([WINE],['wine'])
-AC_CHECK_PROGS([PERL], [perl])
-AC_CHECK_PROGS([DPKG_GENSYMBOLS], [dpkg-gensymbols], [:])
-AC_CHECK_PROGS([LCOV], [lcov], [echo lcov not found])
-AC_CHECK_PROGS([LCOV_GENHTML], [genhtml], [echo genhtml not found])
+AC_CHECK_PROGS([PERL],[perl])
+AC_CHECK_PROGS([DPKG_GENSYMBOLS],[dpkg-gensymbols])
+AX_WITH_PROG([LCOV],[lcov])
+AX_WITH_PROG([LCOV_GENHTML],[genhtml])
 AX_PROG_SPHINX_BUILD(,[AC_MSG_ERROR([sphinx-build version 1.0 or greater is required])])
 
 # Checks for libraries.
