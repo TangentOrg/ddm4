@@ -655,7 +655,7 @@ function make_for_snapshot ()
 
   run_configure
   make_target 'all'
-  make_target 'clean'
+  make_target 'distclean'
 
   # We should have a configure, but no Makefile at the end of this exercise
   assert_no_file 'Makefile'
