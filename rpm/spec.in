@@ -57,17 +57,26 @@ mkdir -p $RPM_BUILD_ROOT/
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING NEWS README HACKING THANKS
 %{_datadir}/aclocal/ax_assert.m4
+%{_datadir}/aclocal/ax_check_library.m4
+%{_datadir}/aclocal/ax_compiler_vendor.m4
 %{_datadir}/aclocal/ax_compiler_version.m4
+%{_datadir}/aclocal/ax_count_cpus.m4
+%{_datadir}/aclocal/ax_cxx_gcc_abi_demangle.m4
 %{_datadir}/aclocal/ax_debug.m4
+%{_datadir}/aclocal/ax_dlopen.m4
 %{_datadir}/aclocal/ax_endian.m4
 %{_datadir}/aclocal/ax_harden_compiler_flags.m4
 %{_datadir}/aclocal/ax_hex_version.m4
 %{_datadir}/aclocal/ax_libevent.m4
 %{_datadir}/aclocal/ax_platform.m4
+%{_datadir}/aclocal/ax_printf_strerror.m4
 %{_datadir}/aclocal/ax_prog_sphinx_build.m4
 %{_datadir}/aclocal/ax_pthread_timedjoin_np.m4
 %{_datadir}/aclocal/ax_uuid.m4
 %{_datadir}/aclocal/ax_vcs_checkout.m4
+%{_datadir}/aclocal/have_cinttypes.m4
+%{_datadir}/aclocal/have_cstdint.m4
+%{_datadir}/aclocal/socket_send_flags.m4
 %{_mandir}/man1/cflags.1.gz
 %{_mandir}/man1/cxxflags.1.gz
 
