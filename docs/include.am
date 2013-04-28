@@ -21,13 +21,7 @@ clean-docs-check:
 .PHONY: help clean html dirhtml singlehtml pickle json htmlhelp qthelp devhelp epub latex latexpdf text man changes linkcheck doctest
 
 man:
-if HAVE_RECENT_SPHINX
 	@PYTHONPATH=$(SPHINX_BUILDDIR)/docs  $(SPHINXBUILD) -b man $(ALLSPHINXOPTS) ${top_builddir}/man
-else
-	@echo "You need to install a recent version of sphinx-build to create the man pages.
-endif
-
-if HAVE_SPHINX
 
 install-html-local: html-local
 	@$(MKDIR_P)  $(htmldir)/html
@@ -86,5 +80,3 @@ doctest: docs/conf.py
 	PYTHONPATH=${top_srcdir}/docs  $(SPHINXBUILD) -b doctest $(ALLSPHINXOPTS) $(SPHINX_BUILDDIR)/doctest
 	@echo "Testing of doctests in the sources finished, look at the " \
 	      "results in $(SPHINX_BUILDDIR)/doctest/output.txt."
-
-endif
