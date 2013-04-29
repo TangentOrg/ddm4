@@ -45,7 +45,6 @@
 static void* thread_runner(void*)
 {
   pthread_exit(0);
-  return NULL;
 }
 
 int main(void)

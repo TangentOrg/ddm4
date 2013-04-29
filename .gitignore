@@ -51,3 +51,4 @@ valgrind*.xml
 html
 bin/.libs/
 tests/.libs/
+confdefs.h

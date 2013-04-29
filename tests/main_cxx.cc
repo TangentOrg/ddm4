@@ -47,21 +47,25 @@ int main(void)
 #if defined(HAVE_CXXABI_H) && HAVE_CXXABI_H
   // We just need to make sure it was defined
   assert(HAVE_GCC_ABI_DEMANGLE);
+# if defined(HAVE_GCC_ABI_DEMANGLE) && HAVE_GCC_ABI_DEMANGLE == 0
   if (HAVE_GCC_ABI_DEMANGLE == 0)
   {
     return EXIT_FAILURE;
   }
+# endif
 #endif
 
 #if defined(HAVE_GCC_ABI_DEMANGLE) && HAVE_GCC_ABI_DEMANGLE
   assert(HAVE_CXXABI_H);
+# if defined(HAVE_CXXABI_H) && HAVE_CXXABI_H == 0
   if (HAVE_CXXABI_H == 0)
   {
     return EXIT_FAILURE;
   }
+# endif
 #endif
 
-#if defined(VCS_CHECKOUT)
+#if defined(VCS_CHECKOUT) && VCS_CHECKOUT == 1
   if (VCS_CHECKOUT)
   {
     assert(strstr(CXXFLAGS, "-Werror"));
@@ -72,7 +76,7 @@ int main(void)
   }
 #endif
 
-#ifdef DEBUG
+#if defined(DEBUG) && DEBUG == 1
   if (DEBUG)
   {
     assert(strstr(CXXFLAGS, "-O0"));

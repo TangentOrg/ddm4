@@ -15,7 +15,7 @@ AC_CONFIG_AUX_DIR([build-aux])
 
 AC_CANONICAL_TARGET
 
-AM_INIT_AUTOMAKE([1.11 no-define color-tests -Wno-portability subdir-objects foreign tar-ustar])
+AM_INIT_AUTOMAKE([1.11 no-define color-tests -Wno-portability subdir-objects foreign tar-ustar serial-tests])
 AC_PREREQ([2.63])
 
 AC_PREREQ([2.63])
@@ -57,13 +57,13 @@ AC_DEFUN([CHECK_FOR_MINGW],
 CHECK_FOR_MINGW
 
 # Checks for programs.
-AC_CHECK_PROGS([VALGRIND],['valgrind'])
-AC_CHECK_PROGS([WINE],['wine'])
-AC_CHECK_PROGS([PERL],[perl])
 AC_CHECK_PROGS([DPKG_GENSYMBOLS],[dpkg-gensymbols])
+AC_CHECK_PROGS([PERL],[perl])
+AC_CHECK_PROGS([WINE],['wine'])
+AX_PROG_SPHINX_BUILD(,[AC_MSG_WARN([sphinx-build version 1.0 or greater is required to build man pages])])
+#AX_PROG_VALGRIND([memcheck],[--error-exitcode=1 --leak-check=yes --track-fds=yes --malloc-fill=A5 --free-fill=DE])
 AX_WITH_PROG([LCOV],[lcov])
 AX_WITH_PROG([LCOV_GENHTML],[genhtml])
-AX_PROG_SPHINX_BUILD(,[AC_MSG_WARN([sphinx-build version 1.0 or greater is required to build man pages])])
 
 # Checks for libraries.
 AX_CXX_GCC_ABI_DEMANGLE

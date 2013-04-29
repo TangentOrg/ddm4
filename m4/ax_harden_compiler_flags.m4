@@ -51,9 +51,7 @@
 
 # The Following flags are not checked for
 # -Wdeclaration-after-statement is counter to C99
-# _APPEND_COMPILE_FLAGS_ERROR([-pedantic]) --
-# ?  _APPEND_COMPILE_FLAGS_ERROR([-Wlong-long]) -- Don't turn on for
-# compatibility issues memcached_stat_st
+# _APPEND_COMPILE_FLAGS_ERROR([-pedantic])
 
 #serial 10
 
@@ -78,15 +76,12 @@ AC_DEFUN([_APPEND_COMPILE_FLAGS_ERROR],
 # Everything above this does the heavy lifting, while what follows does the specifics.
 
 AC_DEFUN([_HARDEN_LINKER_FLAGS],
-         [
-         AS_IF([test "$CC" != "clang"],
-           [_APPEND_LINK_FLAGS_ERROR([-z relro -z now])
-           AS_IF([test "x$ac_cv_warnings_as_errors" = xyes],
-             [AX_APPEND_LINK_FLAGS([-Werror])])
-           AS_IF([test "x$ac_cv_vcs_checkout" = xyes],[
-             _APPEND_LINK_FLAGS_ERROR([-rdynamic])])
-           ])
-         ])
+        [AS_IF([test "$CC" != "clang"],
+          [_APPEND_LINK_FLAGS_ERROR([-z relro -z now])
+          AS_IF([test "x$ac_cv_warnings_as_errors" = xyes],[AX_APPEND_LINK_FLAGS([-Werror])])
+          AS_IF([test "x$ac_cv_vcs_checkout" = xyes],[_APPEND_LINK_FLAGS_ERROR([-rdynamic])])
+          ])
+        ])
 
 AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
          [AC_LANG_PUSH([C])dnl
@@ -110,11 +105,11 @@ AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
            [_APPEND_COMPILE_FLAGS_ERROR([-Wno-unknown-pragmas])
            _APPEND_COMPILE_FLAGS_ERROR([-Wno-pragmas])])
 
-         AS_IF([test "$CC" = "clang"],
-           [_APPEND_COMPILE_FLAGS_ERROR([-Qunused-arguments])])
+         AS_IF([test "$CC" = "clang"],[_APPEND_COMPILE_FLAGS_ERROR([-Qunused-arguments])])
 
          _APPEND_COMPILE_FLAGS_ERROR([-Wall])
          _APPEND_COMPILE_FLAGS_ERROR([-Wextra])
+         _APPEND_COMPILE_FLAGS_ERROR([-Weverything])
          _APPEND_COMPILE_FLAGS_ERROR([-Wthis-test-should-fail])
 # Anything below this comment please keep sorted.
 # _APPEND_COMPILE_FLAGS_ERROR([-Wmissing-format-attribute])
@@ -160,7 +155,7 @@ AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
           _APPEND_COMPILE_FLAGS_ERROR([-Wundef])
           _APPEND_COMPILE_FLAGS_ERROR([-Wunsafe-loop-optimizations])
           _APPEND_COMPILE_FLAGS_ERROR([-funsafe-loop-optimizations])
-          AS_IF([test "x$MINGW" != xyes],
+          AS_IF([test "x$MINGW" != xyes],[
             AS_IF([test "x$ac_cv_vcs_checkout" = xyes],[
               AS_IF([test "x$enable_shared" = "xyes"],[
                 _APPEND_COMPILE_FLAGS_ERROR([-fno-omit-frame-pointer])
@@ -243,11 +238,11 @@ AC_DEFUN([_HARDEN_CXX_COMPILER_FLAGS],
            [_APPEND_COMPILE_FLAGS_ERROR([-Wno-unknown-pragmas])
            _APPEND_COMPILE_FLAGS_ERROR([-Wno-pragmas])])
 
-         AS_IF([test "$CXX" = "clang++"],
-           [_APPEND_COMPILE_FLAGS_ERROR([-Qunused-arguments])])
+         AS_IF([test "$CXX" = "clang++"],[_APPEND_COMPILE_FLAGS_ERROR([-Qunused-arguments])])
 
          _APPEND_COMPILE_FLAGS_ERROR([-Wall])
          _APPEND_COMPILE_FLAGS_ERROR([-Wextra])
+         _APPEND_COMPILE_FLAGS_ERROR([-Weverything])
          _APPEND_COMPILE_FLAGS_ERROR([-Wthis-test-should-fail])
 # Anything below this comment please keep sorted.
 # _APPEND_COMPILE_FLAGS_ERROR([-Wmissing-format-attribute])
@@ -287,7 +282,7 @@ AC_DEFUN([_HARDEN_CXX_COMPILER_FLAGS],
           _APPEND_COMPILE_FLAGS_ERROR([-funsafe-loop-optimizations])
           _APPEND_COMPILE_FLAGS_ERROR([-Wc++11-compat])
           _APPEND_COMPILE_FLAGS_ERROR([-Weffc++])
-          AS_IF([test "x$MINGW" != xyes],
+          AS_IF([test "x$MINGW" != xyes],[
             AS_IF([test "x$ac_cv_vcs_checkout" = xyes],[
               AS_IF([test "x$enable_shared" = "xyes"],[
                 _APPEND_COMPILE_FLAGS_ERROR([-fno-omit-frame-pointer])

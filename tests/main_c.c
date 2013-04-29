@@ -40,23 +40,36 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
+
+#pragma GCC diagnostic ignored "-Wunreachable-code"
 
 int main(void)
 {
   assert(DDm4_VERSION_HEX);
   if (DDm4_VERSION_HEX)
   {
-    assert(strstr(CFLAGS, "-std=c99"));
+    assert(CC);
+    assert(CFLAGS);
+    if (strcmp(CC, "clang") != 0)
+    {
+      assert(strstr(CFLAGS, "-std=c99"));
+    }
 
+    assert(VCS_SYSTEM);
+#if defined(VCS_CHECKOUT) && VCS_CHECKOUT
     if (VCS_CHECKOUT)
     {
       assert(strstr(VCS_SYSTEM, "git"));
     }
-    else
+#else
     {
       assert(strstr(VCS_SYSTEM, "none"));
     }
+#endif
 
+    assert(CC_VERSION);
+    assert(CXX_VERSION);
     assert(strcmp(CC_VERSION, "unknown"));
     assert(strcmp(CXX_VERSION, "unknown"));
 
