@@ -7,5 +7,5 @@ dist_man_MANS+= man/cflags.1
 
 # Build rule for documentation
 $(dist_man_MANS): $(top_srcdir)/configure.ac
-	$(MAKE) $(AM_MAKEFLAGS) man
+	$(MAKE) $(AM_MAKEFLAGS) --jobs=1 man
 

@@ -654,6 +654,7 @@ function make_for_snapshot ()
   assert_no_directory 'autom4te.cache'
 
   run_configure
+  make_target 'man'
   make_target 'all'
   make_target 'distclean'
 
