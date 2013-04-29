@@ -15,7 +15,7 @@ AC_CONFIG_AUX_DIR([build-aux])
 
 AC_CANONICAL_TARGET
 
-AM_INIT_AUTOMAKE([1.11 no-define color-tests -Wno-portability subdir-objects foreign tar-ustar serial-tests])
+AM_INIT_AUTOMAKE([1.11 no-define color-tests -Wno-portability subdir-objects foreign tar-ustar])
 AC_PREREQ([2.63])
 
 AC_PREREQ([2.63])
