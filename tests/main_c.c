@@ -51,11 +51,6 @@ int main(void)
   {
     assert(CC);
     assert(CFLAGS);
-    if (strcmp(CC, "clang") != 0)
-    {
-      assert(strstr(CFLAGS, "-std=c99"));
-    }
-
     assert(VCS_SYSTEM);
 #if defined(VCS_CHECKOUT) && VCS_CHECKOUT
     if (VCS_CHECKOUT)
