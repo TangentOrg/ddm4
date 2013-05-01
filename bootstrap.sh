@@ -1714,6 +1714,12 @@ function main ()
   # We don't want Jenkins overriding other variables, so we NULL them.
   if [ -z "$MAKE_TARGET" ]; then
     if $jenkins_build_environment; then
+      if [[ -n "$label" ]]; then
+        check_make_target $label
+        if [ $? -eq 0 ]; then
+          MAKE_TARGET="$label"
+        fi
+      fi
       if [[ -n "$LABEL" ]]; then
         check_make_target $LABEL
         if [ $? -eq 0 ]; then
