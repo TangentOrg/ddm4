@@ -905,10 +905,10 @@ function self_test ()
   # We start off with a clean env
   make_maintainer_clean
 
-  eval "./bootstrap.sh jenkins" || die "failed 'jenkins'"
-  eval "./bootstrap.sh all" || die "failed 'all'"
-  eval "./bootstrap.sh gdb" || die "failed 'gdb'"
-  eval "./bootstrap.sh maintainer-clean" || die "failed 'maintainer-clean'"
+#  eval "./bootstrap.sh jenkins" || die "failed 'jenkins'"
+#  eval "./bootstrap.sh all" || die "failed 'all'"
+#  eval "./bootstrap.sh gdb" || die "failed 'gdb'"
+#  eval "./bootstrap.sh maintainer-clean" || die "failed 'maintainer-clean'"
 }
 
 function make_install_html ()
