@@ -145,7 +145,7 @@ function rebuild_host_os ()
 {
   HOST_OS="${UNAME_MACHINE_ARCH}-${VENDOR}-${VENDOR_DISTRIBUTION}-${VENDOR_RELEASE}-${UNAME_KERNEL}-${UNAME_KERNEL_RELEASE}"
   if [ -z "$1" ]; then
-    if $VERBOSE; then
+    if $verbose; then
       echo "HOST_OS=$HOST_OS"
     fi
   fi
@@ -189,7 +189,7 @@ function set_VENDOR_RELEASE ()
 {
   local release=`echo "$1" | tr '[A-Z]' '[a-z]'`
 
-  if $DEBUG; then 
+  if $verbose; then 
     echo "VENDOR_DISTRIBUTION:$VENDOR_DISTRIBUTION"
     echo "VENDOR_RELEASE:$release"
   fi
@@ -384,13 +384,13 @@ function run_configure ()
   # Arguments for configure
   local BUILD_CONFIGURE_ARG= 
 
-  # If ENV DEBUG is set we enable both debug and asssert, otherwise we see if this is a VCS checkout and if so enable assert
+  # If debug is set we enable both debug and asssert, otherwise we see if this is a VCS checkout and if so enable assert
   # Set ENV ASSERT in order to enable assert.
   # If we are doing a valgrind run, we always compile with assert disabled
   if $valgrind_run; then
     BUILD_CONFIGURE_ARG+= '--enable-assert=no'
   else
-    if $DEBUG; then 
+    if $debug; then 
       BUILD_CONFIGURE_ARG+=' --enable-debug --enable-assert'
     elif [[ -n "$VCS_CHECKOUT" ]]; then
       BUILD_CONFIGURE_ARG+=' --enable-assert'
@@ -525,7 +525,7 @@ function safe_pushd ()
   pushd $1 &> /dev/null ;
 
   if [ -n "$BUILD_DIR" ]; then
-    if $VERBOSE; then
+    if $verbose; then
       echo "BUILD_DIR=$BUILD_DIR"
     fi
   fi
@@ -905,10 +905,10 @@ function self_test ()
   # We start off with a clean env
   make_maintainer_clean
 
-  eval "./bootstrap.sh jenkins" || die "failed 'jenkins'"
-  eval "./bootstrap.sh all" || die "failed 'all'"
-  eval "./bootstrap.sh gdb" || die "failed 'gdb'"
-  eval "./bootstrap.sh maintainer-clean" || die "failed 'maintainer-clean'"
+#  eval "./bootstrap.sh jenkins" || die "failed 'jenkins'"
+#  eval "./bootstrap.sh all" || die "failed 'all'"
+#  eval "./bootstrap.sh gdb" || die "failed 'gdb'"
+#  eval "./bootstrap.sh maintainer-clean" || die "failed 'maintainer-clean'"
 }
 
 function make_install_html ()
@@ -974,7 +974,7 @@ function make_target ()
   fi
 
   if [ -n "$TESTS_ENVIRONMENT" ]; then
-    if $VERBOSE; then
+    if $verbose; then
       echo "TESTS_ENVIRONMENT=$TESTS_ENVIRONMENT"
     fi
   fi
@@ -1082,7 +1082,7 @@ function run_autoreconf ()
     die "Programmer error, tried to call run_autoreconf () but AUTORECONF was not set"
   fi
 
-  if test $use_libtool = 1; then
+  if $use_libtool; then
     assert $BOOTSTRAP_LIBTOOLIZE
     run $BOOTSTRAP_LIBTOOLIZE '--copy' '--install' '--force' || die "Cannot execute $BOOTSTRAP_LIBTOOLIZE"
   fi
@@ -1094,7 +1094,7 @@ function run_autoreconf ()
 
 function run ()
 {
-  if $VERBOSE; then
+  if $verbose; then
     echo "\`$@' $ARGS"
   fi
 
@@ -1115,26 +1115,25 @@ function parse_command_line_options ()
     case $opt in
       a) #--autoreconf
         AUTORECONF_OPTION=true
-        MAKE_TARGET='autoreconf'
+        MAKE_TARGET+='autoreconf'
         ;;
       p) #--print-env
-        PRINT_SETUP_OPTION=true
+        print_setup_opt=true
         ;;
       c) # --configure
         CONFIGURE_OPTION=true
-        MAKE_TARGET='configure'
+        MAKE_TARGET+='configure'
         ;;
       m) # maintainer-clean
         CLEAN_OPTION=true
-        MAKE_TARGET='clean_op'
         ;;
       t) # target
         TARGET_OPTION=true
         TARGET_OPTION_ARG="$OPTARG"
-        MAKE_TARGET="$OPTARG"
+        MAKE_TARGET+="$OPTARG"
         ;;
       d) # debug
-        DEBUG_OPTION=true
+        opt_debug=true
         enable_debug
         ;;
       h) # help
@@ -1150,8 +1149,8 @@ function parse_command_line_options ()
         exit
         ;;
       v) # verbose
-        VERBOSE_OPTION=true
-        VERBOSE=true
+        opt_verbose=true
+        verbose=true
         ;;
       :)
         echo "Option -$OPTARG requires an argument." >&2
@@ -1186,17 +1185,16 @@ function determine_vcs ()
   fi
 
   if [[ -n "$VCS_CHECKOUT" ]]; then
-    VERBOSE=true
+    verbose=true
   fi
 }
 
 function require_libtoolise ()
 {
-  use_libtool=0
   grep '^[         ]*A[CM]_PROG_LIBTOOL' configure.ac >/dev/null \
-    && use_libtool=1
+    && use_libtool=true
   grep '^[         ]*LT_INIT' configure.ac >/dev/null \
-    && use_libtool=1
+    && use_libtool=true
 }
 
 function autoreconf_setup ()
@@ -1212,12 +1210,12 @@ function autoreconf_setup ()
     fi
     
     if [ "$VCS_CHECKOUT" ]; then
-      if $DEBUG; then
+      if $debug; then
         MAKE="$MAKE --warn-undefined-variables"
       fi
     fi
 
-    if $DEBUG; then
+    if $debug; then
       MAKE="$MAKE -d"
     fi
   fi
@@ -1226,7 +1224,7 @@ function autoreconf_setup ()
     GNU_BUILD_FLAGS="--install --force"
   fi
 
-  if $VERBOSE; then
+  if $verbose; then
     GNU_BUILD_FLAGS="$GNU_BUILD_FLAGS --verbose"
   fi
 
@@ -1242,7 +1240,7 @@ function autoreconf_setup ()
     fi
   fi
 
-  if test $use_libtool = 1; then
+  if $use_libtool; then
     if [[ -n "$LIBTOOLIZE" ]]; then
       BOOTSTRAP_LIBTOOLIZE=`type -p $LIBTOOLIZE`
 
@@ -1269,11 +1267,11 @@ function autoreconf_setup ()
       fi
     fi
 
-    if $VERBOSE; then
+    if $verbose; then
       LIBTOOLIZE_OPTIONS="--verbose $BOOTSTRAP_LIBTOOLIZE_OPTIONS"
     fi
 
-    if $DEBUG; then
+    if $debug; then
       LIBTOOLIZE_OPTIONS="--debug $BOOTSTRAP_LIBTOOLIZE_OPTIONS"
     fi
 
@@ -1324,8 +1322,8 @@ function autoreconf_setup ()
 
 function print_setup ()
 {
-  saved_debug_status=$DEBUG
-  if $DEBUG; then
+  local saved_debug_status=$debug
+  if $debug; then
     disable_debug
   fi
 
@@ -1350,11 +1348,11 @@ function print_setup ()
     echo "--configure"
   fi
 
-  if $DEBUG_OPTION; then
+  if $opt_debug; then
     echo "--debug"
   fi
 
-  if $PRINT_SETUP_OPTION; then
+  if $print_setup_opt; then
     echo "--print-env"
   fi
 
@@ -1362,7 +1360,7 @@ function print_setup ()
     echo "--target=$TARGET_OPTION_ARG"
   fi
 
-  if $VERBOSE_OPTION; then
+  if $opt_verbose; then
     echo "--verbose"
   fi
 
@@ -1386,17 +1384,18 @@ function print_setup ()
     echo "VCS_CHECKOUT=$VCS_CHECKOUT"
   fi
 
-  if $VERBOSE; then
-    echo "VERBOSE=true"
-  fi
-
-  if $DEBUG; then
-    echo "DEBUG=true"
+  if $debug; then
+    echo "debug=true"
   fi
 
   if [[ -n "$WARNINGS" ]]; then
     echo "WARNINGS=$WARNINGS"
   fi
+
+  if $saved_debug_status; then
+    echo "DEBUG=true"
+  fi
+
   echo '----------------------------------------------' 
 
   if $saved_debug_status; then
@@ -1490,13 +1489,14 @@ function check_make_target()
   return 0
 }
 
-function bootstrap ()
+function execute_job ()
 {
   determine_target_platform
 
   determine_vcs
 
   # Set up whatever we need to do to use autoreconf later
+  use_libtool=false
   require_libtoolise
   if ! autoreconf_setup; then
     return 1
@@ -1506,13 +1506,13 @@ function bootstrap ()
     MAKE_TARGET="make_default"
   fi
 
-  if $PRINT_SETUP_OPTION -o  $DEBUG; then
+  if $print_setup_opt -o  $debug; then
     echo 
     print_setup
     echo 
 
     # Exit if all we were looking for were the currently used options
-    if $PRINT_SETUP_OPTION; then
+    if $print_setup_opt; then
       exit
     fi
   fi
@@ -1527,6 +1527,10 @@ function bootstrap ()
 
   # We should always have a target by this point
   assert MAKE_TARGET
+
+  if $CLEAN_OPTION; then
+    make_maintainer_clean
+  fi
 
   local MAKE_TARGET_ARRAY=($MAKE_TARGET)
 
@@ -1627,8 +1631,10 @@ function bootstrap ()
     esac
 
     if $jenkins_build_environment; then
-      if ! $snapshot_run; then
-        run_make_maintainer_clean_if_possible
+      if [[ "$MAKE_TARGET" != "all" ]]; then
+        if ! $snapshot_run; then
+          run_make_maintainer_clean_if_possible
+        fi
       fi
     fi
 
@@ -1637,22 +1643,37 @@ function bootstrap ()
 
 function main ()
 {
+  # Are we running inside of Jenkins?
+  if [[ -n "$JENKINS_HOME" ]]; then 
+    declare -r jenkins_build_environment=true
+  else
+    declare -r jenkins_build_environment=false
+  fi
+
   # Variables we export
   declare -x VCS_CHECKOUT=
 
   # Variables we control globally
-  local MAKE_TARGET=
+  local -a MAKE_TARGET=
   local CONFIGURE=
+  local use_libtool=false
+  local verbose=false
+
+  #getop variables
+  local opt_debug=false
+  local opt_verbose=false
+
+  if [[ -n "$VERBOSE" ]]; then
+    verbose=true
+  fi
 
   # Options for getopt
   local AUTORECONF_OPTION=false
   local CLEAN_OPTION=false
   local CONFIGURE_OPTION=false
-  local DEBUG_OPTION=false
-  local PRINT_SETUP_OPTION=false
+  local print_setup_opt=false
   local TARGET_OPTION=false
   local TARGET_OPTION_ARG=
-  local VERBOSE_OPTION=false
 
   local OLD_CONFIGURE=
   local OLD_CONFIGURE_ARG=
@@ -1706,6 +1727,7 @@ function main ()
           MAKE_TARGET="$label"
         fi
       fi
+
       if [[ -n "$LABEL" ]]; then
         check_make_target $LABEL
         if [ $? -eq 0 ]; then
@@ -1719,12 +1741,13 @@ function main ()
     fi
   fi
 
-  bootstrap
+  execute_job
+  local ret=$?
 
   jobs -l
   wait
 
-  exit 0
+  exit $ret
 }
 
 function set_branch ()
@@ -1771,7 +1794,7 @@ function merge ()
 
 function enable_debug ()
 {
-  if ! $DEBUG; then
+  if ! $debug; then
     local caller_loc=`caller`
     if [ -n $1 ]; then
       echo "$caller_loc Enabling debug: $1"
@@ -1779,7 +1802,7 @@ function enable_debug ()
       echo "$caller_loc Enabling debug"
     fi
     set -x
-    DEBUG=true
+    debug=true
   fi
 }
 
@@ -1798,73 +1821,67 @@ EOF
 function disable_debug ()
 {
   set +x
-  DEBUG=true
+  debug=false
+}
+
+function bootstrap ()
+{
+  local env_debug_enabled=false
+  local debug=false
+
+  export ACLOCAL
+  export AUTOCONF
+  export AUTOHEADER
+  export AUTOM4TE
+  export AUTOMAKE
+  export AUTORECONF
+  export CONFIGURE_ARG
+  export DEBUG
+  export GNU_BUILD_FLAGS
+  export LIBTOOLIZE
+  export LIBTOOLIZE_OPTIONS
+  export MAKE
+  export PREFIX_ARG
+  export TESTS_ENVIRONMENT
+  export VERBOSE
+  export WARNINGS
+
+  case $OSTYPE in
+    darwin*)
+      export MallocGuardEdges
+      export MallocErrorAbort
+      export MallocScribble
+      ;;
+  esac
+
+  # We check for DEBUG twice, once before we source the config file, and once afterward
+  if [[ -n "$DEBUG" ]]; then
+    env_debug_enabled=true
+  fi
+
+  # Variables which only can be set by .bootstrap
+  BOOTSTRAP_SNAPSHOT=false
+  BOOTSTRAP_SNAPSHOT_CHECK=
+
+  if [ -f '.bootstrap' ]; then
+    source '.bootstrap'
+  fi
+
+  # We do this in order to protect the case where DEBUG that came from the ENV (i.e. it overrides what is found in .bootstrap
+  if $env_debug_enabled; then
+    enable_debug
+  elif [[ -n "$DEBUG" ]]; then
+    enable_debug "Enabling DEBUG from '.bootstrap'"
+  fi
+
+  if $env_debug_enabled; then
+    print_setup
+  fi
+
+
+  main $@
 }
 
 # Script begins here
-
-program_name=$0
-
-env_debug_enabled=false
-if [[ -n "$JENKINS_HOME" ]]; then 
-  declare -r jenkins_build_environment=true
-else
-  declare -r jenkins_build_environment=false
-fi
-
-export ACLOCAL
-export AUTOCONF
-export AUTOHEADER
-export AUTOM4TE
-export AUTOMAKE
-export AUTORECONF
-export CONFIGURE_ARG
-export DEBUG
-export GNU_BUILD_FLAGS
-export LIBTOOLIZE
-export LIBTOOLIZE_OPTIONS
-export MAKE
-export PREFIX_ARG
-export TESTS_ENVIRONMENT
-export VERBOSE
-export WARNINGS
-
-case $OSTYPE in
-  darwin*)
-    export MallocGuardEdges
-    export MallocErrorAbort
-    export MallocScribble
-    ;;
-esac
-
-# We check for DEBUG twice, once before we source the config file, and once afterward
-env_debug_enabled=false
-if [[ -n "$DEBUG" ]]; then
-  env_debug_enabled=true
-  enable_debug
-  print_setup
-fi
-
-# Variables which only can be set by .bootstrap
-BOOTSTRAP_SNAPSHOT=false
-BOOTSTRAP_SNAPSHOT_CHECK=
-
-if [ -f '.bootstrap' ]; then
-  source '.bootstrap'
-fi
-
-if $env_debug_enabled; then
-  enable_debug
-else
-  if [[ -n "$DEBUG" ]]; then
-    enable_debug "Enabling DEBUG from '.bootstrap'"
-    print_setup
-  fi
-fi
-
-# We do this in order to protect the case where DEBUG
-if ! $env_debug_enabled; then
-  DEBUG=false
-fi
-
-main $@
+declare -r program_name=$0
+bootstrap $@

@@ -47,7 +47,7 @@ tests/pthread_check
 tests/uuid
 version.h
 *\.exe
-valgrind*.xml
+*\.xml
 html
 bin/.libs/
 tests/.libs/
