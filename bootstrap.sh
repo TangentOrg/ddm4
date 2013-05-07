@@ -80,7 +80,7 @@ function warn ()
 function nassert ()
 {
   local param_name=\$"$1"
-  local param_value=`eval "expr \"$param_name\" "`
+  local param_value="$(eval "expr \"$param_name\" ")"
 
   if [ -n "$param_value" ]; then
     echo "$bash_source:$bash_lineno: assert($param_name) had value of "$param_value"" >&2
@@ -91,7 +91,7 @@ function nassert ()
 function assert ()
 {
   local param_name=\$"$1"
-  local param_value=`eval "expr \"$param_name\" "`
+  local param_value="$(eval "expr \"$param_name\" ")"
 
   if [ -z "$param_value" ]; then
     echo "$bash_source:$bash_lineno: assert($param_name)" >&2
@@ -155,7 +155,7 @@ function rebuild_host_os ()
 #  values: darwin,fedora,rhel,ubuntu,debian,opensuse
 function set_VENDOR_DISTRIBUTION ()
 {
-  local dist=`echo "$1" | tr '[A-Z]' '[a-z]'`
+  local dist="$(echo "$1" | tr '[A-Z]' '[a-z]')"
   case "$dist" in
     darwin)
       VENDOR_DISTRIBUTION='darwin'
@@ -187,7 +187,7 @@ function set_VENDOR_DISTRIBUTION ()
 # Validate a Vendor's release name/number 
 function set_VENDOR_RELEASE ()
 {
-  local release=`echo "$1" | tr '[A-Z]' '[a-z]'`
+  local release="$(echo "$1" | tr '[A-Z]' '[a-z]')"
 
   if $verbose; then 
     echo "VENDOR_DISTRIBUTION:$VENDOR_DISTRIBUTION"
@@ -254,7 +254,7 @@ function set_VENDOR_RELEASE ()
 #  Valid values are: apple, redhat, centos, canonical, oracle, suse
 function set_VENDOR ()
 {
-  local vendor=`echo "$1" | tr '[A-Z]' '[a-z]'`
+  local vendor="$(echo "$1" | tr '[A-Z]' '[a-z]')"
 
   case $vendor in
     apple)
@@ -295,8 +295,8 @@ function set_VENDOR ()
       ;;
   esac
 
-  set_VENDOR_DISTRIBUTION $2
-  set_VENDOR_RELEASE $3
+  set_VENDOR_DISTRIBUTION "$2"
+  set_VENDOR_RELEASE "$3"
 
   # Set which vendor/versions we trust for autoreconf
   case $VENDOR_DISTRIBUTION in
@@ -322,35 +322,35 @@ function set_VENDOR ()
 
 function determine_target_platform ()
 {
-  UNAME_MACHINE_ARCH=`(uname -m) 2>/dev/null` || UNAME_MACHINE_ARCH=unknown
-  UNAME_KERNEL=`(uname -s) 2>/dev/null`  || UNAME_SYSTEM=unknown
-  UNAME_KERNEL_RELEASE=`(uname -r) 2>/dev/null` || UNAME_KERNEL_RELEASE=unknown
+  UNAME_MACHINE_ARCH="$(uname -m 2>/dev/null)" || UNAME_MACHINE_ARCH=unknown
+  UNAME_KERNEL="$(uname -s 2>/dev/null)"  || UNAME_SYSTEM=unknown
+  UNAME_KERNEL_RELEASE="$(uname -r 2>/dev/null)" || UNAME_KERNEL_RELEASE=unknown
 
   if [[ -x '/usr/bin/sw_vers' ]]; then 
-    local _VERSION=`/usr/bin/sw_vers -productVersion`
+    local _VERSION="$(/usr/bin/sw_vers -productVersion)"
     set_VENDOR 'apple' 'darwin' $_VERSION
   elif [[ $(uname) == 'Darwin' ]]; then
     set_VENDOR 'apple' 'darwin' 'mountain'
   elif [[ -f '/etc/fedora-release' ]]; then 
-    local fedora_version=`cat /etc/fedora-release | awk ' { print $3 } '`
+    local fedora_version="$(cat /etc/fedora-release | awk ' { print $3 } ')"
     set_VENDOR 'redhat' 'fedora' $fedora_version
   elif [[ -f '/etc/centos-release' ]]; then
-    local centos_version=`cat /etc/centos-release | awk ' { print $7 } '`
+    local centos_version="$(cat /etc/centos-release | awk ' { print $7 } ')"
     set_VENDOR 'centos' 'rhel' $centos_version
   elif [[ -f '/etc/SuSE-release' ]]; then
-    local suse_distribution=`head -1 /etc/SuSE-release | awk ' { print $1 } '`
-    local suse_version=`head -1 /etc/SuSE-release | awk ' { print $2 } '`
+    local suse_distribution="$(head -1 /etc/SuSE-release | awk ' { print $1 } ')"
+    local suse_version="$(head -1 /etc/SuSE-release | awk ' { print $2 } ')"
     set_VENDOR 'suse' $suse_distribution $suse_version
   elif [[ -f '/etc/redhat-release' ]]; then
-    local rhel_version=`cat /etc/redhat-release | awk ' { print $7 } '`
-    local _vendor=`rpm -qf /etc/redhat-release`
+    local rhel_version="$(cat /etc/redhat-release | awk ' { print $7 } ')"
+    local _vendor="$(rpm -qf /etc/redhat-release)"
     set_VENDOR $_vendor 'rhel' $rhel_version
   elif [[ -f '/etc/os-release' ]]; then 
     source '/etc/os-release'
     set_VENDOR $ID $ID $VERSION_ID
   elif [[ -x '/usr/bin/lsb_release' ]]; then 
-    local _ID=`/usr/bin/lsb_release -s -i`
-    local _VERSION=`/usr/bin/lsb_release -s -r`
+    local _ID="$(/usr/bin/lsb_release -s -i)"
+    local _VERSION="$(/usr/bin/lsb_release -s -r)"
     set_VENDOR $_ID $_ID $_VERSION_ID
   elif [[ -f '/etc/lsb-release' ]]; then 
     source '/etc/lsb-release'
@@ -366,7 +366,8 @@ function run_configure ()
   run_autoreconf_if_required
 
   # We always begin at the root of our build
-  if [ ! popd ]; then
+  popd
+  if [ ! $? ]; then
     die "Programmer error, we entered run_configure with a stacked directory"
   fi
 
@@ -382,43 +383,43 @@ function run_configure ()
   fi
 
   # Arguments for configure
-  local BUILD_CONFIGURE_ARG= 
+  local BUILD_CONFIGURE_ARG='' 
 
   # If debug is set we enable both debug and asssert, otherwise we see if this is a VCS checkout and if so enable assert
   # Set ENV ASSERT in order to enable assert.
   # If we are doing a valgrind run, we always compile with assert disabled
   if $valgrind_run; then
-    BUILD_CONFIGURE_ARG+= '--enable-assert=no'
+    BUILD_CONFIGURE_ARG="--enable-assert=no $BUILD_CONFIGURE_ARG"
   else
     if $debug; then 
-      BUILD_CONFIGURE_ARG+=' --enable-debug --enable-assert'
+      BUILD_CONFIGURE_ARG="--enable-debug --enable-assert $BUILD_CONFIGURE_ARG"
     elif [[ -n "$VCS_CHECKOUT" ]]; then
-      BUILD_CONFIGURE_ARG+=' --enable-assert'
+      BUILD_CONFIGURE_ARG="--enable-assert $BUILD_CONFIGURE_ARG"
     fi
   fi
 
   if [[ -n "$CONFIGURE_ARG" ]]; then 
-    BUILD_CONFIGURE_ARG+=" $CONFIGURE_ARG"
+    BUILD_CONFIGURE_ARG="$CONFIGURE_ARG $BUILD_CONFIGURE_ARG"
   fi
 
   if [[ -n "$PREFIX_ARG" ]]; then 
-    BUILD_CONFIGURE_ARG+=" $PREFIX_ARG"
+    BUILD_CONFIGURE_ARG="$PREFIX_ARG $BUILD_CONFIGURE_ARG"
   fi
 
   ret=1;
   # If we are executing on OSX use CLANG, otherwise only use it if we find it in the ENV
   case $HOST_OS in
     *-darwin-*)
-      CC=clang CXX=clang++ $top_srcdir/configure $BUILD_CONFIGURE_ARG || die "Cannot execute CC=clang CXX=clang++ configure $BUILD_CONFIGURE_ARG"
+      CC=clang CXX=clang++ $top_srcdir/configure "$BUILD_CONFIGURE_ARG" || die "Cannot execute CC=clang CXX=clang++ configure $BUILD_CONFIGURE_ARG"
       ret=$?
       ;;
     rhel-5*)
       command_exists 'gcc44' || die "Could not locate gcc44"
-      CC=gcc44 CXX=gcc44 $top_srcdir/configure $BUILD_CONFIGURE_ARG || die "Cannot execute CC=gcc44 CXX=gcc44 configure $BUILD_CONFIGURE_ARG"
+      CC=gcc44 CXX=gcc44 $top_srcdir/configure "$BUILD_CONFIGURE_ARG" || die "Cannot execute CC=gcc44 CXX=gcc44 configure $BUILD_CONFIGURE_ARG"
       ret=$?
       ;;
     *)
-      $CONFIGURE $BUILD_CONFIGURE_ARG
+      eval "$CONFIGURE $BUILD_CONFIGURE_ARG"
       ret=$?
       ;;
   esac
@@ -432,19 +433,21 @@ function run_configure ()
   fi
 }
 
-function setup_gdb_command () {
+function setup_gdb_command ()
+{
   GDB_TMPFILE=$(mktemp /tmp/gdb.XXXXXXXXXX)
-  echo 'set logging overwrite on' > $GDB_TMPFILE
-  echo 'set logging on' >> $GDB_TMPFILE
-  echo 'set environment LIBTEST_IN_GDB=1' >> $GDB_TMPFILE
-  echo 'run' >> $GDB_TMPFILE
-  echo 'thread apply all bt' >> $GDB_TMPFILE
-  echo 'quit' >> $GDB_TMPFILE
+  echo 'set logging overwrite on' > "$GDB_TMPFILE"
+  echo 'set logging on' >> "$GDB_TMPFILE"
+  echo 'set environment LIBTEST_IN_GDB=1' >> "$GDB_TMPFILE"
+  echo 'run' >> "$GDB_TMPFILE"
+  echo 'thread apply all bt' >> "$GDB_TMPFILE"
+  echo 'quit' >> "$GDB_TMPFILE"
   GDB_COMMAND="gdb -f -batch -x $GDB_TMPFILE"
 }
 
-function setup_valgrind_command () {
-  VALGRIND_PROGRAM=`type -p valgrind`
+function setup_valgrind_command ()
+{
+  VALGRIND_PROGRAM="$(type -p valgrind)"
   if [[ -n "$VALGRIND_PROGRAM" ]]; then
     VALGRIND_COMMAND="$VALGRIND_PROGRAM --error-exitcode=1 --leak-check=yes --malloc-fill=A5 --free-fill=DE --xml=yes --xml-file=\"valgrind-%p.xml\""
   fi
@@ -522,7 +525,7 @@ function restore_BUILD ()
 
 function safe_pushd ()
 {
-  pushd $1 &> /dev/null ;
+  pushd "$1" &> /dev/null ;
 
   if [ -n "$BUILD_DIR" ]; then
     if $verbose; then
@@ -533,7 +536,7 @@ function safe_pushd ()
 
 function safe_popd ()
 {
-  local directory_to_delete=`pwd`
+  local directory_to_delete="$(pwd)"
   popd &> /dev/null ;
   if [ $? -eq 0 ]; then
     if [[ "$top_srcdir" == "$directory_to_delete" ]]; then
@@ -598,7 +601,7 @@ function make_valgrind ()
 
 function make_install_system ()
 {
-  local INSTALL_LOCATION=$(mktemp -d /tmp/XXXXXXXXXX)
+  local INSTALL_LOCATION="$(mktemp -d /tmp/XXXXXXXXXX)"
 
   save_BUILD
   PREFIX_ARG="--prefix=$INSTALL_LOCATION"
@@ -848,7 +851,8 @@ function make_universe ()
   make_for_clang
   make_for_clang_analyzer
 
-  if [ check_mingw -eq 0 ]; then
+  check_mingw
+  if [ $? -eq 0 ]; then
     make_for_mingw
   fi
 
@@ -984,7 +988,7 @@ function make_target ()
   fi
 
   # $2 represents error or warn
-  run $MAKE $1
+  run "$MAKE" "$1"
   ret=$?
 
   if [ $ret -ne 0 ]; then
@@ -1084,10 +1088,10 @@ function run_autoreconf ()
 
   if $use_libtool; then
     assert $BOOTSTRAP_LIBTOOLIZE
-    run $BOOTSTRAP_LIBTOOLIZE '--copy' '--install' '--force' || die "Cannot execute $BOOTSTRAP_LIBTOOLIZE"
+    run "$BOOTSTRAP_LIBTOOLIZE" '--copy' '--install' '--force' || die "Cannot execute $BOOTSTRAP_LIBTOOLIZE"
   fi
 
-  run $AUTORECONF $AUTORECONF_ARGS || die "Cannot execute $AUTORECONF"
+  run "$AUTORECONF" "$AUTORECONF_ARGS" || die "Cannot execute $AUTORECONF"
 
   eval 'bash -n configure' || die "autoreconf generated a malformed configure"
 }
@@ -1102,7 +1106,7 @@ function run ()
     return 127;
   fi
 
-  eval $@ $ARGS
+  eval "$@" "$ARGS"
 } 
 
 function parse_command_line_options ()
@@ -1202,10 +1206,10 @@ function autoreconf_setup ()
   # Set ENV MAKE in order to override "make"
   if [[ -z "$MAKE" ]]; then 
     if command_exists 'gmake'; then
-      MAKE=`type -p gmake`
+      MAKE="$(type -p gmake)"
     else
       if command_exists 'make'; then
-        MAKE=`type -p make`
+        MAKE="$(type -p make)"
       fi
     fi
     
@@ -1242,7 +1246,7 @@ function autoreconf_setup ()
 
   if $use_libtool; then
     if [[ -n "$LIBTOOLIZE" ]]; then
-      BOOTSTRAP_LIBTOOLIZE=`type -p $LIBTOOLIZE`
+      BOOTSTRAP_LIBTOOLIZE="$(type -p $LIBTOOLIZE)"
 
       if [[ -z "$BOOTSTRAP_LIBTOOLIZE" ]]; then
         echo "Couldn't find user supplied libtoolize, it is required"
@@ -1251,14 +1255,14 @@ function autoreconf_setup ()
     else
       # If we are using OSX, we first check to see glibtoolize is available
       if [[ "$VENDOR_DISTRIBUTION" == "darwin" ]]; then
-        BOOTSTRAP_LIBTOOLIZE=`type -p glibtoolize`
+        BOOTSTRAP_LIBTOOLIZE="$(type -p glibtoolize)"
 
         if [[ -z "$BOOTSTRAP_LIBTOOLIZE" ]]; then
           echo "Couldn't find glibtoolize, it is required on OSX"
           return 1
         fi
       else
-        BOOTSTRAP_LIBTOOLIZE=`type -p libtoolize`
+        BOOTSTRAP_LIBTOOLIZE="$(type -p libtoolize)"
 
         if [[ -z "$BOOTSTRAP_LIBTOOLIZE" ]]; then
           echo "Couldn't find libtoolize, it is required"
@@ -1281,32 +1285,32 @@ function autoreconf_setup ()
 
   # Test the ENV AUTOMAKE if it exists
   if [[ -n "$AUTOMAKE" ]]; then
-    run $AUTOMAKE '--help'    &> /dev/null    || die "Failed to run AUTOMAKE:$AUTOMAKE"
+    run "$AUTOMAKE" '--help'    &> /dev/null    || die "Failed to run AUTOMAKE:$AUTOMAKE"
   fi
 
   # Test the ENV AUTOCONF if it exists
   if [[ -n "$AUTOCONF" ]]; then
-    run $AUTOCONF '--help'    &> /dev/null    || die "Failed to run AUTOCONF:$AUTOCONF"
+    run "$AUTOCONF" '--help'    &> /dev/null    || die "Failed to run AUTOCONF:$AUTOCONF"
   fi
 
   # Test the ENV AUTOHEADER if it exists
   if [[ -n "$AUTOHEADER" ]]; then
-    run $AUTOHEADER '--help'  &> /dev/null    || die "Failed to run AUTOHEADER:$AUTOHEADER"
+    run "$AUTOHEADER" '--help'  &> /dev/null    || die "Failed to run AUTOHEADER:$AUTOHEADER"
   fi
 
   # Test the ENV AUTOM4TE if it exists
   if [[ -n "$AUTOM4TE" ]]; then
-    run $AUTOM4TE '--help'    &> /dev/null    || die "Failed to run AUTOM4TE:$AUTOM4TE"
+    run "$AUTOM4TE" '--help'    &> /dev/null    || die "Failed to run AUTOM4TE:$AUTOM4TE"
   fi
 
   # Test the ENV AUTOHEADER if it exists, if not we add one and add --install
   if [[ -z "$ACLOCAL" ]]; then
     ACLOCAL="aclocal --install"
   fi
-  run $ACLOCAL '--help'  &> /dev/null    || die "Failed to run ACLOCAL:$ACLOCAL"
+  run "$ACLOCAL" '--help'  &> /dev/null    || die "Failed to run ACLOCAL:$ACLOCAL"
 
   if [[ -z "$AUTORECONF" ]]; then
-    AUTORECONF=`type -p autoreconf`
+    AUTORECONF="$(type -p autoreconf)"
 
     if [[ -z "$AUTORECONF" ]]; then
       die "Couldn't find autoreconf"
@@ -1317,7 +1321,7 @@ function autoreconf_setup ()
     fi
   fi
 
-  run $AUTORECONF '--help'  &> /dev/null    || die "Failed to run AUTORECONF:$AUTORECONF"
+  run "$AUTORECONF" '--help'  &> /dev/null    || die "Failed to run AUTORECONF:$AUTORECONF"
 }
 
 function print_setup ()
@@ -1429,6 +1433,7 @@ function make_for_autoreconf ()
 
 function check_make_target()
 {
+  local ret=0
   case $1 in
     'self')
       ;;
@@ -1482,11 +1487,11 @@ function check_make_target()
       ;;
     *)
       echo "Matched default"
-      return 1
+      ret=1
       ;;
   esac
 
-  return 0
+  return $ret
 }
 
 function execute_job ()
@@ -1532,7 +1537,8 @@ function execute_job ()
     make_maintainer_clean
   fi
 
-  local MAKE_TARGET_ARRAY=($MAKE_TARGET)
+  local MAKE_TARGET_ARRAY
+  MAKE_TARGET_ARRAY=( $MAKE_TARGET )
 
   for target in "${MAKE_TARGET_ARRAY[@]}"
   do
@@ -1685,7 +1691,7 @@ function main ()
   local AUTORECONF_REBUILD_HOST=false
   local AUTORECONF_REBUILD=false
 
-  local -r top_srcdir=`pwd`
+  local -r top_srcdir="$(pwd)"
 
   # Default configure
   if [ -z "$CONFIGURE" ]; then
@@ -1714,7 +1720,7 @@ function main ()
 
   rebuild_host_os no_output
 
-  parse_command_line_options $@
+  parse_command_line_options "$@"
 
   # If we are running under Jenkins we predetermine what tests we will run against
   # This MAKE_TARGET can be overridden by parse_command_line_options based MAKE_TARGET changes.
@@ -1795,8 +1801,8 @@ function merge ()
 function enable_debug ()
 {
   if ! $debug; then
-    local caller_loc=`caller`
-    if [ -n $1 ]; then
+    local caller_loc="$(caller)"
+    if [[ -n "$1" ]]; then
       echo "$caller_loc Enabling debug: $1"
     else
       echo "$caller_loc Enabling debug"
@@ -1879,9 +1885,9 @@ function bootstrap ()
   fi
 
 
-  main $@
+  main "$@"
 }
 
 # Script begins here
-declare -r program_name=$0
-bootstrap $@
+declare -r program_name="$0"
+bootstrap "$@"
