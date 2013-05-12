@@ -15,7 +15,8 @@ AC_CONFIG_AUX_DIR([build-aux])
 
 AC_CANONICAL_TARGET
 
-AM_INIT_AUTOMAKE([1.11 no-define color-tests -Wno-portability subdir-objects foreign tar-ustar])
+# Automake version before 1.13 (when the serial-tests option was dnl still the default) still defined the badly obsolete macro.  'AM_PROG_INSTALL'.
+AM_INIT_AUTOMAKE(1.11 no-define color-tests -Wno-portability subdir-objects foreign tar-ustar m4_ifndef([AM_PROG_INSTALL], [serial-tests]))
 AC_PREREQ([2.63])
 
 AC_PREREQ([2.63])
