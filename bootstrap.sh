@@ -430,7 +430,7 @@ run_configure ()
       ret=$?
       ;;
     *)
-      run $CONFIGURE $BUILD_CONFIGURE_ARG
+      run $CONFIGURE "$BUILD_CONFIGURE_ARG"
       ret=$?
       ;;
   esac
@@ -1551,10 +1551,6 @@ execute_job ()
   local MAKE_TARGET_ARRAY
   MAKE_TARGET_ARRAY=( $MAKE_TARGET )
 
-  if $jenkins_build_environment; then
-    use_banner $target
-  fi
-
   for target in "${MAKE_TARGET_ARRAY[@]}"
   do
     # If we are running inside of Jenkins, we want to only run some of the possible tests
@@ -1564,6 +1560,10 @@ execute_job ()
       if [ $ret -ne 0 ]; then
         die "Unknown MAKE_TARGET option: $target"
       fi
+    fi
+
+    if $jenkins_build_environment; then
+      use_banner $target
     fi
 
     local snapshot_run=false
@@ -1619,10 +1619,6 @@ execute_job ()
         ;;
       'mingw')
         make_distclean
-        if ! check_mingw; then
-          die "mingw was not found"
-        fi
-
         if ! make_for_mingw; then
           die "Failed to build mingw: $?"
         fi
