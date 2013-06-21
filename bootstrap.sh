@@ -1507,6 +1507,9 @@ check_make_target()
 
 execute_job ()
 {
+  # We should always have a target by this point
+  assert MAKE_TARGET
+
   determine_target_platform
 
   determine_vcs
@@ -1516,10 +1519,6 @@ execute_job ()
   require_libtoolise
   if ! autoreconf_setup; then
     return 1
-  fi
-
-  if [ -z "$MAKE_TARGET" ]; then
-    MAKE_TARGET="make_default"
   fi
 
   if $print_setup_opt -o  $debug; then
@@ -1540,9 +1539,6 @@ execute_job ()
   if [[ -n "$PREFIX" ]]; then 
     PREFIX_ARG="--prefix=$PREFIX"
   fi
-
-  # We should always have a target by this point
-  assert MAKE_TARGET
 
   if $CLEAN_OPTION; then
     make_maintainer_clean
@@ -1761,6 +1757,13 @@ main ()
       fi
     fi
   fi
+
+  if [ -z "$MAKE_TARGET" ]; then
+    MAKE_TARGET="make_default"
+  fi
+
+  # We should always have a target by this point
+  assert MAKE_TARGET
 
   execute_job
   local ret=$?
