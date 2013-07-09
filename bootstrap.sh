@@ -421,7 +421,7 @@ run_configure ()
   # If we are executing on OSX use CLANG, otherwise only use it if we find it in the ENV
   case $HOST_OS in
     *-darwin-*)
-      run CC=clang CXX=clang++ $top_srcdir/configure "$BUILD_CONFIGURE_ARG" || die "Cannot execute CC=clang CXX=clang++ configure $BUILD_CONFIGURE_ARG"
+      run CC=clang CXX=clang++ $CONFIGURE "$BUILD_CONFIGURE_ARG" || die "Cannot execute CC=clang CXX=clang++ configure $BUILD_CONFIGURE_ARG"
       ret=$?
       ;;
     rhel-5*)
@@ -793,18 +793,14 @@ make_for_clang_analyzer ()
 
   CC=clang CXX=clang++
   export CC CXX
+  CONFIGURE='scan-build ./configure'
   CONFIGURE_ARGS='--enable-debug'
 
-  make_skeleton
-  ret=$?
-
-  make_target 'clean' 'warn'
+  run_configure
 
   scan-build -o clang-html make -j4 -k
 
   restore_BUILD
-
-  return $ret
 }
 
 # If we are locally testing, we should make sure the environment is setup correctly

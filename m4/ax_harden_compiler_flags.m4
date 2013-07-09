@@ -111,7 +111,9 @@ AC_DEFUN([_HARDEN_LINKER_FLAGS],
         [AS_IF([test "$CC" != "clang"],
           [_APPEND_LINK_FLAGS_ERROR([-z relro -z now])
           AS_IF([test "x$ac_cv_warnings_as_errors" = xyes],[AX_APPEND_LINK_FLAGS([-Werror])])
-          AS_IF([test "x$ac_cv_vcs_checkout" = xyes],[_APPEND_LINK_FLAGS_ERROR([-rdynamic])])
+          AS_IF([test "x$ac_cv_vcs_checkout" = xyes],
+          [_APPEND_LINK_FLAGS_ERROR([-rdynamic])
+          AX_APPEND_LINK_FLAGS([--coverage])])
           ])
         ])
 
@@ -121,9 +123,10 @@ AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
          AS_IF([test "x$ax_enable_debug" = xyes],
            [CFLAGS=''
            _APPEND_COMPILE_FLAGS_ERROR([-H])
-           _APPEND_COMPILE_FLAGS_ERROR([-ggdb])
            _APPEND_COMPILE_FLAGS_ERROR([-g])
-           _APPEND_COMPILE_FLAGS_ERROR([-O0]),
+           _APPEND_COMPILE_FLAGS_ERROR([-g3])
+           _APPEND_COMPILE_FLAGS_ERROR([-fmudflapth])
+           _APPEND_COMPILE_FLAGS_ERROR([-fno-eliminate-unused-debug-types])
            _APPEND_COMPILE_FLAGS_ERROR([-fno-omit-frame-pointer])
            ],[
            _APPEND_COMPILE_FLAGS_ERROR([-g])
@@ -132,6 +135,7 @@ AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
 
          AS_IF([test "x$ac_cv_vcs_checkout" = xyes],
            [_APPEND_COMPILE_FLAGS_ERROR([-fstack-check])
+           _APPEND_COMPILE_FLAGS_ERROR([--coverage])
            _APPEND_COMPILE_FLAGS_ERROR([-Wpragmas])
            _APPEND_COMPILE_FLAGS_ERROR([-Wunknown-pragmas])],
            [_APPEND_COMPILE_FLAGS_ERROR([-Wno-unknown-pragmas])
@@ -230,9 +234,11 @@ AC_DEFUN([_HARDEN_CXX_COMPILER_FLAGS],
          AS_IF([test "x$ax_enable_debug" = xyes],
            [CXXFLAGS=''
            _APPEND_COMPILE_FLAGS_ERROR([-H])
-           _APPEND_COMPILE_FLAGS_ERROR([-ggdb])
            _APPEND_COMPILE_FLAGS_ERROR([-g])
-           _APPEND_COMPILE_FLAGS_ERROR([-O0]),
+           _APPEND_COMPILE_FLAGS_ERROR([-g3])
+           _APPEND_COMPILE_FLAGS_ERROR([-fmudflapth])
+           _APPEND_COMPILE_FLAGS_ERROR([-fno-inline])
+           _APPEND_COMPILE_FLAGS_ERROR([-fno-eliminate-unused-debug-types])
            _APPEND_COMPILE_FLAGS_ERROR([-fno-omit-frame-pointer])
            ],[
            _APPEND_COMPILE_FLAGS_ERROR([-g])
@@ -241,6 +247,7 @@ AC_DEFUN([_HARDEN_CXX_COMPILER_FLAGS],
 
          AS_IF([test "x$ac_cv_vcs_checkout" = xyes],
            [_APPEND_COMPILE_FLAGS_ERROR([-fstack-check])
+           _APPEND_COMPILE_FLAGS_ERROR([--coverage])
            _APPEND_COMPILE_FLAGS_ERROR([-Wpragmas])
            _APPEND_COMPILE_FLAGS_ERROR([-Wunknown-pragmas])],
            [_APPEND_COMPILE_FLAGS_ERROR([-Wno-unknown-pragmas])

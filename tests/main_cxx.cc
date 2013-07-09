@@ -79,11 +79,13 @@ int main(void)
 #if defined(DEBUG) && DEBUG == 1
   if (DEBUG)
   {
+#ifndef __clang__
     assert(strstr(CXXFLAGS, "-O0"));
     if (strstr(CXXFLAGS, "-O0") == NULL)
     {
       return EXIT_FAILURE;
     }
+#endif
 
     assert(strstr(CXXFLAGS, "-O2") == NULL);
     if (strstr(CXXFLAGS, "-O2"))
