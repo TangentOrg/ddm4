@@ -13,7 +13,7 @@ AC_INIT([ddm4],[0.1.0],[brian@tangent.org],[ddm4],[https://github.com/TangentOrg
 
 AC_CONFIG_AUX_DIR([build-aux])
 
-AC_CANONICAL_TARGET
+AC_CANONICAL_HOST
 
 # Automake version before 1.13 (when the serial-tests option was dnl still the default) still defined the badly obsolete macro.  'AM_PROG_INSTALL'.
 AM_INIT_AUTOMAKE(1.11 no-define color-tests -Wno-portability subdir-objects foreign tar-ustar m4_ifndef([AM_PROG_INSTALL], [serial-tests]))
