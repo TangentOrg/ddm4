@@ -53,7 +53,7 @@
 # -Wdeclaration-after-statement is counter to C99
 # _APPEND_COMPILE_FLAGS_ERROR([-pedantic])
 
-#serial 11
+#serial 12
 
 AC_DEFUN([_SET_SANITIZE_FLAGS],
          [AS_IF([test "x$MINGW" != xyes],[
@@ -96,13 +96,11 @@ AC_DEFUN([_WARNINGS_AS_ERRORS],
 
 # Note: Should this be LIBS or LDFLAGS?
 AC_DEFUN([_APPEND_LINK_FLAGS_ERROR],
-         [AC_REQUIRE([AX_APPEND_LINK_FLAGS])
-         AX_APPEND_LINK_FLAGS([$1],[LDFLAGS],[-Werror])
+         [AX_APPEND_LINK_FLAGS([$1],[LDFLAGS],[-Werror])
          ])
 
 AC_DEFUN([_APPEND_COMPILE_FLAGS_ERROR],
-         [AC_REQUIRE([AX_APPEND_COMPILE_FLAGS])
-         AX_APPEND_COMPILE_FLAGS([$1],,[-Werror])
+         [AX_APPEND_COMPILE_FLAGS([$1],,[-Werror])
          ])
 
 # Everything above this does the heavy lifting, while what follows does the specifics.
@@ -116,6 +114,21 @@ AC_DEFUN([_HARDEN_LINKER_FLAGS],
           AX_APPEND_LINK_FLAGS([--coverage])])
           ])
         ])
+
+AC_DEFUN([_AX_HARDEN_SANITIZE],
+         [AC_REQUIRE([AX_DEBUG])
+         AC_ARG_WITH([sanitize],
+                     [AS_HELP_STRING([--with-sanitize],
+                                     [Enable sanitize flag for compiler if it supports them @<:@default=no@:>@])],
+                     [AS_CASE([$with_sanitize],
+                              [thread],[
+                              ax_harden_sanitize='thread'],
+                              [address],[
+                              ax_harden_sanitize='with_sanitize'],
+                              [ax_harden_sanitize='rest'])
+                     ],
+                     [AS_IF([test "x$ax_enable_debug" = xyes],[ax_harden_sanitize='rest'])])
+         ])
 
 AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
          [AC_LANG_PUSH([C])dnl
@@ -230,8 +243,6 @@ AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
 
 AC_DEFUN([_HARDEN_CXX_COMPILER_FLAGS],
          [AC_LANG_PUSH([C++])
-         AC_REQUIRE([_APPEND_COMPILE_FLAGS_ERROR])
-
          AS_IF([test "x$ax_enable_debug" = xyes],
            [CXXFLAGS=''
            _APPEND_COMPILE_FLAGS_ERROR([-H])
@@ -339,32 +350,17 @@ AC_DEFUN([_HARDEN_CXX_COMPILER_FLAGS],
 # _HARDEN_CC_COMPILER_FLAGS, _HARDEN_CXX_COMPILER_FLAGS
   AC_DEFUN([AX_HARDEN_COMPILER_FLAGS],
            [AC_PREREQ([2.63])dnl
-           AC_REQUIRE([_WARNINGS_AS_ERRORS])
-           AC_REQUIRE([AX_APPEND_LINK_FLAGS])
            AC_REQUIRE([AX_COMPILER_VERSION])
-           AC_REQUIRE([AX_DEBUG])
-           AC_REQUIRE([AX_VCS_CHECKOUT])
-           AC_REQUIRE([AX_HARDEN_SANITIZE])
+           AC_REQUIRE([AX_ASSERT])
+           _WARNINGS_AS_ERRORS
+           _AX_HARDEN_SANITIZE
 
            AC_REQUIRE([gl_VISIBILITY])
            AS_IF([test -n "$CFLAG_VISIBILITY"],[CPPFLAGS="$CPPFLAGS $CFLAG_VISIBILITY"])
 
-           AC_REQUIRE([_HARDEN_LINKER_FLAGS])
-           AC_REQUIRE([_HARDEN_CC_COMPILER_FLAGS])
-           AC_REQUIRE([_HARDEN_CXX_COMPILER_FLAGS])
+           _WARNINGS_AS_ERRORS
+           _HARDEN_LINKER_FLAGS
+           _HARDEN_CC_COMPILER_FLAGS
+           _HARDEN_CXX_COMPILER_FLAGS
            ])
 
-AC_DEFUN([AX_HARDEN_SANITIZE],
-         [AC_REQUIRE([AX_DEBUG])
-         AC_ARG_WITH([sanitize],
-                     [AS_HELP_STRING([--with-sanitize],
-                                     [Enable sanitize flag for compiler if it supports them @<:@default=no@:>@])],
-                     [AS_CASE([$with_sanitize],
-                              [thread],[
-                              ax_harden_sanitize='thread'],
-                              [address],[
-                              ax_harden_sanitize='with_sanitize'],
-                              [ax_harden_sanitize='rest'])
-                     ],
-                     [AS_IF([test "x$ax_enable_debug" = xyes],[ax_harden_sanitize='rest'])])
-         ])

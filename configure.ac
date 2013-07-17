@@ -19,7 +19,6 @@ AC_CANONICAL_HOST
 AM_INIT_AUTOMAKE(1.11 no-define color-tests -Wno-portability subdir-objects foreign tar-ustar m4_ifndef([AM_PROG_INSTALL], [serial-tests]))
 AC_PREREQ([2.63])
 
-AC_PREREQ([2.63])
 AC_ARG_PROGRAM
 AC_DEFUN([PROTECT_AC_USE_SYSTEM_EXTENSIONS],
          [AX_SAVE_FLAGS
@@ -46,7 +45,6 @@ AC_PROG_CC_C99
 AS_IF([test "x${ac_cv_prog_cc_c99}" == "xno"],[AC_MSG_ERROR([No c99 compatible compiler found])])
 
 AX_PLATFORM
-AX_ASSERT
 
 AC_DEFUN([CHECK_FOR_MINGW],
          [AS_IF([test "x${TARGET_WINDOWS}" == "xtrue"],
