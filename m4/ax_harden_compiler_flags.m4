@@ -207,7 +207,8 @@ AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
           _APPEND_COMPILE_FLAGS_ERROR([-Wsizeof-pointer-memaccess])
           _APPEND_COMPILE_FLAGS_ERROR([-Wpacked])
           _APPEND_COMPILE_FLAGS_ERROR([-Wlong-long])
-          _APPEND_COMPILE_FLAGS_ERROR([-Wunreachable-code])
+#         GCC 4.5 removed this.
+#         _APPEND_COMPILE_FLAGS_ERROR([-Wunreachable-code])
 
           _SET_SANITIZE_FLAGS
 
@@ -314,7 +315,8 @@ AC_DEFUN([_HARDEN_CXX_COMPILER_FLAGS],
           _APPEND_COMPILE_FLAGS_ERROR([-Wsizeof-pointer-memaccess])
           _APPEND_COMPILE_FLAGS_ERROR([-Wpacked])
           _APPEND_COMPILE_FLAGS_ERROR([-Wlong-long])
-          _APPEND_COMPILE_FLAGS_ERROR([-Wunreachable-code])
+#         GCC 4.5 removed this.
+#         _APPEND_COMPILE_FLAGS_ERROR([-Wunreachable-code])
 
           AS_IF([test "x$ax_enable_debug" = xno],
           [AS_IF([test "x$ac_cv_vcs_checkout" = xyes],
