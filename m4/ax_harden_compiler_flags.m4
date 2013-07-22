@@ -124,7 +124,7 @@ AC_DEFUN([_AX_HARDEN_SANITIZE],
                               [thread],[
                               ax_harden_sanitize='thread'],
                               [address],[
-                              ax_harden_sanitize='with_sanitize'],
+                              ax_harden_sanitize='address'],
                               [ax_harden_sanitize='rest'])
                      ],
                      [AS_IF([test "x$ax_enable_debug" = xyes],[ax_harden_sanitize='rest'])])
