@@ -1006,6 +1006,9 @@ make_rpm ()
 {
   if command_exists 'rpmbuild'; then
     if [ -f 'rpm.am' -o -d 'rpm' ]; then
+      mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+      mkdir -p ~/rpmbuild/RPMS/{i386,i486,i586,i686,noarch,athlon}
+
       run_configure_if_required
       make_target 'rpm'
 
