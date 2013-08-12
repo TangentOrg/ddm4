@@ -54,3 +54,4 @@ tests/.libs/
 confdefs.h
 *gcda
 *gcno
+gdb.txt
