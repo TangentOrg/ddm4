@@ -11,12 +11,15 @@ AC_COPYRIGHT([Data Differential, http://datadifferential.com/])
 
 AC_INIT([ddm4],[0.1.0],[brian@tangent.org],[ddm4],[https://github.com/TangentOrg/ddm4])
 
+# Must come before AM_INIT_AUTOMAKE.
 AC_CONFIG_AUX_DIR([build-aux])
-
 AC_CANONICAL_HOST
+AC_CONFIG_MACRO_DIR([m4])
 
 # Automake version before 1.13 (when the serial-tests option was dnl still the default) still defined the badly obsolete macro.  'AM_PROG_INSTALL'.
 AM_INIT_AUTOMAKE(1.11 no-define color-tests -Wno-portability subdir-objects foreign tar-ustar m4_ifndef([AM_PROG_INSTALL], [serial-tests]))
+
+# Minimum Autoconf version required.
 AC_PREREQ([2.63])
 
 AC_ARG_PROGRAM
@@ -29,10 +32,7 @@ AC_DEFUN([PROTECT_AC_USE_SYSTEM_EXTENSIONS],
           ])
 PROTECT_AC_USE_SYSTEM_EXTENSIONS
 
-AC_CONFIG_MACRO_DIR([m4])
-
 AC_CONFIG_HEADERS([config.h:config.in])dnl Keep filename to 8.3 for MS-DOS.
-
 AC_CONFIG_SRCDIR([bin/cflags.c])
 
 LT_PREREQ([2.2])

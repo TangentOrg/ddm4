@@ -11,8 +11,6 @@
 #
 #   Any compiler flag that "hardens" or tests code. C99 is assumed.
 #
-#   NOTE: Implementation based on AX_APPEND_FLAG.
-#
 # LICENSE
 #
 #  Copyright (C) 2012-2013 Brian Aker
@@ -108,10 +106,10 @@ AC_DEFUN([_APPEND_COMPILE_FLAGS_ERROR],
 AC_DEFUN([_HARDEN_LINKER_FLAGS],
         [AS_IF([test "$CC" != "clang"],
           [_APPEND_LINK_FLAGS_ERROR([-z relro -z now])
-          AS_IF([test "x$ac_cv_warnings_as_errors" = xyes],[AX_APPEND_LINK_FLAGS([-Werror])])
           AS_IF([test "x$ac_cv_vcs_checkout" = xyes],
           [_APPEND_LINK_FLAGS_ERROR([-rdynamic])
 #         AX_APPEND_LINK_FLAGS([--coverage])])
+          AS_IF([test "x$ac_cv_warnings_as_errors" = xyes],[AX_APPEND_LINK_FLAGS([-Werror])])
           ])
         ])
 
@@ -236,7 +234,7 @@ AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
                   ])])])])
 
          AS_IF([test "x$ac_cv_warnings_as_errors" = xyes],
-             [AX_APPEND_FLAG([-Werror])])
+             [AX_APPEND_COMPILE_FLAGS([-Werror])])
 
           AC_LANG_POP([C])
   ])
@@ -342,7 +340,7 @@ AC_DEFUN([_HARDEN_CXX_COMPILER_FLAGS],
           _SET_SANITIZE_FLAGS
 
           AS_IF([test "x$ac_cv_warnings_as_errors" = xyes],
-                [AX_APPEND_FLAG([-Werror])])
+                [AX_APPEND_COMPILE_FLAGS([-Werror])])
           AC_LANG_POP([C++])
   ])
 
@@ -352,6 +350,7 @@ AC_DEFUN([_HARDEN_CXX_COMPILER_FLAGS],
            [AC_PREREQ([2.63])dnl
            AC_REQUIRE([AC_CANONICAL_HOST])
            AC_REQUIRE([AX_COMPILER_VERSION])
+           AC_REQUIRE([AX_DEBUG])
            AC_REQUIRE([AX_ASSERT])
            _WARNINGS_AS_ERRORS
            _AX_HARDEN_SANITIZE
@@ -359,7 +358,6 @@ AC_DEFUN([_HARDEN_CXX_COMPILER_FLAGS],
            AC_REQUIRE([gl_VISIBILITY])
            AS_IF([test -n "$CFLAG_VISIBILITY"],[CPPFLAGS="$CPPFLAGS $CFLAG_VISIBILITY"])
 
-           _WARNINGS_AS_ERRORS
            _HARDEN_LINKER_FLAGS
            _HARDEN_CC_COMPILER_FLAGS
            _HARDEN_CXX_COMPILER_FLAGS
