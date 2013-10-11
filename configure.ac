@@ -55,6 +55,9 @@ AC_DEFUN([CHECK_FOR_MINGW],
          ])
 CHECK_FOR_MINGW
 
+# Specialty checks
+AX_CXX_CINTTYPES
+
 # Checks for programs.
 AC_CHECK_PROGS([DPKG_GENSYMBOLS],[dpkg-gensymbols])
 AC_CHECK_PROGS([PERL],[perl])
