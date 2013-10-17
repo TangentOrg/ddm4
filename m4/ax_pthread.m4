@@ -82,7 +82,7 @@
 #   modified version of the Autoconf Macro, you may extend this special
 #   exception to the GPL to apply to your modified version as well.
 
-#serial 21
+#serial 22
 
 AU_ALIAS([ACX_PTHREAD], [AX_PTHREAD])
 AC_DEFUN([AX_PTHREAD], [
@@ -123,7 +123,7 @@ fi
 # which indicates that we try without any flags at all, and "pthread-config"
 # which is a program returning the flags for the Pth emulation library.
 
-ax_pthread_flags="pthreads none -Kthread -kthread lthread -pthread -pthreads -mthreads pthread --thread-safe -mt pthread-config"
+ax_pthread_flags="none pthreads -Kthread -kthread lthread -pthread -pthreads -mthreads pthread --thread-safe -mt pthread-config"
 
 # The ordering *is* (sometimes) important.  Some notes on the
 # individual items follow:
