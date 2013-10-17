@@ -29,9 +29,16 @@ tests_main_assert_SOURCES= tests/main_assert.cc
 check_PROGRAMS+= tests/main_assert
 noinst_PROGRAMS+= tests/main_assert
 
-tests_pthread_check_SOURCES= tests/pthread_check.cc
+tests_pthread_check_cxx_SOURCES= tests/pthread_check.cc
+tests_pthread_check_cxx_CPPFLAGS= @PTHREAD_CFLAGS@
+tests_pthread_check_cxx_CXXFLAGS= @PTHREAD_CFLAGS@
+tests_pthread_check_cxx_LDADD= @PTHREAD_LIBS@
+tests_pthread_check_cxx_LDFLAGS= @MCHECK@
+check_PROGRAMS+= tests/pthread_check_cxx
+noinst_PROGRAMS+= tests/pthread_check_cxx
+
+tests_pthread_check_SOURCES= tests/pthread_check.c
 tests_pthread_check_CPPFLAGS= @PTHREAD_CFLAGS@
-tests_pthread_check_CXXFLAGS= @PTHREAD_CFLAGS@
 tests_pthread_check_LDADD= @PTHREAD_LIBS@
 tests_pthread_check_LDFLAGS= @MCHECK@
 check_PROGRAMS+= tests/pthread_check
