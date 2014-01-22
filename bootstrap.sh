@@ -1742,7 +1742,7 @@ main ()
         if [ $? -eq 0 ]; then
           BOOTSTRAP_TARGET="$JENKINS_TARGET"
         else
-          echo "label not found: $label"
+          die "label not found: $label"
         fi
       else
           BOOTSTRAP_TARGET='jenkins'
