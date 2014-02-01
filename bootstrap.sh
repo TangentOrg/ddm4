@@ -1098,7 +1098,11 @@ run_autoreconf ()
 
   if $use_libtool; then
     assert $BOOTSTRAP_LIBTOOLIZE
-    run "$BOOTSTRAP_LIBTOOLIZE" '--copy' '--install' '--force' || die "Cannot execute $BOOTSTRAP_LIBTOOLIZE"
+    if $jenkins_build_environment; then
+      run "$BOOTSTRAP_LIBTOOLIZE" '--copy' '--install' || die "Cannot execute $BOOTSTRAP_LIBTOOLIZE"
+    else
+      run "$BOOTSTRAP_LIBTOOLIZE" '--copy' '--install' '--force' || die "Cannot execute $BOOTSTRAP_LIBTOOLIZE"
+    fi
   fi
 
   run "$AUTORECONF" "$AUTORECONF_ARGS" || die "Cannot execute $AUTORECONF"
@@ -1239,7 +1243,11 @@ autoreconf_setup ()
   fi
 
   if [[ -z "$GNU_BUILD_FLAGS" ]]; then
-    GNU_BUILD_FLAGS="--install --force"
+    if $jenkins_build_environment; then
+      GNU_BUILD_FLAGS="--install"
+    else
+      GNU_BUILD_FLAGS="--install --force"
+    fi
   fi
 
   if $verbose; then
