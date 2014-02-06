@@ -20,7 +20,6 @@ EXTRA_DIST+= m4/ax_add_am_macro.m4
 EXTRA_DIST+= m4/ax_am_jobserver.m4
 EXTRA_DIST+= m4/ax_am_macros.m4
 EXTRA_DIST+= m4/ax_append_to_file.m4
-EXTRA_DIST+= m4/ax_endian.m4
 EXTRA_DIST+= m4/ax_file_escapes.m4
 EXTRA_DIST+= m4/ax_gcc_version.m4
 EXTRA_DIST+= m4/ax_print_to_file.m4

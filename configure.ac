@@ -58,6 +58,7 @@ CHECK_FOR_MINGW
 AX_CXX_CINTTYPES
 
 # Checks for programs.
+AC_CHECK_PROGS([LSB_RELEASE],[lsb_release])
 AC_CHECK_PROGS([DPKG_GENSYMBOLS],[dpkg-gensymbols])
 AC_CHECK_PROGS([PERL],[perl])
 AC_CHECK_PROGS([WINE],['wine'])
@@ -105,6 +106,10 @@ AC_DEFINE_UNQUOTED([CXX_VERSION],["$CXX_VERSION"],[Version information for CXX c
 AC_DEFINE_UNQUOTED([CFLAGS],["$CFLAGS"],[CFLAGS used for compiling binary])
 AC_DEFINE_UNQUOTED([CXXFLAGS],["$CXXFLAGS"],[CXXFLAGS used for compiling binary])
 
+AS_IF([test -n "${LSB_RELEASE}"],[
+       LSB_DESCRIPTION="`lsb_release -d -s`"
+       ],[LSB_DESCRIPTION="unknown"])
+
 AX_AM_JOBSERVER([yes])
 
 AC_CONFIG_FILES([Makefile
@@ -119,6 +124,7 @@ echo "---"
 echo "Configuration summary for $PACKAGE_NAME version $VERSION"
 echo ""
 echo "   * Installation prefix:       $prefix"
+echo "   * LSB Release:               $LSB_RELEASE"
 echo "   * System type:               $host_vendor-$host_os"
 echo "   * Host CPU:                  $host_cpu"
 echo "   * Compiler Vendor:           $ax_cv_c_compiler_vendor"
