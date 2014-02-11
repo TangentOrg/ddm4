@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+# configure.ac -*- autoconf -*- vim: filetype=config
+#
 # DDM4
 # Copyright (C) 2012 Data Differential, http://datadifferential.com/
 # All rights reserved.
@@ -66,6 +67,9 @@ AX_PROG_SPHINX_BUILD(,[AC_MSG_WARN([sphinx-build version 1.0 or greater is requi
 #AX_PROG_VALGRIND([memcheck],[--error-exitcode=1 --leak-check=yes --track-fds=yes --malloc-fill=A5 --free-fill=DE])
 AX_WITH_PROG([LCOV],[lcov])
 AX_WITH_PROG([LCOV_GENHTML],[genhtml])
+AC_CHECK_PROGS([RPMBUILD],[rpmbuild --nocheck])
+AC_CHECK_PROGS([RPMDEV_SETUPTREE],[rpmdev-setuptree])
+AC_CHECK_PROGS([RPM],[rpm])
 
 # Checks for libraries.
 AX_CXX_GCC_ABI_DEMANGLE
@@ -95,6 +99,8 @@ AX_UUID_GENERATE_TIME_SAFE
 AX_LIBEVENT2
 AX_ENDIAN
 AX_HEX_VERSION([DDm4],[$VERSION])
+AC_SUBST([RPM_RELEASE],[1])
+
 AX_HARDEN_COMPILER_FLAGS
 
 AC_DEFINE_UNQUOTED([C_COMPILER_VENDOR],["$ax_cv_c_compiler_vendor"],[Compiler vendor])

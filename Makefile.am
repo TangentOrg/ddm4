@@ -37,7 +37,7 @@ TESTS+= ${check_PROGRAMS}
 include tests/include.am
 include m4/include.am
 include bin/include.am
-include rpm/include.am
+include rpm/include.mk
 include docs/include.am
 include man/include.am
 include yatl/include.am
