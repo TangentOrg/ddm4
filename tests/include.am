@@ -11,44 +11,44 @@
 LIBTOOL_COMMAND= ${abs_top_builddir}/libtool --mode=execute
 GDB_COMMAND= $(LIBTOOL_COMMAND) gdb -f -x support/run.gdb
 
-tests_main_c_SOURCES= tests/main_c.c
-check_PROGRAMS+= tests/main_c
-noinst_PROGRAMS+= tests/main_c
+t_main_c_SOURCES= tests/main_c.c
+check_PROGRAMS+= t/main_c
+noinst_PROGRAMS+= t/main_c
 
-gdb-main_c: tests/main_c
-	@$(GDB_COMMAND) tests/main_c
+gdb-main_c: t/main_c
+	@$(GDB_COMMAND) t/main_c
 
-tests_main_cxx_SOURCES= tests/main_cxx.cc
-check_PROGRAMS+= tests/main_cxx
-noinst_PROGRAMS+= tests/main_cxx
+t_main_cxx_SOURCES= tests/main_cxx.cc
+check_PROGRAMS+= t/main_cxx
+noinst_PROGRAMS+= t/main_cxx
 
-gdb-main_cxx: tests/main_cxx
-	@$(GDB_COMMAND) tests/main_cxx
+gdb-main_cxx: t/main_cxx
+	@$(GDB_COMMAND) t/main_cxx
 
-tests_main_assert_SOURCES= tests/main_assert.cc
-check_PROGRAMS+= tests/main_assert
-noinst_PROGRAMS+= tests/main_assert
+t_main_assert_SOURCES= tests/main_assert.cc
+check_PROGRAMS+= t/main_assert
+noinst_PROGRAMS+= t/main_assert
 
-tests_pthread_check_cxx_SOURCES= tests/pthread_check.cc
-tests_pthread_check_cxx_CXXFLAGS= @PTHREAD_CFLAGS@
-tests_pthread_check_cxx_LDADD= @PTHREAD_LIBS@
-tests_pthread_check_cxx_LDFLAGS= @MCHECK@
-check_PROGRAMS+= tests/pthread_check_cxx
-noinst_PROGRAMS+= tests/pthread_check_cxx
+t_pthread_check_cxx_SOURCES= tests/pthread_check.cc
+t_pthread_check_cxx_CXXFLAGS= @PTHREAD_CFLAGS@
+t_pthread_check_cxx_LDADD= @PTHREAD_LIBS@
+t_pthread_check_cxx_LDFLAGS= @MCHECK@
+check_PROGRAMS+= t/pthread_check_cxx
+noinst_PROGRAMS+= t/pthread_check_cxx
 
-tests_pthread_check_SOURCES= tests/pthread_check.c
-tests_pthread_check_CFLAGS= @PTHREAD_CFLAGS@
-tests_pthread_check_LDADD= @PTHREAD_LIBS@
-tests_pthread_check_LDFLAGS= @MCHECK@
-check_PROGRAMS+= tests/pthread_check
-noinst_PROGRAMS+= tests/pthread_check
+t_pthread_check_SOURCES= tests/pthread_check.c
+t_pthread_check_CFLAGS= @PTHREAD_CFLAGS@
+t_pthread_check_LDADD= @PTHREAD_LIBS@
+t_pthread_check_LDFLAGS= @MCHECK@
+check_PROGRAMS+= t/pthread_check
+noinst_PROGRAMS+= t/pthread_check
 
-tests_event_SOURCES= tests/event.cc
-tests_event_LDADD= @LIBEVENT_LIB@
-check_PROGRAMS+= tests/event
-noinst_PROGRAMS+= tests/event
+t_event_SOURCES= tests/event.cc
+t_event_LDADD= @LIBEVENT_LIB@
+check_PROGRAMS+= t/event
+noinst_PROGRAMS+= t/event
 
-tests_uuid_SOURCES= tests/uuid.cc
-tests_uuid_LDADD= @LIBUUID_LIB@
-check_PROGRAMS+= tests/uuid
-noinst_PROGRAMS+= tests/uuid
+t_uuid_SOURCES= tests/uuid.cc
+t_uuid_LDADD= @LIBUUID_LIB@
+check_PROGRAMS+= t/uuid
+noinst_PROGRAMS+= t/uuid
