@@ -81,5 +81,5 @@ mkdir -p $RPM_BUILD_ROOT/
 %{_mandir}/man1/cxxflags.1.gz
 
 %changelog
-* Wed Oct 11 2012 Brian Aker <brian@tangent.org> - 0.1-1
+* Wed Oct 11 2012 Brian Aker <brian@tangent.org>
 - Initial package

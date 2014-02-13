@@ -13,7 +13,7 @@
 #
 # LICENSE
 #
-#  Copyright (C) 2012-2013 Brian Aker
+#  Copyright (C) 2012-2014 Brian Aker
 #  All rights reserved.
 #
 #  Redistribution and use in source and binary forms, with or without
@@ -51,7 +51,7 @@
 # -Wdeclaration-after-statement is counter to C99
 # _APPEND_COMPILE_FLAGS_ERROR([-pedantic])
 
-#serial 13
+#serial 14
 
 AC_DEFUN([_SET_SANITIZE_FLAGS],
          [AS_IF([test "x$MINGW" != xyes],[
@@ -104,7 +104,7 @@ AC_DEFUN([_APPEND_COMPILE_FLAGS_ERROR],
 # Everything above this does the heavy lifting, while what follows does the specifics.
 
 AC_DEFUN([_HARDEN_LINKER_FLAGS],
-        [AS_IF([test "$CC" != "clang"],
+        [AS_IF([test "$ax_cv_c_compiler_vendor" != "clang"],
           [_APPEND_LINK_FLAGS_ERROR([-z relro -z now])
           AS_IF([test "x$ac_cv_vcs_checkout" = xyes],
           [_APPEND_LINK_FLAGS_ERROR([-rdynamic])
@@ -133,7 +133,7 @@ AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
 
          AS_IF([test "x$ax_enable_debug" = xyes],
            [CFLAGS=''
-           _APPEND_COMPILE_FLAGS_ERROR([-H])
+           #_APPEND_COMPILE_FLAGS_ERROR([-H])
            _APPEND_COMPILE_FLAGS_ERROR([-g])
            _APPEND_COMPILE_FLAGS_ERROR([-g3])
            _APPEND_COMPILE_FLAGS_ERROR([-fmudflapth])
@@ -152,7 +152,7 @@ AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
            [_APPEND_COMPILE_FLAGS_ERROR([-Wno-unknown-pragmas])
            _APPEND_COMPILE_FLAGS_ERROR([-Wno-pragmas])])
 
-         AS_IF([test "$CC" = "clang"],[_APPEND_COMPILE_FLAGS_ERROR([-Qunused-arguments])])
+         AS_IF([test "$ax_cv_c_compiler_vendor" = "clang"],[_APPEND_COMPILE_FLAGS_ERROR([-Qunused-arguments])])
 
          _APPEND_COMPILE_FLAGS_ERROR([-Wall])
          _APPEND_COMPILE_FLAGS_ERROR([-Wextra])
@@ -243,7 +243,7 @@ AC_DEFUN([_HARDEN_CXX_COMPILER_FLAGS],
          [AC_LANG_PUSH([C++])
          AS_IF([test "x$ax_enable_debug" = xyes],
            [CXXFLAGS=''
-           _APPEND_COMPILE_FLAGS_ERROR([-H])
+           #_APPEND_COMPILE_FLAGS_ERROR([-H])
            _APPEND_COMPILE_FLAGS_ERROR([-g])
            _APPEND_COMPILE_FLAGS_ERROR([-g3])
            _APPEND_COMPILE_FLAGS_ERROR([-fmudflapth])
@@ -263,7 +263,7 @@ AC_DEFUN([_HARDEN_CXX_COMPILER_FLAGS],
            [_APPEND_COMPILE_FLAGS_ERROR([-Wno-unknown-pragmas])
            _APPEND_COMPILE_FLAGS_ERROR([-Wno-pragmas])])
 
-         AS_IF([test "$CXX" = "clang++"],[_APPEND_COMPILE_FLAGS_ERROR([-Qunused-arguments])])
+         AS_IF([test "$ax_cv_c_compiler_vendor" = "clang"],[_APPEND_COMPILE_FLAGS_ERROR([-Qunused-arguments])])
 
          _APPEND_COMPILE_FLAGS_ERROR([-Wall])
          _APPEND_COMPILE_FLAGS_ERROR([-Wextra])
