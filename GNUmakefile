@@ -5,6 +5,10 @@ _bootstrap_config-status := $(wildcard config.status)
 
 ALL_RECURSIVE_TARGETS=
 
+ifeq ($(.DEFAULT_GOAL),Makefile)
+  @rm Makefile
+endif
+
 ifneq ($(_bootstrap_Makefile),)
   include Makefile
 else
@@ -16,7 +20,7 @@ else
 .DEFAULT_GOAL:= basic_build
 srcdir= .
 
-configure: bootstrap.sh
+configure: bootstrap.sh build-aux/.dirstamp
 	@$(srcdir)/bootstrap.sh -a
 
 Makefile: configure
@@ -34,3 +38,8 @@ ifneq ($(filter $(ALL_RECURSIVE_TARGETS), $(MAKECMDGOALS)), )
 .NOTPARALLEL:
 endif
 endif
+
+build-aux/.dirstamp: configure.ac
+	@$(srcdir)/bootstrap.sh -a
+	@touch $@
+

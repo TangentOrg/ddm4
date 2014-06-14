@@ -425,19 +425,8 @@ run_configure ()
     BUILD_CONFIGURE_ARG="$PREFIX_ARG $BUILD_CONFIGURE_ARG"
   fi
 
-  ret=1;
-  # If we are executing on OSX use CLANG, otherwise only use it if we find it in the ENV
-  case $HOST_OS in
-    rhel-5*)
-      command_exists 'gcc44' || die "Could not locate gcc44"
-      run CC=gcc44 CXX=gcc44 $top_srcdir/configure "$BUILD_CONFIGURE_ARG" || die "Cannot execute CC=gcc44 CXX=gcc44 configure $BUILD_CONFIGURE_ARG"
-      ret=$?
-      ;;
-    *)
-      run $CONFIGURE "$BUILD_CONFIGURE_ARG"
-      ret=$?
-      ;;
-  esac
+  run $CONFIGURE "$BUILD_CONFIGURE_ARG"
+  ret=$?
 
   if [ $ret -ne 0 ]; then
     die "Could not execute $CONFIGURE $BUILD_CONFIGURE_ARG"
