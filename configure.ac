@@ -46,6 +46,8 @@ AS_IF([test "x${ac_cv_prog_cc_c99}" == "xno"],[AC_MSG_ERROR([No c99 compatible c
 
 AX_PLATFORM
 
+CONFIG_EXTRA
+
 AC_DEFUN([CHECK_FOR_MINGW],
          [AS_IF([test "x${TARGET_WINDOWS}" == "xtrue"],
                [AX_APPEND_LINK_FLAGS([-static-libstdc++],[LDFLAGS])
