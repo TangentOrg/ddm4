@@ -80,7 +80,7 @@ AC_DEFUN([AX_COMPILER_VERSION],
     [AC_REQUIRE([AX_COMPILER_VENDOR])
 
     AC_MSG_CHECKING([MINGW])
-    AC_CHECK_DECL([__MINGW32__],
+    AC_CHECK_DECL([__MINGW64__],
       [MINGW=yes
       ax_c_compiler_version_vendor=mingw],
       [MINGW=no])
