@@ -51,7 +51,7 @@
 # -Wdeclaration-after-statement is counter to C99
 # _APPEND_COMPILE_FLAGS_ERROR([-pedantic])
 
-#serial 14
+#serial 15
 
 AC_DEFUN([_SET_SANITIZE_FLAGS],
          [AS_IF([test "x$MINGW" != xyes],[
@@ -306,7 +306,8 @@ AC_DEFUN([_HARDEN_CXX_COMPILER_FLAGS],
           _APPEND_COMPILE_FLAGS_ERROR([-Wunsafe-loop-optimizations])
           _APPEND_COMPILE_FLAGS_ERROR([-funsafe-loop-optimizations])
           _APPEND_COMPILE_FLAGS_ERROR([-Wc++11-compat])
-          _APPEND_COMPILE_FLAGS_ERROR([-Weffc++])
+# Disabled due to https://gcc.gnu.org/bugzilla/show_bug.cgi?id=55837
+#          _APPEND_COMPILE_FLAGS_ERROR([-Weffc++])
           _APPEND_COMPILE_FLAGS_ERROR([-Wold-style-cast])
           _APPEND_COMPILE_FLAGS_ERROR([-Wclobbered])
           _APPEND_COMPILE_FLAGS_ERROR([-Wunused])
