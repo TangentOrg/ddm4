@@ -727,7 +727,7 @@ make_for_mingw ()
 
   CONFIGURE='mingw64-configure'
   MAKE='mingw64-make'
-  CONFIGURE_ARGS='--enable-static --disable-shared'
+  CONFIGURE_ARG='--enable-static --disable-shared'
 
   make_skeleton
   ret=$?
@@ -787,7 +787,7 @@ make_for_clang_analyzer ()
   CC=clang CXX=clang++
   export CC CXX
   CONFIGURE='scan-build ./configure'
-  CONFIGURE_ARGS='--enable-debug'
+  CONFIGURE_ARG='--enable-debug'
 
   run_configure
 

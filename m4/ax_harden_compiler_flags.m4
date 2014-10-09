@@ -213,7 +213,9 @@ AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
           _APPEND_COMPILE_FLAGS_ERROR([-fwrapv])
           _APPEND_COMPILE_FLAGS_ERROR([-fmudflapt])
           _APPEND_COMPILE_FLAGS_ERROR([-pipe])
-          _APPEND_COMPILE_FLAGS_ERROR([-fPIE -pie])
+          AS_IF([test "x$MINGW" = xyes],
+                [],
+                [_APPEND_COMPILE_FLAGS_ERROR([-fPIE -pie])])
           _APPEND_COMPILE_FLAGS_ERROR([-Wsizeof-pointer-memaccess])
           _APPEND_COMPILE_FLAGS_ERROR([-Wpacked])
           _APPEND_COMPILE_FLAGS_ERROR([-Wlong-long])
@@ -320,7 +322,9 @@ AC_DEFUN([_HARDEN_CXX_COMPILER_FLAGS],
           _APPEND_COMPILE_FLAGS_ERROR([-fwrapv])
           _APPEND_COMPILE_FLAGS_ERROR([-fmudflapt])
           _APPEND_COMPILE_FLAGS_ERROR([-pipe])
-          _APPEND_COMPILE_FLAGS_ERROR([-fPIE -pie])
+          AS_IF([test "x$MINGW" = xyes],
+                [],
+                [_APPEND_COMPILE_FLAGS_ERROR([-fPIE -pie])])
           _APPEND_COMPILE_FLAGS_ERROR([-Wsizeof-pointer-memaccess])
           _APPEND_COMPILE_FLAGS_ERROR([-Wpacked])
           _APPEND_COMPILE_FLAGS_ERROR([-Wlong-long])
