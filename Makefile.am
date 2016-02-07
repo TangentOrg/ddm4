@@ -11,7 +11,6 @@ DISTCLEANFILES =
 bin_PROGRAMS =
 noinst_HEADERS =
 lib_LTLIBRARIES =
-man_MANS =
 noinst_LTLIBRARIES =
 noinst_PROGRAMS =
 include_HEADERS =
@@ -20,10 +19,11 @@ check_PROGRAMS =
 EXTRA_HEADERS =
 BUILT_SOURCES=
 EXTRA_DIST=
+CONFIGURE_DEPENDENCIES=
+dist_man_MANS=
 
 #includes additional rules from aminclude.am
 @INC_AMINCLUDE@
-
 DISTCLEANFILES+= aminclude.am
 
 EXTRA_DIST+= README.md
@@ -37,7 +37,10 @@ TESTS+= ${check_PROGRAMS}
 include tests/include.am
 include m4/include.am
 include bin/include.am
-include rpm/include.am
+include rpm/include.mk
+include docs/include.am
+include man/include.am
+include yatl/include.am
 
 # Cleanup individual files in order to preserve uninstall/etc order
 maintainer-clean-local:
@@ -49,6 +52,7 @@ maintainer-clean-local:
 	-rm build-aux/install-sh
 	-rm build-aux/ltmain.sh
 	-rm build-aux/missing
+	-rm build-aux/test-driver
 	-rmdir build-aux
 	-rm configure
 	-rm config.log

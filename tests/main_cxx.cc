@@ -36,8 +36,88 @@
 
 #include "config.h"
 
+#include <cassert>
+#include <cerrno>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+
 int main(void)
 {
-  return 0;
+#if defined(HAVE_CXXABI_H) && HAVE_CXXABI_H
+  // We just need to make sure it was defined
+  assert(HAVE_GCC_ABI_DEMANGLE);
+# if defined(HAVE_GCC_ABI_DEMANGLE) && HAVE_GCC_ABI_DEMANGLE == 0
+  if (HAVE_GCC_ABI_DEMANGLE == 0)
+  {
+    return EXIT_FAILURE;
+  }
+# endif
+#endif
+
+#if defined(HAVE_GCC_ABI_DEMANGLE) && HAVE_GCC_ABI_DEMANGLE
+  assert(HAVE_CXXABI_H);
+# if defined(HAVE_CXXABI_H) && HAVE_CXXABI_H == 0
+  if (HAVE_CXXABI_H == 0)
+  {
+    return EXIT_FAILURE;
+  }
+# endif
+#endif
+
+#if defined(VCS_CHECKOUT) && VCS_CHECKOUT == 1
+  if (VCS_CHECKOUT)
+  {
+    assert(strstr(CXXFLAGS, "-Werror"));
+    if (strstr(CXXFLAGS, "-Werror") == NULL)
+    {
+      return EXIT_FAILURE;
+    }
+  }
+#endif
+
+#if defined(DEBUG) && DEBUG == 1
+  if (DEBUG)
+  {
+    assert(strstr(CXXFLAGS, " -O2 ") == NULL);
+    if (strstr(CXXFLAGS, " -O2 "))
+    {
+      return EXIT_FAILURE;
+    }
+
+    assert(strstr(CXXFLAGS, " -g "));
+    if (strstr(CXXFLAGS, " -g ") == NULL)
+    {
+      return EXIT_FAILURE;
+    }
+  }
+#endif
+
+#ifdef HAVE_PRINTF_STRERROR
+  {
+    char buffer[1024]= { 0 };
+    errno= 0;
+    int buffer_length= snprintf(buffer, sizeof(buffer), "%ms");
+    assert(errno == 0);
+    if (errno != 0)
+    {
+      return EXIT_FAILURE;
+    }
+
+    assert(buffer_length >= 3);
+    if (buffer_length < 3)
+    {
+      return EXIT_FAILURE;
+    }
+
+    assert(strncmp(buffer, "Suc", 3) == 0);
+    if (strncmp(buffer, "Suc", 3) != 0)
+    {
+      return EXIT_FAILURE;
+    }
+  }
+#endif
+
+  return EXIT_SUCCESS;
 }
 

@@ -1,31 +1,23 @@
 # ===========================================================================
-#      http://www.gnu.org/software/autoconf-archive/ax_append_flag.html
+#      http://www.gnu.org/software/autoconf-archive/ax_gcc_version.html
 # ===========================================================================
 #
 # SYNOPSIS
 #
-#   AX_APPEND_FLAG(FLAG, [FLAGS-VARIABLE])
+#   AX_GCC_VERSION
 #
 # DESCRIPTION
 #
-#   FLAG is appended to the FLAGS-VARIABLE shell variable, with a space
-#   added in between.
-#
-#   If FLAGS-VARIABLE is not specified, the current language's flags (e.g.
-#   CFLAGS) is used.  FLAGS-VARIABLE is not changed if it already contains
-#   FLAG.  If FLAGS-VARIABLE is unset in the shell, it is set to exactly
-#   FLAG.
-#
-#   NOTE: Implementation based on AX_CFLAGS_GCC_OPTION.
+#   This macro retrieves the gcc version and returns it in the GCC_VERSION
+#   variable if available, an empty string otherwise.
 #
 # LICENSE
 #
-#   Copyright (c) 2008 Guido U. Draheim <guidod@gmx.de>
-#   Copyright (c) 2011 Maarten Bosmans <mkbosmans@gmail.com>
+#   Copyright (c) 2009 Francesco Salvestrini <salvestrini@users.sourceforge.net>
 #
-#   This program is free software: you can redistribute it and/or modify it
+#   This program is free software; you can redistribute it and/or modify it
 #   under the terms of the GNU General Public License as published by the
-#   Free Software Foundation, either version 3 of the License, or (at your
+#   Free Software Foundation; either version 2 of the License, or (at your
 #   option) any later version.
 #
 #   This program is distributed in the hope that it will be useful, but
@@ -49,21 +41,25 @@
 #   modified version of the Autoconf Macro, you may extend this special
 #   exception to the GPL to apply to your modified version as well.
 
-#serial 2
+#serial 8
 
-AC_DEFUN([AX_APPEND_FLAG],
-[AC_PREREQ(2.59)dnl for _AC_LANG_PREFIX
-AS_VAR_PUSHDEF([FLAGS], [m4_default($2,_AC_LANG_PREFIX[FLAGS])])dnl
-AS_VAR_SET_IF(FLAGS,
-  [case " AS_VAR_GET(FLAGS) " in
-    *" $1 "*)
-      AC_RUN_LOG([: FLAGS already contains $1])
-      ;;
-    *)
-      AC_RUN_LOG([: FLAGS="$FLAGS $1"])
-      AS_VAR_SET(FLAGS, ["AS_VAR_GET(FLAGS) $1"])
-      ;;
-   esac],
-  [AS_VAR_SET(FLAGS,["$1"])])
-AS_VAR_POPDEF([FLAGS])dnl
-])dnl AX_APPEND_FLAG
+AC_DEFUN([AX_GCC_VERSION], [
+  GCC_VERSION=""
+  AX_GCC_OPTION([-dumpversion],[],[],[
+    ax_gcc_version_option=yes
+  ],[
+    ax_gcc_version_option=no
+  ])
+  AS_IF([test "x$GCC" = "xyes"],[
+    AS_IF([test "x$ax_gcc_version_option" != "xno"],[
+      AC_CACHE_CHECK([gcc version],[ax_cv_gcc_version],[
+        ax_cv_gcc_version="`$CC -dumpversion`"
+        AS_IF([test "x$ax_cv_gcc_version" = "x"],[
+          ax_cv_gcc_version=""
+        ])
+      ])
+      GCC_VERSION=$ax_cv_gcc_version
+    ])
+  ])
+  AC_SUBST([GCC_VERSION])
+])
