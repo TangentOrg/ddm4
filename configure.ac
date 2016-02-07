@@ -12,12 +12,13 @@ AC_COPYRIGHT([Data Differential, http://datadifferential.com/])
 AC_PREREQ([2.63])
 AC_INIT([ddm4],[0.1.0],[brian@tangent.org],[ddm4],[https://github.com/TangentOrg/ddm4])
 
+# Must come before AM_INIT_AUTOMAKE.
+AC_CONFIG_AUX_DIR([build-aux])
+
 # Setup the compilers early on
 AC_PROG_CC([cc gcc clang])
 AC_PROG_CXX([c++ g++ clang++])
 
-# Must come before AM_INIT_AUTOMAKE.
-AC_CONFIG_AUX_DIR([build-aux])
 AC_CANONICAL_HOST
 AC_CONFIG_MACRO_DIR([m4])
 
