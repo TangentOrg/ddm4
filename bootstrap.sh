@@ -248,7 +248,7 @@ set_VENDOR_RELEASE ()
       ;;
     fedora)
       VENDOR_RELEASE="$release"
-      if [[ "x$VENDOR_RELEASE" == '18' ]]; then
+      if [[ "x$VENDOR_RELEASE" == 'x18' ]]; then
         VENDOR_RELEASE='sphericalcow'
       fi
       ;;
@@ -857,8 +857,7 @@ make_universe ()
   make_for_clang_analyzer
 
   use_banner 'mingw'
-  check_mingw
-  if [ $? -eq 0 ]; then
+  if ! check_mingw; then
     make_for_mingw
   fi
 
@@ -1575,7 +1574,7 @@ execute_job ()
   fi
 
   local BOOTSTRAP_TARGET_ARRAY
-  BOOTSTRAP_TARGET_ARRAY=( $BOOTSTRAP_TARGET )
+  BOOTSTRAP_TARGET_ARRAY=( "$BOOTSTRAP_TARGET" )
 
   for target in "${BOOTSTRAP_TARGET_ARRAY[@]}"
   do
