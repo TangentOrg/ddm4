@@ -27,6 +27,7 @@ config.in~
 config.log
 config.status
 configure
+ddm4-?.*
 docs/conf.py
 gdb.txt
 html
