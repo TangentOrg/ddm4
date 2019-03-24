@@ -193,9 +193,9 @@ do \
 { \
   if ((__expression) == NULL) { \
     if (YATL_FULL) { \
-      FAIL("Assertion '%s' == NULL", #__expression,);\
+      FAIL("Assertion '%s' == NULL", #__expression);\
     } \
-    fprintf(stderr, "\n%s:%d: %s Assertion '%s' == NULL\n", __FILE__, __LINE__, __PRETTY_FUNCTION__, #__expression,);\
+    fprintf(stderr, "\n%s:%d: %s Assertion '%s' == NULL\n", __FILE__, __LINE__, __PRETTY_FUNCTION__, #__expression);\
     exit(EXIT_FAILURE); \
   } \
 } while (0)
