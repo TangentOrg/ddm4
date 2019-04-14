@@ -51,7 +51,7 @@
 # -Wdeclaration-after-statement is counter to C99
 # _APPEND_COMPILE_FLAGS_ERROR([-pedantic])
 
-#serial 15
+#serial 16
 
 AC_DEFUN([_SET_SANITIZE_FLAGS],
          [AS_IF([test "x$MINGW" != xyes],[
@@ -132,7 +132,7 @@ AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
          [AC_LANG_PUSH([C])dnl
 
          AS_IF([test "x$ax_enable_debug" = xyes],
-           [CFLAGS=''
+           [
            #_APPEND_COMPILE_FLAGS_ERROR([-H])
            _APPEND_COMPILE_FLAGS_ERROR([-g])
            _APPEND_COMPILE_FLAGS_ERROR([-g3])
@@ -160,8 +160,6 @@ AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
          _APPEND_COMPILE_FLAGS_ERROR([-Wthis-test-should-fail])
 # Anything below this comment please keep sorted.
 # _APPEND_COMPILE_FLAGS_ERROR([-Wmissing-format-attribute])
-          _APPEND_COMPILE_FLAGS_ERROR([-Wunsuffixed-float-constants])
-          _APPEND_COMPILE_FLAGS_ERROR([-Wjump-misses-init])
           _APPEND_COMPILE_FLAGS_ERROR([-Wno-attributes])
           _APPEND_COMPILE_FLAGS_ERROR([-Waddress])
           _APPEND_COMPILE_FLAGS_ERROR([-Wvarargs])
@@ -174,16 +172,12 @@ AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
           _APPEND_COMPILE_FLAGS_ERROR([-Wformat-security])
           _APPEND_COMPILE_FLAGS_ERROR([-Wformat=2])
           _APPEND_COMPILE_FLAGS_ERROR([-Wformat-y2k])
-          _APPEND_COMPILE_FLAGS_ERROR([-Wlogical-op])
-          _APPEND_COMPILE_FLAGS_ERROR([-Wmaybe-uninitialized])
           _APPEND_COMPILE_FLAGS_ERROR([-Wmissing-field-initializers])
           AS_IF([test "x$MINGW" = xyes],
                 [_APPEND_COMPILE_FLAGS_ERROR([-Wno-missing-noreturn])],
                 [_APPEND_COMPILE_FLAGS_ERROR([-Wmissing-noreturn])])
           _APPEND_COMPILE_FLAGS_ERROR([-Wmissing-prototypes])
           _APPEND_COMPILE_FLAGS_ERROR([-Wnested-externs])
-          _APPEND_COMPILE_FLAGS_ERROR([-Wnormalized=id])
-          _APPEND_COMPILE_FLAGS_ERROR([-Woverride-init])
           _APPEND_COMPILE_FLAGS_ERROR([-Wpointer-arith])
           _APPEND_COMPILE_FLAGS_ERROR([-Wpointer-sign])
           AS_IF([test "x$MINGW" = xyes],
@@ -198,12 +192,8 @@ AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
           _APPEND_COMPILE_FLAGS_ERROR([-Wstrict-overflow=1])
           _APPEND_COMPILE_FLAGS_ERROR([-Wstrict-prototypes])
           _APPEND_COMPILE_FLAGS_ERROR([-Wswitch-enum])
-          _APPEND_COMPILE_FLAGS_ERROR([-Wtrampolines])
           _APPEND_COMPILE_FLAGS_ERROR([-Wundef])
-          _APPEND_COMPILE_FLAGS_ERROR([-Wunsafe-loop-optimizations])
-          _APPEND_COMPILE_FLAGS_ERROR([-funsafe-loop-optimizations])
 
-          _APPEND_COMPILE_FLAGS_ERROR([-Wclobbered])
           _APPEND_COMPILE_FLAGS_ERROR([-Wunused])
           _APPEND_COMPILE_FLAGS_ERROR([-Wunused-result])
           _APPEND_COMPILE_FLAGS_ERROR([-Wunused-variable])
@@ -220,6 +210,8 @@ AC_DEFUN([_HARDEN_CC_COMPILER_FLAGS],
           _APPEND_COMPILE_FLAGS_ERROR([-Wpacked])
           _APPEND_COMPILE_FLAGS_ERROR([-Wlong-long])
           _APPEND_COMPILE_FLAGS_ERROR([ftrapv])
+          # Stop error when using -pie on library builds
+          _APPEND_COMPILE_FLAGS_ERROR([-Wno-unused-command-line-argument])
 #         GCC 4.5 removed this.
 #         _APPEND_COMPILE_FLAGS_ERROR([-Wunreachable-code])
 
