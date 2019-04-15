@@ -79,6 +79,9 @@ AX_CXX_GCC_ABI_DEMANGLE
 
 # Checks for header files.
 AC_CHECK_HEADERS_ONCE([features.h])
+AC_CHECK_HEADERS([malloc.h])
+AC_CHECK_HEADERS([stddef.h])
+AC_CHECK_HEADER_STDBOOL
 
 #  We use the header to cross test our m4 rules that also test
 AC_DEFUN([CHECK_FOR_CXXABI],
@@ -92,6 +95,11 @@ CHECK_FOR_CXXABI
 # Checks for typedefs, structures, and compiler characteristics.
 
 # Checks for library functions.
+AC_CHECK_FUNCS([strstr])
+AC_C_INLINE
+AC_FUNC_ALLOCA
+AC_PROG_RANLIB
+AC_TYPE_SIZE_T
 AX_PRINTF_STRERROR
 
 AX_PTHREAD_TIMEDJOIN_NP

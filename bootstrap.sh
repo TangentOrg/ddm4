@@ -1106,11 +1106,11 @@ run_autoreconf ()
   fi
 
   if $use_libtool; then
-    assert "$BOOTSTRAP_LIBTOOLIZE"
+    assert "$LIBTOOLIZE"
     if $jenkins_build_environment; then
-      run "$BOOTSTRAP_LIBTOOLIZE" '--copy' '--install' || die "Cannot execute $BOOTSTRAP_LIBTOOLIZE"
+      run "$LIBTOOLIZE" '--copy' '--install' || die "Cannot execute $LIBTOOLIZE"
     else
-      run "$BOOTSTRAP_LIBTOOLIZE" '--copy' '--install' '--force' || die "Cannot execute $BOOTSTRAP_LIBTOOLIZE"
+      run "$LIBTOOLIZE" '--copy' '--install' '--force' || die "Cannot execute $LIBTOOLIZE"
     fi
   fi
 
@@ -1277,6 +1277,7 @@ autoreconf_setup ()
 
   if $use_libtool; then
     if [[ -n "$LIBTOOLIZE" ]]; then
+      local BOOTSTRAP_LIBTOOLIZE
       BOOTSTRAP_LIBTOOLIZE=$(type -p "$LIBTOOLIZE")
 
       if [[ -z "$BOOTSTRAP_LIBTOOLIZE" ]]; then
@@ -1311,7 +1312,7 @@ autoreconf_setup ()
     fi
 
     # Here we set LIBTOOLIZE to true since we are going to invoke it via BOOTSTRAP_LIBTOOLIZE
-    LIBTOOLIZE=true
+    LIBTOOLIZE="$BOOTSTRAP_LIBTOOLIZE"
   fi
 
   # Test the ENV AUTOMAKE if it exists
@@ -1376,6 +1377,7 @@ print_setup ()
   echo "ACLOCAL=$ACLOCAL"
   echo "AUTOPOINT=$AUTOPOINT"
   echo "LIBTOOLIZE=$LIBTOOLIZE"
+  echo "LIBTOOLIZE_OPTIONS=$LIBTOOLIZE_OPTIONS"
   echo "M4=$M4"
   echo "MAKE=$MAKE"
 

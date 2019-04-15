@@ -66,3 +66,5 @@ tests/pthread_check
 tests/pthread_check_cxx
 tests/uuid
 version.h
+
+configure.scan
