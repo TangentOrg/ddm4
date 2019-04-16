@@ -27,6 +27,7 @@ config.in~
 config.log
 config.status
 configure
+configure.ac~
 ddm4-?.*
 docs/conf.py
 gdb.txt
@@ -47,6 +48,7 @@ m4/ltversion.m4
 m4/lt~obsolete.m4
 man/cflags.1
 man/cxxflags.1
+patch
 rpm/spec
 stamp-h1
 t

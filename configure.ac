@@ -9,7 +9,7 @@
 
 AC_COPYRIGHT([Data Differential, http://datadifferential.com/])
 #AC_REVISION([m4_esyscmd_s([git describe --always])])
-AC_PREREQ([2.63])
+AC_PREREQ([2.69])
 AC_INIT([ddm4],[0.1.0],[brian@tangent.org],[ddm4],[https://github.com/TangentOrg/ddm4])
 
 # Must come before AM_INIT_AUTOMAKE.
@@ -22,8 +22,8 @@ AC_PROG_CXX([c++ g++ clang++])
 AC_CANONICAL_HOST
 AC_CONFIG_MACRO_DIR([m4])
 
-# Automake version before 1.13 (when the serial-tests option was dnl still the default) still defined the badly obsolete macro.  'AM_PROG_INSTALL'.
-AM_INIT_AUTOMAKE(1.11 no-define color-tests -Wno-portability subdir-objects foreign tar-ustar m4_ifndef([AM_PROG_INSTALL], [serial-tests]))
+# Automake version before 1.13 (when the serial-tests option was dnl still the default) still defined the badly obsolete macro.  'AC_PROG_INSTALL'.
+AM_INIT_AUTOMAKE(1.11 no-define color-tests -Wno-portability subdir-objects foreign tar-ustar m4_ifndef([AC_PROG_INSTALL], [serial-tests]))
 
 AC_ARG_PROGRAM
 AC_DEFUN([PROTECT_AC_USE_SYSTEM_EXTENSIONS],
