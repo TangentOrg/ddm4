@@ -13,7 +13,7 @@
 #
 # LICENSE
 #
-#  Copyright (C) 2012-2014 Brian Aker
+#  Copyright (C) 2012-2019 Brian Aker
 #  All rights reserved.
 #
 #  Redistribution and use in source and binary forms, with or without
@@ -51,7 +51,7 @@
 # -Wdeclaration-after-statement is counter to C99
 # _APPEND_COMPILE_FLAGS_ERROR([-pedantic])
 
-#serial 16
+#serial 17
 
 AC_DEFUN([_SET_SANITIZE_FLAGS],
          [AS_IF([test "x$MINGW" != xyes],[

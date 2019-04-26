@@ -1,7 +1,7 @@
 # configure.ac -*- autoconf -*- vim: filetype=config
 #
 # DDM4
-# Copyright (C) 2012-2018 Data Differential, http://datadifferential.com/
+# Copyright (C) 2012-2019 Data Differential, http://datadifferential.com/
 # All rights reserved.
 #
 # Use and distribution licensed under the BSD license.  See
